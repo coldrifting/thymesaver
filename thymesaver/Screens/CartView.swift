@@ -1,24 +1,24 @@
 import SwiftUI
 import SwiftData
 
-struct Recipes: View {
+struct CartView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         NavigationSplitView {
             List {
-                Button("Add Recipe") {
+                Button("Setup Cart") {
                     
                 }
             }
-            .navigationTitle(Text("Recipes"))
+            .navigationTitle(Text("Cart"))
         } detail: {
-            Text("Select a Recipe")
+            Text("Setup Cart")
         }
     }
 }
 
 #Preview {
-    Recipes()
+    CartView()
         .modelContainer(for: [Store.self], inMemory: true)
 }

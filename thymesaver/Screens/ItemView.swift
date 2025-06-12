@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct Items: View {
+struct ItemView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
@@ -19,6 +19,6 @@ struct Items: View {
 }
 
 #Preview {
-    Items()
+    ItemView()
         .modelContainer(for: [Store.self], inMemory: true)
 }

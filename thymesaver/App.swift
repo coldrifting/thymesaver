@@ -1,26 +1,37 @@
 import SwiftUI
 import SwiftData
 
+let schemaTypes : [any PersistentModel.Type] = [Store.self,Aisle.self]
+let schema = Schema(schemaTypes)
+
 @main
 struct thymesaverApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Store.self
-        ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            
+            var itemFetchDescriptor = FetchDescriptor<Store>()
+            itemFetchDescriptor.fetchLimit = 1
+            
+            guard try container.mainContext.fetch(itemFetchDescriptor).count == 0 else { return container }
+            
+            populate(context: container.mainContext)
+            
+            try container.mainContext.save()
+            
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
     var body: some Scene {
         WindowGroup {
             AppContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: schemaTypes)
     }
 }
 
@@ -31,23 +42,37 @@ struct AppContentView: View {
     var body: some View {
         TabView {
             Tab("Stores", systemImage: "location") {
-                Stores()
+                StoreView()
             }
             Tab("Items", systemImage: "list.dash") {
-                Items()
+                ItemView()
             }
             Tab("Recipes", systemImage: "star") {
-                Recipes()
+                RecipeView()
             }
             Tab("Cart", systemImage: "cart") {
-                Cart()
+                CartView()
             }
         }
     }
     
 }
 
+@MainActor
+let previewContainer: ModelContainer = {
+    do {
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+        
+        populate(context: container.mainContext)
+        
+        return container
+    } catch {
+        fatalError("Failed to create container")
+    }
+}()
+
 #Preview {
     AppContentView()
-        .modelContainer(for: [Store.self], inMemory: true)
+        .modelContainer(previewContainer)
 }
