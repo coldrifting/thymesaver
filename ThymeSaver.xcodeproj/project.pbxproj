@@ -28,26 +28,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		079A72622DFA1BED0098A2EB /* thymesaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = thymesaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		079A72712DFA1BEE0098A2EB /* thymesaverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = thymesaverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		079A727B2DFA1BEF0098A2EB /* thymesaverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = thymesaverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		079A72622DFA1BED0098A2EB /* ThymeSaver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ThymeSaver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		079A72712DFA1BEE0098A2EB /* ThymeSaverTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThymeSaverTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		079A727B2DFA1BEF0098A2EB /* ThymeSaverUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThymeSaverUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		079A72922DFA59070098A2EB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		079A72642DFA1BED0098A2EB /* thymesaver */ = {
+		079A72642DFA1BED0098A2EB /* ThymeSaver */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = thymesaver;
+			path = ThymeSaver;
 			sourceTree = "<group>";
 		};
-		079A72742DFA1BEF0098A2EB /* thymesaverTests */ = {
+		079A72742DFA1BEF0098A2EB /* ThymeSaverTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = thymesaverTests;
+			path = ThymeSaverTests;
 			sourceTree = "<group>";
 		};
-		079A727E2DFA1BEF0098A2EB /* thymesaverUITests */ = {
+		079A727E2DFA1BEF0098A2EB /* ThymeSaverUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = thymesaverUITests;
+			path = ThymeSaverUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -81,9 +81,9 @@
 			isa = PBXGroup;
 			children = (
 				079A72922DFA59070098A2EB /* README.md */,
-				079A72642DFA1BED0098A2EB /* thymesaver */,
-				079A72742DFA1BEF0098A2EB /* thymesaverTests */,
-				079A727E2DFA1BEF0098A2EB /* thymesaverUITests */,
+				079A72642DFA1BED0098A2EB /* ThymeSaver */,
+				079A72742DFA1BEF0098A2EB /* ThymeSaverTests */,
+				079A727E2DFA1BEF0098A2EB /* ThymeSaverUITests */,
 				079A72632DFA1BED0098A2EB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,9 +91,9 @@
 		079A72632DFA1BED0098A2EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				079A72622DFA1BED0098A2EB /* thymesaver.app */,
-				079A72712DFA1BEE0098A2EB /* thymesaverTests.xctest */,
-				079A727B2DFA1BEF0098A2EB /* thymesaverUITests.xctest */,
+				079A72622DFA1BED0098A2EB /* ThymeSaver.app */,
+				079A72712DFA1BEE0098A2EB /* ThymeSaverTests.xctest */,
+				079A727B2DFA1BEF0098A2EB /* ThymeSaverUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,9 +101,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		079A72612DFA1BED0098A2EB /* thymesaver */ = {
+		079A72612DFA1BED0098A2EB /* ThymeSaver */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 079A72852DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaver" */;
+			buildConfigurationList = 079A72852DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaver" */;
 			buildPhases = (
 				079A725E2DFA1BED0098A2EB /* Sources */,
 				079A725F2DFA1BED0098A2EB /* Frameworks */,
@@ -114,18 +114,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				079A72642DFA1BED0098A2EB /* thymesaver */,
+				079A72642DFA1BED0098A2EB /* ThymeSaver */,
 			);
-			name = thymesaver;
+			name = ThymeSaver;
 			packageProductDependencies = (
 			);
 			productName = thymesaver;
-			productReference = 079A72622DFA1BED0098A2EB /* thymesaver.app */;
+			productReference = 079A72622DFA1BED0098A2EB /* ThymeSaver.app */;
 			productType = "com.apple.product-type.application";
 		};
-		079A72702DFA1BEE0098A2EB /* thymesaverTests */ = {
+		079A72702DFA1BEE0098A2EB /* ThymeSaverTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 079A72882DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaverTests" */;
+			buildConfigurationList = 079A72882DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaverTests" */;
 			buildPhases = (
 				079A726D2DFA1BEE0098A2EB /* Sources */,
 				079A726E2DFA1BEE0098A2EB /* Frameworks */,
@@ -137,18 +137,18 @@
 				079A72732DFA1BEE0098A2EB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				079A72742DFA1BEF0098A2EB /* thymesaverTests */,
+				079A72742DFA1BEF0098A2EB /* ThymeSaverTests */,
 			);
-			name = thymesaverTests;
+			name = ThymeSaverTests;
 			packageProductDependencies = (
 			);
 			productName = thymesaverTests;
-			productReference = 079A72712DFA1BEE0098A2EB /* thymesaverTests.xctest */;
+			productReference = 079A72712DFA1BEE0098A2EB /* ThymeSaverTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		079A727A2DFA1BEF0098A2EB /* thymesaverUITests */ = {
+		079A727A2DFA1BEF0098A2EB /* ThymeSaverUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 079A728B2DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaverUITests" */;
+			buildConfigurationList = 079A728B2DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaverUITests" */;
 			buildPhases = (
 				079A72772DFA1BEF0098A2EB /* Sources */,
 				079A72782DFA1BEF0098A2EB /* Frameworks */,
@@ -160,13 +160,13 @@
 				079A727D2DFA1BEF0098A2EB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				079A727E2DFA1BEF0098A2EB /* thymesaverUITests */,
+				079A727E2DFA1BEF0098A2EB /* ThymeSaverUITests */,
 			);
-			name = thymesaverUITests;
+			name = ThymeSaverUITests;
 			packageProductDependencies = (
 			);
 			productName = thymesaverUITests;
-			productReference = 079A727B2DFA1BEF0098A2EB /* thymesaverUITests.xctest */;
+			productReference = 079A727B2DFA1BEF0098A2EB /* ThymeSaverUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -192,7 +192,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 079A725D2DFA1BED0098A2EB /* Build configuration list for PBXProject "thymesaver" */;
+			buildConfigurationList = 079A725D2DFA1BED0098A2EB /* Build configuration list for PBXProject "ThymeSaver" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -206,9 +206,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				079A72612DFA1BED0098A2EB /* thymesaver */,
-				079A72702DFA1BEE0098A2EB /* thymesaverTests */,
-				079A727A2DFA1BEF0098A2EB /* thymesaverUITests */,
+				079A72612DFA1BED0098A2EB /* ThymeSaver */,
+				079A72702DFA1BEE0098A2EB /* ThymeSaverTests */,
+				079A727A2DFA1BEF0098A2EB /* ThymeSaverUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,12 +265,12 @@
 /* Begin PBXTargetDependency section */
 		079A72732DFA1BEE0098A2EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 079A72612DFA1BED0098A2EB /* thymesaver */;
+			target = 079A72612DFA1BED0098A2EB /* ThymeSaver */;
 			targetProxy = 079A72722DFA1BEE0098A2EB /* PBXContainerItemProxy */;
 		};
 		079A727D2DFA1BEF0098A2EB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 079A72612DFA1BED0098A2EB /* thymesaver */;
+			target = 079A72612DFA1BED0098A2EB /* ThymeSaver */;
 			targetProxy = 079A727C2DFA1BEF0098A2EB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -334,6 +334,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "Thyme Saver";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -391,6 +392,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "Thyme Saver";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -407,11 +409,14 @@
 				DEVELOPMENT_TEAM = M4327C8M2N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Thyme Saver";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -435,11 +440,14 @@
 				DEVELOPMENT_TEAM = M4327C8M2N;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Thyme Saver";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -468,7 +476,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/thymesaver.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/thymesaver";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThymeSaver.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ThymeSaver";
 			};
 			name = Debug;
 		};
@@ -487,7 +495,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/thymesaver.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/thymesaver";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ThymeSaver.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ThymeSaver";
 			};
 			name = Release;
 		};
@@ -528,7 +536,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		079A725D2DFA1BED0098A2EB /* Build configuration list for PBXProject "thymesaver" */ = {
+		079A725D2DFA1BED0098A2EB /* Build configuration list for PBXProject "ThymeSaver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079A72832DFA1BEF0098A2EB /* Debug */,
@@ -537,7 +545,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		079A72852DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaver" */ = {
+		079A72852DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079A72862DFA1BEF0098A2EB /* Debug */,
@@ -546,7 +554,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		079A72882DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaverTests" */ = {
+		079A72882DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaverTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079A72892DFA1BEF0098A2EB /* Debug */,
@@ -555,7 +563,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		079A728B2DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "thymesaverUITests" */ = {
+		079A728B2DFA1BEF0098A2EB /* Build configuration list for PBXNativeTarget "ThymeSaverUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079A728C2DFA1BEF0098A2EB /* Debug */,
