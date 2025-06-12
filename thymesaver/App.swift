@@ -1,7 +1,11 @@
 import SwiftUI
 import SwiftData
 
-let schemaTypes : [any PersistentModel.Type] = [Store.self,Aisle.self]
+let schemaTypes : [any PersistentModel.Type] = [
+    Store.self,
+    Aisle.self,
+    Item.self
+]
 let schema = Schema(schemaTypes)
 
 @main
@@ -39,18 +43,20 @@ struct thymesaverApp: App {
 struct AppContentView: View {
     @Environment(\.modelContext) private var modelContext
     
+    @State private var selectedTab: Int = 1
+    
     var body: some View {
-        TabView {
-            Tab("Stores", systemImage: "location") {
+        TabView(selection: $selectedTab) {
+            Tab("Stores", systemImage: "location", value: 0) {
                 StoreView()
             }
-            Tab("Items", systemImage: "list.dash") {
+            Tab("Items", systemImage: "list.dash", value: 1) {
                 ItemView()
             }
-            Tab("Recipes", systemImage: "star") {
+            Tab("Recipes", systemImage: "star", value: 2) {
                 RecipeView()
             }
-            Tab("Cart", systemImage: "cart") {
+            Tab("Cart", systemImage: "cart", value: 3) {
                 CartView()
             }
         }

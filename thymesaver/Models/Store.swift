@@ -36,6 +36,7 @@ final class Store: Codable, Comparable {
         try container.encode(selected, forKey: .selected)
     }
     
+    // Sorting
     static func == (lhs: Store, rhs: Store) -> Bool {
       return (lhs.name, lhs.id) == (rhs.name, rhs.id)
     }

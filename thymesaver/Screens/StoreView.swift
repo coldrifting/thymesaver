@@ -83,14 +83,14 @@ struct StoreView: View {
                         storeRename = false
                         presentAlert = true
                     } label: {
-                        Label("Add Item", systemImage: "plus")
+                        Label("Add Store", systemImage: "plus")
                     }
                 }
             }
             .alert(storeRename ? "Rename Store" : "New Store", isPresented: $presentAlert, actions: {
                 TextField("Store Name", text: $storeRenameName)
                 
-                Button(storeRename ? "Rename" : "Create", action: {
+                Button(storeRename ? "Rename" : "Add", action: {
                     if (storeRename) {
                         renameStore(storeId: storeRenameId!, newName: storeRenameName.trim())
                     }

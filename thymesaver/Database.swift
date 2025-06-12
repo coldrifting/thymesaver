@@ -20,6 +20,10 @@ func populate(context: ModelContext) {
     guard let aislesURL = Bundle.main.url(forResource: "Aisles", withExtension: "json") else {
         fatalError("Failed to find Aisles.json")
     }
+    
+    guard let itemsURL = Bundle.main.url(forResource: "Items", withExtension: "json") else {
+        fatalError("Failed to find Items.json")
+    }
 
     do {
         // Stores
@@ -41,9 +45,16 @@ func populate(context: ModelContext) {
             }
         }
         
-        // TODO
-        
         // Items
+        let itemData = try Data(contentsOf: itemsURL)
+        let itemTempData = try JSONDecoder().decode([Item].self, from: itemData)
+        
+        for itemEntry in itemTempData {
+            context.insert(itemEntry)
+        }
+        
+        // TODO
+
         // ItemAisles
         // ItemPreps
         

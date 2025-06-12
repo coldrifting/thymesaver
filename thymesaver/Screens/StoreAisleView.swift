@@ -74,7 +74,7 @@ struct StoreAisleView: View {
         .alert(aisleRename ? "Rename Store" : "New Store", isPresented: $presentAlert, actions: {
             TextField("Store Name", text: $aisleRenameName)
             
-            Button(aisleRename ? "Rename" : "Create", action: {
+            Button(aisleRename ? "Rename" : "Add", action: {
                 if (aisleRename) {
                     renameAisle(aisleId: aisleRenameId!, newName: aisleRenameName.trim())
                 }
