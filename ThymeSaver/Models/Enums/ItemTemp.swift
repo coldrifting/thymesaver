@@ -1,8 +1,13 @@
 import Foundation
-import SwiftData
 
-enum ItemTemp: String, Codable, CaseIterable {
-    case ambient = "Ambient"
-    case chilled = "Chilled"
-    case frozen = "Frozen"
+enum ItemTemp: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
+    case ambient
+    case chilled
+    case frozen
+    
+    var id: Self { self }
+    
+    var description: String {
+        return self.rawValue.capitalized
+    }
 }

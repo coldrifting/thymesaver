@@ -1,6 +1,41 @@
 import SwiftUI
 import SwiftData
+import GRDB
 
+func grdb() -> DatabaseQueue {
+    do {
+        // 1. Open a database connection
+        let fileManager = FileManager.default
+        let appSupportURL = try fileManager.url(
+            for: .applicationSupportDirectory, in: .userDomainMask,
+            appropriateFor: nil, create: true)
+        let directoryURL = appSupportURL.appendingPathComponent("MyDatabase", isDirectory: true)
+        try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        
+        // Open or create the database
+        let databaseURL = directoryURL.appendingPathComponent("db.sqlite")
+        let dbQueue: DatabaseQueue = try DatabaseQueue(path: databaseURL.path)
+        
+        // 2. Define the database schema
+        try dbQueue.write { db in
+            try? db.drop(table: "store")
+            
+            try db.create(table: "store") { t in
+                t.primaryKey("storeId", .integer).notNull()
+                t.column("storeName", .text).notNull()
+            }
+            
+            try Store(storeId: 1, storeName: "Store 1").insert(db)
+            try Store(storeId: 2, storeName: "Shop B").insert(db)
+        }
+        
+        return dbQueue
+    }
+    catch {
+        fatalError("Unable to init DB: \(error)")
+    }
+}
+/*
 @MainActor
 func populate(context: ModelContext) {
     context.autosaveEnabled = false
@@ -68,3 +103,4 @@ func populate(context: ModelContext) {
     try? context.save()
     context.autosaveEnabled = true
 }
+*/

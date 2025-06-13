@@ -1,15 +1,19 @@
 import SwiftUI
-import SwiftData
+import Observation
+import GRDB
 
+/*
 let schemaTypes : [any PersistentModel.Type] = [
-    Store.self,
+    StoreOld.self,
     Aisle.self,
     Item.self
 ]
 let schema = Schema(schemaTypes)
+*/
 
 @main
 struct thymesaverApp: App {
+    /*
     var sharedModelContainer: ModelContainer = {
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -30,40 +34,58 @@ struct thymesaverApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    */
+    
+    var dbQueue: DatabaseQueue = {
+        return grdb()
+    }()
     
     var body: some Scene {
         WindowGroup {
-            AppContentView()
+            AppContentView().appDatabase(.shared)
         }
-        .modelContainer(for: schemaTypes)
+        //.modelContainer(for: schemaTypes)
     }
 }
 
 
 struct AppContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.appDatabase) var appDatabase
     
-    @State private var selectedTab: Int = 1
+    @State private var selectedTab: Int = 0
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Stores", systemImage: "location", value: 0) {
-                StoreView()
+                StoreView(appDatabase: appDatabase)
             }
             Tab("Items", systemImage: "list.dash", value: 1) {
-                ItemView()
+                //ItemView()
             }
             Tab("Recipes", systemImage: "star", value: 2) {
-                RecipeView()
+                //RecipeView()
             }
             Tab("Cart", systemImage: "cart", value: 3) {
-                CartView()
+                //CartView()
             }
         }
     }
     
 }
 
+extension EnvironmentValues {
+    @Entry var appDatabase = AppDatabase.empty()
+}
+
+extension View {
+    func appDatabase(_ appDatabase: AppDatabase) -> some View {
+        self.environment(\.appDatabase, appDatabase)
+    }
+}
+
+
+
+/*
 @MainActor
 let previewContainer: ModelContainer = {
     do {
@@ -77,8 +99,8 @@ let previewContainer: ModelContainer = {
         fatalError("Failed to create container")
     }
 }()
-
+*/
 #Preview {
     AppContentView()
-        .modelContainer(previewContainer)
+        //.modelContainer(previewContainer)
 }

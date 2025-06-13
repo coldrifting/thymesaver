@@ -36,3 +36,31 @@ extension UUID {
         self.init(uuid: tuple)
     }
 }
+
+extension View {
+    func customAlert(
+        title: String,
+        message: String,
+        placeholder: String,
+        onConfirm: @escaping (String) -> Void,
+        onDismiss: @escaping () -> Void,
+        alertType: AlertType,
+        @Binding text: String
+    ) -> some View {
+        self.alert(
+            title,
+            isPresented: Binding<Bool>(get: { alertType != AlertType.none}, set: {_ in onDismiss()}),
+            actions: {
+                TextField(placeholder, text: $text)
+                
+                Button(alertType.description, action: {
+                    withAnimation {
+                        onConfirm(text.trim())
+                    }
+                })
+                Button("Cancel", role: .cancel, action: {
+                })
+            },
+            message: { Text(message) })
+    }
+}
