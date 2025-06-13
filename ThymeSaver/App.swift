@@ -19,16 +19,16 @@ struct AppContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Stores", systemImage: "location", value: 0) {
-                StoreView(appDatabase: appDatabase)
+                StoreView(appDatabase)
             }
             Tab("Items", systemImage: "list.dash", value: 1) {
-                //ItemView()
+                ItemView(appDatabase)
             }
             Tab("Recipes", systemImage: "star", value: 2) {
-                //RecipeView()
+                RecipeView(appDatabase)
             }
             Tab("Cart", systemImage: "cart", value: 3) {
-                //CartView()
+                CartView(appDatabase)
             }
         }
     }

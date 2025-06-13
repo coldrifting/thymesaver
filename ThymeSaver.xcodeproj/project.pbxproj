@@ -39,11 +39,8 @@
 		0713A6922DFB94C300A3982C /* Exceptions for "ThymeSaver" folder in "ThymeSaver" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Interface/CartView.swift.txt,
 				Interface/ItemDetailsView.swift.txt,
 				Interface/ItemView.swift.txt,
-				Interface/RecipeView.swift.txt,
-				Interface/StoreAisleView.swift.txt,
 			);
 			target = 079A72612DFA1BED0098A2EB /* ThymeSaver */;
 		};
@@ -54,11 +51,8 @@
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 079A725E2DFA1BED0098A2EB /* Sources */;
 			membershipExceptions = (
-				Interface/CartView.swift.txt,
 				Interface/ItemDetailsView.swift.txt,
 				Interface/ItemView.swift.txt,
-				Interface/RecipeView.swift.txt,
-				Interface/StoreAisleView.swift.txt,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */

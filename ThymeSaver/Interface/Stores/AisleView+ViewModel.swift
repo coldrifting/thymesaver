@@ -1,7 +1,7 @@
 import SwiftUI
 import GRDB
 
-extension StoreView {
+extension AisleView {
     @Observable @MainActor
     class ViewModel {
         private let appDatabase: AppDatabase
@@ -11,42 +11,33 @@ extension StoreView {
             self.appDatabase = appDatabase
         }
         
-        func observe() {
+        func observe(storeId: Int) {
             let observation = ValueObservation.tracking { db in
-                try (
-                    stores: Store.fetchAll(db),
-                    config: Config.find(db)
-                )
+                return try Aisle.getAisles(db: db, storeId: storeId)
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
-            } onChange: { (stores, config) in
-                self.stores = stores
-                self.selectedStoreId = config.selectedStore
+            } onChange: { aisles in
+                self.aisles = aisles
             }
         }
         
-        private(set) var selectedStoreId: Int = -1
-        private(set) var stores: [Store] = []
+        private(set) var aisles: [Aisle] = []
         
-        func selectStore(storeId: Int) {
-            try? appDatabase.selectStore(storeId: storeId)
+        func addAisle(aisleName: String, storeId: Int) {
+            try? appDatabase.addAisle(aisleName: aisleName, storeId: storeId)
         }
         
-        func addStore(storeName: String) {
-            try? appDatabase.addStore(storeName: storeName)
+        func deleteAisle(aisleId: Int, storeId: Int) {
+            try? appDatabase.deleteAisle(aisleId: aisleId, storeId: storeId)
         }
         
-        func deleteStore(storeId: Int) {
-            try? appDatabase.deleteStore(storeId: storeId)
+        func renameAisle(aisleId: Int, newName: String) {
+            try? appDatabase.renameAisle(aisleId: aisleId, newName: newName)
         }
         
-        func renameStore(storeId: Int, newName: String) {
-            try? appDatabase.renameStore(storeId: storeId, newName: newName)
-        }
-        
-        func reset() {
-            try? appDatabase.reset()
+        func moveAisle(aisleId: Int, newIndex: Int) {
+            try? appDatabase.moveAisle(aisleId: aisleId, newIndex: newIndex)
         }
         
         // MARK: - Alerts
@@ -57,7 +48,7 @@ extension StoreView {
         private(set) var alertMessage: String = ""
         private(set) var alertConfirmText: String = ""
         private(set) var alertDismissText: String = "Cancel"
-        private(set) var alertPlaceholder: String = "Store Name"
+        private(set) var alertPlaceholder: String = "Aisle Name"
         
         private(set) var alertTextEntry: String = ""
         
@@ -72,8 +63,8 @@ extension StoreView {
             alertId = -1
             alertTextEntry = ""
             alertType = .add
-            alertTitle = "Add Store"
-            alertMessage = "Please enter the name for the new Store"
+            alertTitle = "Add Aisle"
+            alertMessage = "Please enter the name for the new Aisle"
             alertConfirmText = "Create"
         }
         
@@ -81,8 +72,8 @@ extension StoreView {
             alertId = itemId
             alertTextEntry = itemName
             alertType = .rename
-            alertTitle = "Rename Store"
-            alertMessage = "Please enter the new name for the store"
+            alertTitle = "Rename Aisle"
+            alertMessage = "Please enter the new name for the Aisle"
             alertConfirmText = "Rename"
         }
         

@@ -46,9 +46,9 @@ final class AppDatabase: Sendable {
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         
-        #if DEBUG
-            migrator.eraseDatabaseOnSchemaChange = true
-        #endif
+#if DEBUG
+        migrator.eraseDatabaseOnSchemaChange = true
+#endif
         
         migrator.registerMigration("v1") { db in
             try self.SetupDatabaseSchema(db)
@@ -60,14 +60,16 @@ final class AppDatabase: Sendable {
     static func makeConfiguration() -> Configuration {
         var config = Configuration()
         
-        // Uncomment to enable SQL Logging
-        #if false
+// Uncomment to enable SQL Logging
+#if DEBUG
+#if false
         config.prepareDatabase { db in
             db.trace {
                 print("SQL: \($0)")
             }
         }
-        #endif
+#endif
+#endif
         
         return config
     }

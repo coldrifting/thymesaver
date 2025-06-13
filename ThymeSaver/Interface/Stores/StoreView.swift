@@ -3,13 +3,15 @@ import Observation
 import Combine
 
 struct StoreView: View {
+    @Environment(\.appDatabase) var appDatabase
+    
     @State private var viewModel: ViewModel
     
     @State private var stores: [Store] = []
     @State private var selectedStoreId: Int = -1
     
-    init(appDatabase: AppDatabase) {
-        _viewModel = State(initialValue: ViewModel(appDatabase: appDatabase))
+    init(_ appDatabase: AppDatabase) {
+        _viewModel = State(initialValue: ViewModel(appDatabase))
     }
     
     var body: some View {
@@ -68,7 +70,7 @@ struct StoreView: View {
             else {
                 let selectedStore: Store = stores.first(where: { $0.storeId == selectedStoreId })!
                 NavigationLink(
-                    destination: { EmptyView() },
+                    destination: { AisleView(appDatabase, storeId: selectedStoreId, storeName: selectedStore.storeName) },
                     label: { Text(selectedStore.storeName) }
                 )
             }
@@ -118,5 +120,5 @@ struct StoreView: View {
 }
 
 #Preview {
-    StoreView(appDatabase: .shared)
+    StoreView(.shared)
 }

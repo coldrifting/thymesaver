@@ -24,22 +24,29 @@ extension AppDatabase {
     
     func addStore(storeName: String) throws {
         try dbWriter.write { db in
-            let x = StoreInsert(storeName: storeName)
-            try x.insert(db)
+            let store = StoreInsert(storeName: storeName)
+            try store.insert(db)
         }
     }
     
     func deleteStore(storeId: Int) throws {
         try dbWriter.write { db in
-            let x = Store(storeId: storeId, storeName: "")
-            try x.delete(db)
+            let store = Store(storeId: storeId, storeName: "")
+            try store.delete(db)
         }
     }
     
     func renameStore(storeId: Int, newName: String) throws {
         try dbWriter.write { db in
-            let x = Store(storeId: storeId, storeName: newName)
-            try x.update(db)
+            let store = Store(storeId: storeId, storeName: newName)
+            try store.update(db)
+        }
+    }
+    
+    func getStore(storeId: Int) throws -> Store {
+        try dbWriter.write { db in
+            let store = try Store.fetchOne(db, key: storeId)!
+            return store
         }
     }
 }
