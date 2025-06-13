@@ -1,8 +1,19 @@
 import Foundation
 import GRDB
+import os.log
 
-extension AppDatabase {
-    /// The database for the application
+final class AppDatabase: Sendable {
+    var reader: any GRDB.DatabaseReader {
+        dbWriter
+    }
+    
+    let dbWriter: any DatabaseWriter
+
+    init(_ dbWriter: any GRDB.DatabaseWriter) throws {
+        self.dbWriter = dbWriter
+        try migrator.migrate(dbWriter)
+    }
+    
     static let shared = makeShared()
     
     private static func makeShared() -> AppDatabase {
@@ -24,7 +35,7 @@ extension AppDatabase {
             let appDatabase = try AppDatabase(dbPool)
             
             // Populate the database if it is empty, for better demo purpose.
-            try appDatabase.resetStores()
+            try appDatabase.reset()
             
             return appDatabase
         } catch {
@@ -32,11 +43,32 @@ extension AppDatabase {
         }
     }
     
-    /*
-    /// Creates an empty database for SwiftUI previews
-    static func empty() -> AppDatabase {
-        let dbQueue = try! DatabaseQueue(configuration: AppDatabase.makeConfiguration())
-        return try! AppDatabase(dbQueue)
+    private var migrator: DatabaseMigrator {
+        var migrator = DatabaseMigrator()
+        
+        #if DEBUG
+            migrator.eraseDatabaseOnSchemaChange = true
+        #endif
+        
+        migrator.registerMigration("v1") { db in
+            try self.SetupDatabaseSchema(db)
+        }
+        
+        return migrator
     }
-     */
+    
+    static func makeConfiguration() -> Configuration {
+        var config = Configuration()
+        
+        // Uncomment to enable SQL Logging
+        #if false
+        config.prepareDatabase { db in
+            db.trace {
+                print("SQL: \($0)")
+            }
+        }
+        #endif
+        
+        return config
+    }
 }

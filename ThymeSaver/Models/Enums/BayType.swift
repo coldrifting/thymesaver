@@ -1,9 +1,9 @@
 import Foundation
 
 enum BayType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
-    case start
-    case middle
-    case end
+    case start = "Start"
+    case middle = "Middle"
+    case end = "End"
     
     var id: Self { self }
     

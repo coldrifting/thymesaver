@@ -33,13 +33,9 @@ struct StoreView: View {
                 }
             }
             .customAlert(
-                title: viewModel.alertType == AlertType.rename
-                ? "Rename Store"
-                : "New Store",
-                message: viewModel.alertType == AlertType.rename
-                ? "Please enter the new name for this store."
-                : "Please enter a name for the new store.",
-                placeholder: "Store Name",
+                title: viewModel.alertTitle,
+                message: viewModel.alertMessage,
+                placeholder: viewModel.alertPlaceholder,
                 onConfirm: viewModel.alertType == AlertType.rename
                 ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
                 : { viewModel.addStore(storeName: $0)},

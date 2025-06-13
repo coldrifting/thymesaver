@@ -6,7 +6,6 @@ extension StoreView {
     class ViewModel {
         private let appDatabase: AppDatabase
         @ObservationIgnored private var cancellable: AnyDatabaseCancellable?
-        @ObservationIgnored private var cancellable2: AnyDatabaseCancellable?
         
         init(appDatabase: AppDatabase) {
             self.appDatabase = appDatabase
@@ -14,22 +13,15 @@ extension StoreView {
         
         func observe() {
             let observation = ValueObservation.tracking { db in
-                try Store.fetchAll(db)
+                try (
+                    stores: Store.fetchAll(db),
+                    config: Config.find(db)
+                )
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
-            } onChange: { [unowned self] stores in
+            } onChange: { (stores, config) in
                 self.stores = stores
-            }
-            
-            let observation2 = ValueObservation.tracking { db in
-                try Config.find(db)
-            }
-            
-            // Start observing the database.
-            // Previous observation, if any, is cancelled.
-            cancellable2 = observation2.start(in: appDatabase.reader) { _ in
-            } onChange: { [unowned self] config in
                 self.selectedStoreId = config.selectedStore
             }
         }
@@ -41,6 +33,12 @@ extension StoreView {
         private(set) var alertType: AlertType = AlertType.none
         private(set) var alertId: Int = -1
         
+        private(set) var alertTitle: String = ""
+        private(set) var alertMessage: String = ""
+        private(set) var alertConfirmText: String = ""
+        private(set) var alertDismissText: String = "Cancel"
+        private(set) var alertPlaceholder: String = "Store Name"
+        
         private(set) var alertTextEntry: String = ""
         
         var alertTextBinding: Binding<String> {
@@ -51,12 +49,7 @@ extension StoreView {
         }
         
         func selectStore(storeId: Int) {
-            for store in stores {
-                if (store.id == storeId) {
-                    selectedStoreId = storeId
-                    break
-                }
-            }
+            try? appDatabase.selectStore(storeId: storeId)
         }
         
         func addStore(storeName: String) {
@@ -72,19 +65,25 @@ extension StoreView {
         }
         
         func reset() {
-            try? appDatabase.resetStores()
+            try? appDatabase.reset()
         }
         
         func queueAddItemAlert() {
             alertId = -1
             alertTextEntry = ""
             alertType = .add
+            alertTitle = "Add Store"
+            alertMessage = "Please enter the name for the new store"
+            alertConfirmText = "Create"
         }
         
         func queueRenameItemAlert(itemId: Int, itemName: String) {
             alertId = itemId
             alertTextEntry = itemName
             alertType = .rename
+            alertTitle = "Rename Store"
+            alertMessage = "Please enter the new name for the store"
+            alertConfirmText = "Rename"
         }
         
         func dismissAlert() {

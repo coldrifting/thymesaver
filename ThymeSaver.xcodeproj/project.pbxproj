@@ -44,9 +44,6 @@
 				Interface/ItemView.swift.txt,
 				Interface/RecipeView.swift.txt,
 				Interface/StoreAisleView.swift.txt,
-				Models/Aisle.swift.txt,
-				Models/Item.swift.txt,
-				Models/StoreOld.swift.txt,
 			);
 			target = 079A72612DFA1BED0098A2EB /* ThymeSaver */;
 		};
@@ -62,9 +59,6 @@
 				Interface/ItemView.swift.txt,
 				Interface/RecipeView.swift.txt,
 				Interface/StoreAisleView.swift.txt,
-				Models/Aisle.swift.txt,
-				Models/Item.swift.txt,
-				Models/StoreOld.swift.txt,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
