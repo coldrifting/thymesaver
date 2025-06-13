@@ -6,6 +6,7 @@ extension StoreView {
     class ViewModel {
         private let appDatabase: AppDatabase
         @ObservationIgnored private var cancellable: AnyDatabaseCancellable?
+        @ObservationIgnored private var cancellable2: AnyDatabaseCancellable?
         
         init(appDatabase: AppDatabase) {
             self.appDatabase = appDatabase
@@ -16,24 +17,26 @@ extension StoreView {
                 try Store.fetchAll(db)
             }
             
-            // Start observing the database.
-            // Previous observation, if any, is cancelled.
-            cancellable = observation.start(in: appDatabase.reader) { error in
-                // Handle error
+            cancellable = observation.start(in: appDatabase.reader) { _ in
             } onChange: { [unowned self] stores in
                 self.stores = stores
-                selectedStore = stores.first(where: { $0.id == selectedStoreId })
-                if (selectedStore == nil && !stores.isEmpty) {
-                    selectedStoreId = stores.first?.id
-                    selectedStore = stores.first
-                }
+            }
+            
+            let observation2 = ValueObservation.tracking { db in
+                try Config.find(db)
+            }
+            
+            // Start observing the database.
+            // Previous observation, if any, is cancelled.
+            cancellable2 = observation2.start(in: appDatabase.reader) { _ in
+            } onChange: { [unowned self] config in
+                self.selectedStoreId = config.selectedStore
             }
         }
         
-        private var selectedStoreId: Int? = nil
+        private(set) var selectedStoreId: Int = -1
         
         private(set) var stores: [Store] = []
-        private(set) var selectedStore: Store? = nil
         
         private(set) var alertType: AlertType = AlertType.none
         private(set) var alertId: Int = -1
@@ -51,7 +54,6 @@ extension StoreView {
             for store in stores {
                 if (store.id == storeId) {
                     selectedStoreId = storeId
-                    self.selectedStore = store
                     break
                 }
             }

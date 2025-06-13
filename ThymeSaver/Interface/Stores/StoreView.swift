@@ -1,101 +1,122 @@
 import SwiftUI
+import Observation
+import Combine
 
 struct StoreView: View {
     @State private var viewModel: ViewModel
+    
+    @State private var stores: [Store] = []
+    @State private var selectedStoreId: Int = -1
     
     init(appDatabase: AppDatabase) {
         _viewModel = State(initialValue: ViewModel(appDatabase: appDatabase))
     }
     
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
-                if let selectedStore = viewModel.selectedStore {
-                    Section("Selected Store") {
-                        NavigationLink() {
-                            EmptyView() // TODO - StoreAisleView(storeId: selectedStore.id, storeName: selectedStore.name)
-                        } label: {
-                            Text(selectedStore.storeName)
-                        }
-                    }
-                }
-                
-                Section("All Stores") {
-                    ForEach(viewModel.stores) { storeItem in
-                        let selected : Bool = storeItem.storeId == viewModel.selectedStore?.storeId
-                        
-                        Button(action: {
-                            withAnimation {
-                                viewModel.selectStore(storeId: storeItem.storeId)
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(.gray)
-                                    .accessibilityLabel(selected ? "Selected" : "Unselected")
-                                    .padding([.trailing], 4)
-                                Text(storeItem.storeName)
-                            }
-                        }
-                        .swipeActions(edge: .leading) {
-                            Button() {
-                                viewModel.queueRenameItemAlert(itemId: storeItem.storeId, itemName: storeItem.storeName)
-                            } label: {
-                                Text("Rename")
-                            }
-                            .tint(Color(red: 0.2, green: 0.6, blue: 0.3))
-                        }
-                        .if(viewModel.stores.count > 1 && !selected) { view in
-                            view
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        viewModel.deleteStore(storeId: storeItem.storeId)
-                                    } label: {
-                                        Text("Delete")
-                                    }
-                                }
-                        }
-                    }
-                }
+                selectedStoreLink()
+                allStores()
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Reset Data") {
-                        viewModel.reset()
-                    }.foregroundStyle(Color.red)
+                    Button(
+                        action: { viewModel.reset() },
+                        label: { Text("Reset Data").foregroundStyle(Color.red) }
+                    )
                 }
                 ToolbarItem {
-                    Button {
-                        viewModel.queueAddItemAlert()
-                    } label: {
-                        Label("Add Store", systemImage: "plus")
-                    }
+                    Button(
+                        action: { viewModel.queueAddItemAlert() },
+                        label: { Label("Add Store", systemImage: "plus") }
+                    )
                 }
             }
             .customAlert(
                 title: viewModel.alertType == AlertType.rename
-                    ? "Rename Store"
-                    : "New Store",
+                ? "Rename Store"
+                : "New Store",
                 message: viewModel.alertType == AlertType.rename
-                    ? "Please enter the new name for this store."
-                    : "Please enter a name for the new store.",
+                ? "Please enter the new name for this store."
+                : "Please enter a name for the new store.",
                 placeholder: "Store Name",
                 onConfirm: viewModel.alertType == AlertType.rename
-                    ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
-                    : { viewModel.addStore(storeName: $0)},
+                ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
+                : { viewModel.addStore(storeName: $0)},
                 onDismiss: viewModel.dismissAlert,
                 alertType: viewModel.alertType,
                 $text: viewModel.alertTextBinding
             )
+            .onAppear {
+                viewModel.observe()
+            }
+            .onReceive(Just(viewModel.stores)) { stores in
+                withAnimation {
+                    self.stores = stores
+                }
+            }
+            .onReceive(Just(viewModel.selectedStoreId)) { selectedStoreId in
+                withAnimation {
+                    self.selectedStoreId = selectedStoreId
+                }
+            }
             .navigationTitle(Text("Stores"))
-        } detail: {
-            Text("Select a store")
-        }.onAppear {
-            viewModel.observe()
+        }
+    }
+    
+    func selectedStoreLink() -> some View {
+        Section("Selected Store") {
+            if (selectedStoreId == -1) {
+                Text("None Selected")
+            }
+            else {
+                let selectedStore: Store = stores.first(where: { $0.storeId == selectedStoreId })!
+                NavigationLink(
+                    destination: { EmptyView() },
+                    label: { Text(selectedStore.storeName) }
+                )
+            }
+        }
+    }
+    
+    func storeItem(name: String, selected: Bool) -> some View {
+        HStack {
+            Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                .renderingMode(.original)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+                .foregroundColor(.gray)
+                .accessibilityLabel(selected ? "Selected" : "Unselected")
+                .padding([.trailing], 4)
+            Text(name)
+        }
+    }
+    
+    func allStores() -> some View {
+        Section("All Stores") {
+            ForEach(stores) { store in
+                let selected : Bool = store.storeId == selectedStoreId
+                
+                Button(
+                    action: { viewModel.selectStore(storeId: store.storeId) },
+                    label: { storeItem(name: store.storeName, selected: selected) }
+                )
+                .foregroundStyle(.primary)
+                .swipeActions(edge: .leading) {
+                    Button {
+                        viewModel.queueRenameItemAlert(itemId: store.storeId, itemName: store.storeName)
+                    } label: {
+                        Text("Rename")
+                    }
+                    .tint(Color(red: 0.2, green: 0.6, blue: 0.3))
+                }
+                .deleteDisabled(selected)
+            }.onDelete { offsets in
+                offsets.forEach { index in
+                    viewModel.deleteStore(storeId: stores[index].storeId)
+                }
+            }
         }
     }
 }

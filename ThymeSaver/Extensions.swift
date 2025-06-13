@@ -14,30 +14,7 @@ extension View {
             self
         }
     }
-}
-
-extension String {
-    func trim() -> String {
-    return self.trimmingCharacters(in: .whitespaces)
-   }
-}
-
-extension UUID {
-    init(number: Int64) {
-        var number = number
-        let numberData = Data(bytes: &number, count: MemoryLayout<Int64>.size)
-        
-        let bytes = [UInt8](numberData)
-        
-        let tuple: uuid_t = (0, 0, 0, 0, 0, 0, 0, 0,
-                             bytes[0], bytes[1], bytes[2], bytes[3],
-                             bytes[4], bytes[5], bytes[6], bytes[7])
-        
-        self.init(uuid: tuple)
-    }
-}
-
-extension View {
+    
     func customAlert(
         title: String,
         message: String,
@@ -62,5 +39,26 @@ extension View {
                 })
             },
             message: { Text(message) })
+    }
+}
+
+extension String {
+    func trim() -> String {
+    return self.trimmingCharacters(in: .whitespaces)
+   }
+}
+
+extension UUID {
+    init(number: Int64) {
+        var number = number
+        let numberData = Data(bytes: &number, count: MemoryLayout<Int64>.size)
+        
+        let bytes = [UInt8](numberData)
+        
+        let tuple: uuid_t = (0, 0, 0, 0, 0, 0, 0, 0,
+                             bytes[0], bytes[1], bytes[2], bytes[3],
+                             bytes[4], bytes[5], bytes[6], bytes[7])
+        
+        self.init(uuid: tuple)
     }
 }
