@@ -1,84 +1,50 @@
 import SwiftUI
-import SwiftData
-
-let schemaTypes : [any PersistentModel.Type] = [
-    Store.self,
-    Aisle.self,
-    Item.self
-]
-let schema = Schema(schemaTypes)
+import Observation
+import GRDB
 
 @main
 struct thymesaverApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            
-            var itemFetchDescriptor = FetchDescriptor<Store>()
-            itemFetchDescriptor.fetchLimit = 1
-            
-            guard try container.mainContext.fetch(itemFetchDescriptor).count == 0 else { return container }
-            
-            populate(context: container.mainContext)
-            
-            try container.mainContext.save()
-            
-            return container
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-    
     var body: some Scene {
         WindowGroup {
-            AppContentView()
+            AppContentView().appDatabase(.shared)
         }
-        .modelContainer(for: schemaTypes)
     }
 }
 
-
 struct AppContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.appDatabase) var appDatabase
     
     @State private var selectedTab: Int = 1
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Stores", systemImage: "location", value: 0) {
-                StoreView()
+                StoreView(appDatabase)
             }
-            Tab("Items", systemImage: "list.dash", value: 1) {
-                ItemView()
+            Tab("Items", systemImage: "square.stack.3d.down.right", value: 1) {
+                ItemsView(appDatabase)
             }
-            Tab("Recipes", systemImage: "star", value: 2) {
-                RecipeView()
+            Tab("Recipes", systemImage: "list.bullet.rectangle", value: 2) {
+                RecipeView(appDatabase)
             }
             Tab("Cart", systemImage: "cart", value: 3) {
-                CartView()
+                CartView(appDatabase)
             }
         }
     }
     
 }
 
-@MainActor
-let previewContainer: ModelContainer = {
-    do {
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-        
-        populate(context: container.mainContext)
-        
-        return container
-    } catch {
-        fatalError("Failed to create container")
+extension EnvironmentValues {
+    @Entry var appDatabase = AppDatabase.shared
+}
+
+extension View {
+    func appDatabase(_ appDatabase: AppDatabase) -> some View {
+        self.environment(\.appDatabase, appDatabase)
     }
-}()
+}
 
 #Preview {
-    AppContentView()
-        .modelContainer(previewContainer)
+    AppContentView().appDatabase(.shared)
 }

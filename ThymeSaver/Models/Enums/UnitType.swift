@@ -1,7 +1,7 @@
 import Foundation
-import SwiftData
+import GRDB
 
-enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
+enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible, DatabaseValueConvertible {
     case count = "Count"
     case volumeTeaspoons = "VolumeTeaspoons"
     case volumeTablespoons = "VolumeTablespoons"
@@ -16,27 +16,9 @@ enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConverti
     var id: Self { self }
     
     var description: String {
-        switch self {
-        case .count:
-            return "Count"
-        case .volumeTeaspoons:
-            return "Teaspoons"
-        case .volumeTablespoons:
-            return "Tablespoons"
-        case .volumeOunces:
-            return "Ounces"
-        case .volumeCups:
-            return "Cups"
-        case .volumeQuarts:
-            return "Quarts"
-        case .volumePints:
-            return "Pints"
-        case .volumeGallons:
-            return "Gallons"
-        case .weightOunces:
-            return "Ounces (#)"
-        case .weightPounds:
-            return "Pounds"
-        }
+        return self.rawValue
+            .replacingOccurrences(of: "WeightOunces", with: "Ounces (#)")
+            .replacingOccurrences(of: "Volume", with: "")
+            .replacingOccurrences(of: "Weight", with: "")
     }
 }

@@ -1,47 +1,52 @@
 import Foundation
-import SwiftData
+import GRDB
 
-@Model
-final class Store: Codable, Comparable {
-    private(set) var uuid: UUID
-    var name: String
-    var selected: Bool
-    var aisles: [Aisle]
+struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
+    var storeId: Int
+    var storeName: String
     
-    init(name: String, uuid: UUID? = nil, selected: Bool = false) {
-        self.name = name
-        self.uuid = uuid ?? UUID()
-        self.selected = selected
-        self.aisles = []
+    var id: Int { storeId }
+    
+    enum Columns {
+        static let storeId = Column(CodingKeys.storeId)
+        static let storeName = Column(CodingKeys.storeName)
     }
     
-    enum CodingKeys: CodingKey {
-        case storeId
-        case storeName
-        case selected
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.uuid = try UUID.init(number: container.decode(Int64.self, forKey: .storeId))
-        self.name = try container.decode(String.self, forKey: .storeName)
-        self.selected = try container.decodeIfPresent(Bool.self, forKey: .selected) ?? false
-        self.aisles = []
-    }
+    static var databaseTableName: String = "Stores"
+}
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(uuid, forKey: .storeId)
-        try container.encode(name, forKey: .storeName)
-        try container.encode(selected, forKey: .selected)
+struct StoreInsert: Codable, FetchableRecord, PersistableRecord {
+    var storeName: String
+    
+    static var databaseTableName: String { Store.databaseTableName }
+}
+
+extension AppDatabase {
+    func addStore(storeName: String) throws {
+        try dbWriter.write { db in
+            let store = StoreInsert(storeName: storeName)
+            try store.insert(db)
+        }
     }
     
-    // Sorting
-    static func == (lhs: Store, rhs: Store) -> Bool {
-      return (lhs.name, lhs.id) == (rhs.name, rhs.id)
+    func deleteStore(storeId: Int) throws {
+        try dbWriter.write { db in
+            _ = try Store.deleteOne(db, key: storeId)
+        }
     }
     
-    static func < (lhs: Store, rhs: Store) -> Bool {
-        return (lhs.name.lowercased(), lhs.id) < (rhs.name.lowercased(), rhs.id)
+    func renameStore(storeId: Int, newName: String) throws {
+        try dbWriter.write { db in
+            var store = try Store.find(db, key: storeId)
+            store.storeName = newName
+            try store.update(db, columns: [Store.Columns.storeName])
+        }
+    }
+    
+    func getStore(storeId: Int) throws -> Store {
+        try dbWriter.write { db in
+            let store = try Store.fetchOne(db, key: storeId)!
+            return store
+        }
     }
 }

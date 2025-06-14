@@ -1,50 +1,83 @@
-import Foundation
-import SwiftData
+import GRDB
 
-@Model
-final class Item: Codable, Comparable {
-    private(set) var uuid: UUID
-    var name: String
-    var temp: ItemTemp
+struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord {
+    var itemId: Int
+    var itemName: String
+    var itemTemp: ItemTemp
     var defaultUnits: UnitType
     
-    init(name: String, temp: ItemTemp = .ambient, defaultUnits: UnitType = .count, uuid: UUID? = nil) {
-        self.name = name
-        self.temp = temp
-        self.defaultUnits = defaultUnits
-        self.uuid = uuid ?? UUID()
+    var id: Int { itemId }
+    
+    enum Columns {
+        static let itemId = Column(CodingKeys.itemId)
+        static let itemName = Column(CodingKeys.itemName)
+        static let itemTemp = Column(CodingKeys.itemTemp)
+        static let defaultUnits = Column(CodingKeys.defaultUnits)
     }
     
-    // Serialization
-    enum CodingKeys: CodingKey {
-        case itemId
-        case itemName
-        case itemTemp
-        case defaultUnits
-    }
+    static var databaseTableName: String = "Items"
     
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.uuid = try UUID.init(number: container.decode(Int64.self, forKey: .itemId))
-        self.name = try container.decode(String.self, forKey: .itemName)
-        self.temp = try container.decodeIfPresent(ItemTemp.self, forKey: .itemTemp) ?? ItemTemp.ambient
-        self.defaultUnits = try container.decodeIfPresent(UnitType.self, forKey: .defaultUnits) ?? UnitType.count
+    static func getItems(_ db: Database, filter: String = "") throws -> [Item] {
+        if (filter.trim().isEmpty) {
+            return try Item.order(Item.Columns.itemName.asc).fetchAll(db)
+        }
+        
+        let filterString = filter.lowercased().trim()
+        
+        return try Item
+            .filter(Item.Columns.itemName.like("%\(filterString)%"))
+            .order(Item.Columns.itemName.asc)
+            .fetchAll(db)
     }
+}
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(uuid, forKey: .itemId)
-        try container.encode(name, forKey: .itemName)
-        try container.encode(temp, forKey: .itemTemp)
-        try container.encode(defaultUnits, forKey: .defaultUnits)
+struct ItemInsert: Codable, FetchableRecord, PersistableRecord {
+    var itemName: String
+    var itemTemp: ItemTemp
+    var defaultUnits: UnitType
+    
+    static var databaseTableName: String { Item.databaseTableName }
+}
+
+extension AppDatabase {
+    func addItem(
+        itemName: String,
+        itemTemp: ItemTemp = ItemTemp.ambient,
+        defaultUnits: UnitType = UnitType.count
+    ) throws {
+        try dbWriter.write { db in
+            let item = ItemInsert(itemName: itemName, itemTemp: itemTemp, defaultUnits: defaultUnits)
+            try item.insert(db)
+        }
     }
     
-    // Sorting
-    static func == (lhs: Item, rhs: Item) -> Bool {
-      return (lhs.name, lhs.id) == (rhs.name, rhs.id)
+    func deleteItem(itemId: Int) throws {
+        try dbWriter.write { db in
+            _ = try Item.deleteOne(db, key: itemId)
+        }
     }
     
-    static func < (lhs: Item, rhs: Item) -> Bool {
-        return (lhs.name.lowercased(), lhs.id) < (rhs.name.lowercased(), rhs.id)
+    func renameItem(itemId: Int, newName: String) throws {
+        try dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.itemName = newName
+            try item.update(db, columns: [Item.Columns.itemName])
+        }
+    }
+    
+    func updateItemTemp(itemId: Int, itemTemp: ItemTemp) throws {
+        try dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.itemTemp = itemTemp
+            try item.update(db, columns: [Item.Columns.itemTemp])
+        }
+    }
+    
+    func updateItemDefaultUnits(itemId: Int, defaultUnits: UnitType) throws {
+        try dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.defaultUnits = defaultUnits
+            try item.update(db, columns: [Item.Columns.defaultUnits])
+        }
     }
 }

@@ -1,55 +1,89 @@
-import Foundation
-import SwiftData
+import GRDB
 
-@Model
-final class Aisle {
-    private(set) var uuid: UUID
-    var name: String
-    var store: Store
-    var order: Int
+struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
+    var aisleId: Int
+    var storeId: Int
+    var aisleName: String
+    var aisleOrder: Int = -1
     
-    init(name: String, store: Store, order: Int = -1, uuid: UUID? = nil) {
-        self.name = name
-        self.store = store
-        self.order = order
-        self.uuid = uuid ?? UUID()
+    var id: Int { aisleId }
+    
+    enum Columns {
+        static let aisleId = Column(CodingKeys.aisleId)
+        static let storeId = Column(CodingKeys.storeId)
+        static let aisleName = Column(CodingKeys.aisleName)
+        static let aisleOrder = Column(CodingKeys.aisleOrder)
+    }
+    
+    static var databaseTableName: String = "Aisles"
+    
+    static func getAisles(_ db: Database) throws -> [Aisle] {
+        let storeIdChecked = (try? Config.find(db).selectedStore) ?? -1
+        return try Aisle
+            .filter{ $0.storeId == storeIdChecked }
+            .order(\.aisleOrder.asc)
+            .fetchAll(db)
     }
 }
 
-final class AisleJson: Codable {
-    enum CodingKeys: CodingKey {
-        case aisleId
-        case aisleName
-        case aisleOrder
-        case storeId
-    }
-    
-    var aisleId: Int64
+struct AisleInsert: Codable, FetchableRecord, PersistableRecord {
+    var storeId: Int
     var aisleName: String
-    var aisleOrder: Int
-    var storeId: Int64
+    var aisleOrder: Int = -1
     
-    func ToAisle(store: Store) -> Aisle {
-        return Aisle(
-            name: aisleName,
-            store: store,
-            order: aisleOrder,
-            uuid: UUID.init(number: aisleId))
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.aisleId = try container.decode(Int64.self, forKey: .aisleId)
-        self.aisleName = try container.decode(String.self, forKey: .aisleName)
-        self.aisleOrder = try container.decodeIfPresent(Int.self, forKey: .aisleOrder) ?? 0
-        self.storeId = try container.decode(Int64.self, forKey: .storeId)
-    }
+    static var databaseTableName: String { Aisle.databaseTableName }
+}
 
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(aisleId, forKey: .aisleId)
-        try container.encode(aisleName, forKey: .aisleName)
-        try container.encode(aisleOrder, forKey: .aisleOrder)
-        try container.encode(storeId, forKey: .storeId)
+extension AppDatabase {
+    func getAisle(aisleId: Int) throws -> Aisle {
+        try dbWriter.write { db in
+            let aisle = try Aisle.fetchOne(db, key: aisleId)!
+            return aisle
+        }
+    }
+    
+    func addAisle(aisleName: String, storeId: Int, aisleOrder: Int = Int.max) throws {
+        try dbWriter.write { db in
+            let aisle = AisleInsert(storeId: storeId, aisleName: aisleName, aisleOrder: aisleOrder)
+            try aisle.insert(db)
+            try syncAisleOrder(db: db)
+        }
+    }
+    
+    func renameAisle(aisleId: Int, newName: String) throws {
+        try dbWriter.write { db in
+            var aisle = try Aisle.find(db, key: aisleId)
+            aisle.aisleName = newName
+            try aisle.update(db, columns: [Aisle.Columns.aisleName])
+        }
+    }
+    
+    func deleteAisle(aisleId: Int, storeId: Int) throws {
+        try dbWriter.write { db in
+            try Aisle.deleteOne(db, key: aisleId)
+            try syncAisleOrder(db: db)
+        }
+    }
+    
+    func moveAisle(aisleId: Int, newIndex: Int) throws {
+        try dbWriter.write { db in
+            if var aisle: Aisle = try? Aisle.find(db, key: aisleId) {
+                aisle.aisleOrder = newIndex
+                try aisle.update(db)
+            }
+        }
+    }
+    
+    func syncAisleOrder(db: Database) throws {
+        let aisles = try Aisle.getAisles(db)
+        for (index, aisle) in aisles.enumerated() {
+            let aisleCopy = Aisle(
+                aisleId: aisle.aisleId,
+                storeId: aisle.storeId,
+                aisleName: aisle.aisleName,
+                aisleOrder: index
+            )
+            try aisleCopy.update(db)
+        }
     }
 }

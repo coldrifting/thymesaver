@@ -1,8 +1,13 @@
 import Foundation
-import SwiftData
 
-enum BayType: String, Codable, CaseIterable {
+enum BayType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
     case start = "Start"
     case middle = "Middle"
     case end = "End"
+    
+    var id: Self { self }
+    
+    var description: String {
+        return self.rawValue.capitalized
+    }
 }
