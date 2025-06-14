@@ -13,3 +13,18 @@ struct Config: Codable, FetchableRecord, PersistableRecord {
         try fetchOne(db)!
     }
 }
+
+extension AppDatabase {
+    func getSelectedStoreId() throws -> Int {
+        try dbWriter.read { db in
+            try Config.find(db).selectedStore
+        }
+    }
+    
+    func selectStore(storeId: Int) throws {
+        try dbWriter.write { db in
+            let config: Config = Config(selectedStore: storeId)
+            try config.update(db)
+        }
+    }
+}

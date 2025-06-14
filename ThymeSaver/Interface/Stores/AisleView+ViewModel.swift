@@ -13,7 +13,7 @@ extension AisleView {
         
         func observe(storeId: Int) {
             let observation = ValueObservation.tracking { db in
-                return try Aisle.getAisles(db, storeId: storeId)
+                return try Aisle.getAisles(db)
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
@@ -65,7 +65,7 @@ extension AisleView {
             alertType = .add
             alertTitle = "Add Aisle"
             alertMessage = "Please enter the name for the new Aisle"
-            alertConfirmText = "Create"
+            alertConfirmText = "Add"
         }
         
         func queueRenameItemAlert(itemId: Int, itemName: String) {

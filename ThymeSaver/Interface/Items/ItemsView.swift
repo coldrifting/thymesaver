@@ -3,6 +3,8 @@ import Observation
 import Combine
 
 struct ItemsView: View {
+    @Environment(\.appDatabase) var appDatabase
+    
     @State private var viewModel: ViewModel
     
     @State private var itemsWithAisleInfo: [(section: String, items: [ItemExpanded])] = []
@@ -17,7 +19,7 @@ struct ItemsView: View {
                 itemsList()
             }
             .navigationTitle(Text("Items"))
-            .searchable(text: viewModel.searchText)
+            .searchable(text: viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
                 ToolbarItem {
                     Button(
@@ -33,7 +35,7 @@ struct ItemsView: View {
                 }
             }
             .onAppear {
-                viewModel.observe()
+                viewModel.observe(filterText: viewModel.searchText.wrappedValue)
             }
             .onReceive(Just(viewModel.itemsWithAisleInfo)) { items in
                 withAnimation {
@@ -73,16 +75,21 @@ struct ItemsView: View {
     
     private func sectionItems(items: [ItemExpanded], ) -> some View {
         ForEach(items) { item in
-            HStack {
-                Text(item.itemName)
-                Spacer()
-                
-                let secondaryText = viewModel.sectionSplitType != .aisle
-                ? item.aisleName ?? ""
-                : item.itemTemp.description
-                
-                Text(secondaryText).foregroundStyle(.secondary).font(.system(size: 15))
-            }
+            NavigationLink(
+                destination: { ItemDetailsView(appDatabase, itemId: item.itemId, itemName: item.itemName) },
+                label: {
+                    HStack {
+                        Text(item.itemName)
+                        Spacer()
+                        
+                        let secondaryText = viewModel.sectionSplitType != .aisle
+                        ? item.aisleName ?? ""
+                        : item.itemTemp.description
+                        
+                        Text(secondaryText).foregroundStyle(.secondary).font(.system(size: 15))
+                    }
+                }
+            )
             .swipeActions(edge: .leading) {
                 Button(
                     action: { viewModel.queueRenameItemAlert(itemId: item.itemId, itemName: item.itemName) },

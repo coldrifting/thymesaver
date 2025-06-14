@@ -64,4 +64,20 @@ extension AppDatabase {
             try item.update(db, columns: [Item.Columns.itemName])
         }
     }
+    
+    func updateItemTemp(itemId: Int, itemTemp: ItemTemp) throws {
+        try dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.itemTemp = itemTemp
+            try item.update(db, columns: [Item.Columns.itemTemp])
+        }
+    }
+    
+    func updateItemDefaultUnits(itemId: Int, defaultUnits: UnitType) throws {
+        try dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.defaultUnits = defaultUnits
+            try item.update(db, columns: [Item.Columns.defaultUnits])
+        }
+    }
 }

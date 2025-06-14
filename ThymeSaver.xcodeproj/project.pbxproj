@@ -35,35 +35,9 @@
 		079A72922DFA59070098A2EB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		0713A6922DFB94C300A3982C /* Exceptions for "ThymeSaver" folder in "ThymeSaver" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Interface/ItemDetailsView.swift.txt,
-				Interface/ItemView.swift.txt,
-			);
-			target = 079A72612DFA1BED0098A2EB /* ThymeSaver */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		0713A6932DFB94C300A3982C /* Exceptions for "ThymeSaver" folder in "Compile Sources" phase from "ThymeSaver" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 079A725E2DFA1BED0098A2EB /* Sources */;
-			membershipExceptions = (
-				Interface/ItemDetailsView.swift.txt,
-				Interface/ItemView.swift.txt,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		079A72642DFA1BED0098A2EB /* ThymeSaver */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0713A6922DFB94C300A3982C /* Exceptions for "ThymeSaver" folder in "ThymeSaver" target */,
-				0713A6932DFB94C300A3982C /* Exceptions for "ThymeSaver" folder in "Compile Sources" phase from "ThymeSaver" target */,
-			);
 			path = ThymeSaver;
 			sourceTree = "<group>";
 		};

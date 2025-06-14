@@ -74,7 +74,7 @@ extension StoreView {
             alertType = .add
             alertTitle = "Add Store"
             alertMessage = "Please enter the name for the new Store"
-            alertConfirmText = "Create"
+            alertConfirmText = "Add"
         }
         
         func queueRenameItemAlert(itemId: Int, itemName: String) {

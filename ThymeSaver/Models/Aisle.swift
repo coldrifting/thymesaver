@@ -17,9 +17,10 @@ struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
     
     static var databaseTableName: String = "Aisles"
     
-    static func getAisles(_ db: Database, storeId: Int) throws -> [Aisle] {
+    static func getAisles(_ db: Database) throws -> [Aisle] {
+        let storeIdChecked = (try? Config.find(db).selectedStore) ?? -1
         return try Aisle
-            .filter{ $0.storeId == storeId }
+            .filter{ $0.storeId == storeIdChecked }
             .order(\.aisleOrder.asc)
             .fetchAll(db)
     }
@@ -45,7 +46,7 @@ extension AppDatabase {
         try dbWriter.write { db in
             let aisle = AisleInsert(storeId: storeId, aisleName: aisleName, aisleOrder: aisleOrder)
             try aisle.insert(db)
-            try syncAisleOrder(db: db, storeId: storeId)
+            try syncAisleOrder(db: db)
         }
     }
     
@@ -60,7 +61,7 @@ extension AppDatabase {
     func deleteAisle(aisleId: Int, storeId: Int) throws {
         try dbWriter.write { db in
             try Aisle.deleteOne(db, key: aisleId)
-            try syncAisleOrder(db: db, storeId: storeId)
+            try syncAisleOrder(db: db)
         }
     }
     
@@ -73,8 +74,8 @@ extension AppDatabase {
         }
     }
     
-    func syncAisleOrder(db: Database, storeId: Int) throws {
-        let aisles = try Aisle.getAisles(db, storeId: storeId)
+    func syncAisleOrder(db: Database) throws {
+        let aisles = try Aisle.getAisles(db)
         for (index, aisle) in aisles.enumerated() {
             let aisleCopy = Aisle(
                 aisleId: aisle.aisleId,

@@ -17,7 +17,7 @@ extension ItemsView {
             self.appDatabase = appDatabase
         }
         
-        func observe(filterText: String = "") {
+        func observe(filterText: String) {
             let observation = ValueObservation.tracking { db in
                 try ItemExpanded.getItemsFiltered(db, itemNameFilter: filterText)
             }
@@ -42,7 +42,7 @@ extension ItemsView {
             case .aisle:
                 return Dictionary(grouping: items, by: { $0.aisleId} )
                     .sorted(by: { $0.value.first?.aisleOrder ?? Int.max < $1.value.first?.aisleOrder ?? Int.max })
-                    .map{ ("\($0.value.first?.aisleName ?? "None")", $0.value) }
+                    .map{ ("\($0.value.first?.aisleName ?? "No Aisle Assigned")", $0.value) }
             }
         }
         
@@ -58,7 +58,6 @@ extension ItemsView {
             self.observe(filterText: self.searchTextRaw)
         }
         
-        // TODO - Debounce?
         private var searchTextRaw: String = ""
         var searchText: Binding<String> {
             Binding(
@@ -107,7 +106,7 @@ extension ItemsView {
             alertType = .add
             alertTitle = "Add Item"
             alertMessage = "Please enter the name for the new Item"
-            alertConfirmText = "Create"
+            alertConfirmText = "Add"
         }
         
         func queueRenameItemAlert(itemId: Int, itemName: String) {

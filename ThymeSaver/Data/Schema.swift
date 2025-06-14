@@ -33,6 +33,13 @@ extension AppDatabase {
             
             t.primaryKey(["itemId", "storeId"])
         }
+        try db.create(table: ItemPrep.databaseTableName) {t in
+            t.autoIncrementedPrimaryKey("itemPrepId").notNull()
+            t.column("itemId", .integer).notNull()
+            t.column("prepName", .text).notNull()
+            
+            t.foreignKey(["itemId"], references: Item.databaseTableName)
+        }
         
         try db.create(table: Config.databaseTableName) { t in
             t.primaryKey("id", .integer, onConflict: .replace).check { $0 == 1 }
@@ -45,6 +52,7 @@ extension AppDatabase {
     func reset() throws {
         try dbWriter.write { db in
             try Config.deleteAll(db)
+            try ItemPrep.deleteAll(db)
             try ItemAisle.deleteAll(db)
             try Item.deleteAll(db)
             try Aisle.deleteAll(db)
@@ -54,6 +62,7 @@ extension AppDatabase {
             try decode(db, for: Aisle.self)
             try decode(db, for: Item.self)
             try decode(db, for: ItemAisle.self)
+            try decode(db, for: ItemPrep.self)
             
             let config: Config = Config(selectedStore: 1)
             try config.insert(db)

@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 
-struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord {
+struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
     var storeId: Int
     var storeName: String
     
@@ -22,13 +22,6 @@ struct StoreInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func selectStore(storeId: Int) throws {
-        try dbWriter.write { db in
-            let config: Config = Config(selectedStore: storeId)
-            try config.update(db)
-        }
-    }
-    
     func addStore(storeName: String) throws {
         try dbWriter.write { db in
             let store = StoreInsert(storeName: storeName)

@@ -17,16 +17,15 @@ struct ItemAisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
     }
     
     static var databaseTableName: String = "ItemAisles"
+    
+    static func getItemAisles(_ db: Database, itemId: Int) throws -> [ItemAisle] {
+        let storeId = try Config.find(db).selectedStore
+        return try ItemAisle.filter{itemId == $0.itemId && storeId == $0.storeId}.fetchAll(db)
+    }
+    
 }
 
 extension AppDatabase {
-    func getItemAisles(storeId: Int, itemId: Int) throws -> [ItemAisle] {
-        try dbWriter.write { db in
-            let itemAisles = try ItemAisle.filter{itemId == $0.itemId && storeId == $0.storeId}.fetchAll(db)
-            return itemAisles
-        }
-    }
-    
     func addItemAisle(itemId: Int, aisleId: Int, storeId: Int, bay: BayType = BayType.middle) throws {
         try dbWriter.write { db in
             let itemAisle = ItemAisle(itemId: itemId, aisleId: aisleId, storeId: storeId, bay: bay)
@@ -37,6 +36,20 @@ extension AppDatabase {
     func deleteItemAisle(itemId: Int, storeId: Int) throws {
         try dbWriter.write { db in
             _ = try ItemAisle.deleteAll(db, keys: [itemId, storeId])
+        }
+    }
+    
+    func updateItemAisle(itemId: Int, storeId: Int, aisleId: Int) throws {
+        try dbWriter.write { db in
+            let compositeKey = [
+                ItemAisle.Columns.itemId.name: itemId,
+                ItemAisle.Columns.storeId.name: storeId
+            ]
+            
+            let bay: BayType? = try? ItemAisle.find(db, key: compositeKey).bay
+            
+            let itemAisleEntry = ItemAisle(itemId: itemId, aisleId: aisleId, storeId: storeId, bay: bay ?? .middle)
+            try? itemAisleEntry.upsert(db)
         }
     }
     
