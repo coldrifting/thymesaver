@@ -49,3 +49,10 @@ extension UUID {
         self.init(uuid: tuple)
     }
 }
+
+extension Int {
+    // Cantor pairing function
+    func concat(_ other: Int) -> Int {
+        return (self + other) * (self + other + 1) / 2 + self;
+    }
+}

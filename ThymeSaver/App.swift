@@ -14,17 +14,17 @@ struct thymesaverApp: App {
 struct AppContentView: View {
     @Environment(\.appDatabase) var appDatabase
     
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Int = 1
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Stores", systemImage: "location", value: 0) {
                 StoreView(appDatabase)
             }
-            Tab("Items", systemImage: "list.dash", value: 1) {
-                ItemView(appDatabase)
+            Tab("Items", systemImage: "square.stack.3d.down.right", value: 1) {
+                ItemsView(appDatabase)
             }
-            Tab("Recipes", systemImage: "star", value: 2) {
+            Tab("Recipes", systemImage: "list.bullet.rectangle", value: 2) {
                 RecipeView(appDatabase)
             }
             Tab("Cart", systemImage: "cart", value: 3) {

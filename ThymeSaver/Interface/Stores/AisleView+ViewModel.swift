@@ -13,7 +13,7 @@ extension AisleView {
         
         func observe(storeId: Int) {
             let observation = ValueObservation.tracking { db in
-                return try Aisle.getAisles(db: db, storeId: storeId)
+                return try Aisle.getAisles(db, storeId: storeId)
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in

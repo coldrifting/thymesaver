@@ -6,6 +6,13 @@ struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord {
     var storeName: String
     
     var id: Int { storeId }
+    
+    enum Columns {
+        static let storeId = Column(CodingKeys.storeId)
+        static let storeName = Column(CodingKeys.storeName)
+    }
+    
+    static var databaseTableName: String = "Stores"
 }
 
 struct StoreInsert: Codable, FetchableRecord, PersistableRecord {
@@ -31,15 +38,15 @@ extension AppDatabase {
     
     func deleteStore(storeId: Int) throws {
         try dbWriter.write { db in
-            let store = Store(storeId: storeId, storeName: "")
-            try store.delete(db)
+            _ = try Store.deleteOne(db, key: storeId)
         }
     }
     
     func renameStore(storeId: Int, newName: String) throws {
         try dbWriter.write { db in
-            let store = Store(storeId: storeId, storeName: newName)
-            try store.update(db)
+            var store = try Store.find(db, key: storeId)
+            store.storeName = newName
+            try store.update(db, columns: [Store.Columns.storeName])
         }
     }
     

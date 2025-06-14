@@ -1,0 +1,1400 @@
+[
+  {
+    "itemId": 1,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 1,
+    "storeId": 2,
+    "aisleId": 24,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 10,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 100,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 101,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 102,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 103,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 104,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 105,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 106,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 107,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 108,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "End"
+  },
+  {
+    "itemId": 109,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "End"
+  },
+  {
+    "itemId": 11,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 110,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "End"
+  },
+  {
+    "itemId": 111,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "End"
+  },
+  {
+    "itemId": 112,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "End"
+  },
+  {
+    "itemId": 113,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 114,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 115,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 116,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 117,
+    "storeId": 1,
+    "aisleId": 8,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 118,
+    "storeId": 1,
+    "aisleId": 8,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 119,
+    "storeId": 1,
+    "aisleId": 8,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 12,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 120,
+    "storeId": 1,
+    "aisleId": 8,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 121,
+    "storeId": 1,
+    "aisleId": 8,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 122,
+    "storeId": 1,
+    "aisleId": 12,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 123,
+    "storeId": 1,
+    "aisleId": 12,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 124,
+    "storeId": 1,
+    "aisleId": 12,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 125,
+    "storeId": 1,
+    "aisleId": 12,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 126,
+    "storeId": 1,
+    "aisleId": 13,
+    "bay": "Start"
+  },
+  {
+    "itemId": 127,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "End"
+  },
+  {
+    "itemId": 128,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 129,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 13,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 130,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 131,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 132,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 133,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 134,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 135,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 136,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 137,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 138,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Start"
+  },
+  {
+    "itemId": 139,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 14,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 140,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 141,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "End"
+  },
+  {
+    "itemId": 142,
+    "storeId": 1,
+    "aisleId": 14,
+    "bay": "End"
+  },
+  {
+    "itemId": 143,
+    "storeId": 1,
+    "aisleId": 15,
+    "bay": "Start"
+  },
+  {
+    "itemId": 144,
+    "storeId": 1,
+    "aisleId": 15,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 145,
+    "storeId": 1,
+    "aisleId": 15,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 146,
+    "storeId": 1,
+    "aisleId": 15,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 147,
+    "storeId": 1,
+    "aisleId": 15,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 148,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Start"
+  },
+  {
+    "itemId": 149,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Start"
+  },
+  {
+    "itemId": 15,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 150,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 151,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Start"
+  },
+  {
+    "itemId": 152,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Start"
+  },
+  {
+    "itemId": 153,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Start"
+  },
+  {
+    "itemId": 154,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 155,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "End"
+  },
+  {
+    "itemId": 156,
+    "storeId": 1,
+    "aisleId": 16,
+    "bay": "End"
+  },
+  {
+    "itemId": 157,
+    "storeId": 1,
+    "aisleId": 17,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 158,
+    "storeId": 1,
+    "aisleId": 17,
+    "bay": "Start"
+  },
+  {
+    "itemId": 159,
+    "storeId": 1,
+    "aisleId": 17,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 16,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 160,
+    "storeId": 1,
+    "aisleId": 17,
+    "bay": "End"
+  },
+  {
+    "itemId": 161,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 162,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 163,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 164,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 165,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 166,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 167,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 168,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 169,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 17,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 170,
+    "storeId": 1,
+    "aisleId": 18,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 171,
+    "storeId": 1,
+    "aisleId": 19,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 172,
+    "storeId": 1,
+    "aisleId": 19,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 173,
+    "storeId": 1,
+    "aisleId": 20,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 174,
+    "storeId": 1,
+    "aisleId": 20,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 175,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "End"
+  },
+  {
+    "itemId": 176,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "End"
+  },
+  {
+    "itemId": 177,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Start"
+  },
+  {
+    "itemId": 178,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 179,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Start"
+  },
+  {
+    "itemId": 18,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 180,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 181,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 183,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 184,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 185,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 186,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 187,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Start"
+  },
+  {
+    "itemId": 188,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 189,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "End"
+  },
+  {
+    "itemId": 19,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 190,
+    "storeId": 1,
+    "aisleId": 21,
+    "bay": "End"
+  },
+  {
+    "itemId": 191,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 192,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 193,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 194,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 195,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 196,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 197,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 198,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 199,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 2,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 20,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 200,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 201,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 202,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 203,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 204,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 205,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 206,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 207,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 208,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 209,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 21,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 210,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 211,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 212,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 213,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 214,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 215,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 216,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 217,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 218,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 219,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 22,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 220,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 221,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 222,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 223,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 224,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 225,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 226,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 227,
+    "storeId": 1,
+    "aisleId": 22,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 228,
+    "storeId": 1,
+    "aisleId": 23,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 229,
+    "storeId": 1,
+    "aisleId": 23,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 23,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 230,
+    "storeId": 1,
+    "aisleId": 23,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 231,
+    "storeId": 1,
+    "aisleId": 23,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 232,
+    "storeId": 1,
+    "aisleId": 23,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 233,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 24,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 25,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 26,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 27,
+    "storeId": 1,
+    "aisleId": 2,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 28,
+    "storeId": 1,
+    "aisleId": 2,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 29,
+    "storeId": 1,
+    "aisleId": 2,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 3,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 30,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 31,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 32,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 33,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 34,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 35,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 36,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 37,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 38,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 39,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 4,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 40,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 41,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 42,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "End"
+  },
+  {
+    "itemId": 43,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "End"
+  },
+  {
+    "itemId": 44,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 45,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 46,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 47,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 48,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 49,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 5,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 50,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 51,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 52,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 53,
+    "storeId": 1,
+    "aisleId": 3,
+    "bay": "Start"
+  },
+  {
+    "itemId": 54,
+    "storeId": 1,
+    "aisleId": 4,
+    "bay": "Start"
+  },
+  {
+    "itemId": 55,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 56,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 57,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 58,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 59,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 6,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "End"
+  },
+  {
+    "itemId": 60,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 61,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 62,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 63,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 64,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Start"
+  },
+  {
+    "itemId": 65,
+    "storeId": 1,
+    "aisleId": 5,
+    "bay": "Start"
+  },
+  {
+    "itemId": 66,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 67,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 68,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 69,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 7,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 70,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 71,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 72,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 73,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 74,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 75,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 76,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 77,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 78,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 79,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 8,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 80,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 81,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 82,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 83,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 84,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 85,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 86,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 87,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 88,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 89,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 9,
+    "storeId": 1,
+    "aisleId": 1,
+    "bay": "Start"
+  },
+  {
+    "itemId": 90,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 91,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 92,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 93,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Start"
+  },
+  {
+    "itemId": 94,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 95,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 96,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 97,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 98,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  },
+  {
+    "itemId": 99,
+    "storeId": 1,
+    "aisleId": 6,
+    "bay": "Middle"
+  }
+]

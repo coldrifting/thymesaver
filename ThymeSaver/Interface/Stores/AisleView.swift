@@ -22,6 +22,7 @@ struct AisleView: View {
                 allAisles()
             }
         }
+        .navigationTitle(Text(storeName))
         .toolbar {
             ToolbarItem {
                 EditButton()
@@ -31,6 +32,14 @@ struct AisleView: View {
                     action: { viewModel.queueAddItemAlert() },
                     label: { Label("Add Aisle", systemImage: "plus") }
                 )
+            }
+        }
+        .onAppear {
+            viewModel.observe(storeId: self.storeId)
+        }
+        .onReceive(Just(viewModel.aisles)) { aisles in
+            withAnimation {
+                self.aisles = aisles
             }
         }
         .customAlert(
@@ -44,15 +53,6 @@ struct AisleView: View {
             alertType: viewModel.alertType,
             $text: viewModel.alertTextBinding
         )
-        .onAppear {
-            viewModel.observe(storeId: self.storeId)
-        }
-        .onReceive(Just(viewModel.aisles)) { aisles in
-            withAnimation {
-                self.aisles = aisles
-            }
-        }
-        .navigationTitle(Text(storeName))
     }
     
     private func allAisles() -> some View {

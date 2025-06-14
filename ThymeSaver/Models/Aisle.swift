@@ -9,12 +9,19 @@ struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
     var id: Int { aisleId }
     
     enum Columns {
+        static let aisleId = Column(CodingKeys.aisleId)
         static let storeId = Column(CodingKeys.storeId)
+        static let aisleName = Column(CodingKeys.aisleName)
         static let aisleOrder = Column(CodingKeys.aisleOrder)
     }
     
-    static func getAisles(db: Database, storeId: Int) throws -> [Aisle] {
-        return try Aisle.filter{ $0.storeId == storeId }.order(\.aisleOrder.asc).fetchAll(db)
+    static var databaseTableName: String = "Aisles"
+    
+    static func getAisles(_ db: Database, storeId: Int) throws -> [Aisle] {
+        return try Aisle
+            .filter{ $0.storeId == storeId }
+            .order(\.aisleOrder.asc)
+            .fetchAll(db)
     }
 }
 
@@ -44,17 +51,15 @@ extension AppDatabase {
     
     func renameAisle(aisleId: Int, newName: String) throws {
         try dbWriter.write { db in
-            if var aisle: Aisle = try? Aisle.find(db, key: aisleId) {
-                aisle.aisleName = newName
-                try aisle.update(db)
-            }
+            var aisle = try Aisle.find(db, key: aisleId)
+            aisle.aisleName = newName
+            try aisle.update(db, columns: [Aisle.Columns.aisleName])
         }
     }
     
     func deleteAisle(aisleId: Int, storeId: Int) throws {
         try dbWriter.write { db in
-            let aisle = Aisle(aisleId: aisleId, storeId: -1, aisleName: "")
-            try aisle.delete(db)
+            try Aisle.deleteOne(db, key: aisleId)
             try syncAisleOrder(db: db, storeId: storeId)
         }
     }
@@ -69,7 +74,7 @@ extension AppDatabase {
     }
     
     func syncAisleOrder(db: Database, storeId: Int) throws {
-        let aisles = try Aisle.getAisles(db: db, storeId: storeId)
+        let aisles = try Aisle.getAisles(db, storeId: storeId)
         for (index, aisle) in aisles.enumerated() {
             let aisleCopy = Aisle(
                 aisleId: aisle.aisleId,

@@ -20,6 +20,7 @@ struct StoreView: View {
                 selectedStoreLink()
                 allStores()
             }
+            .navigationTitle(Text("Stores"))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(
@@ -34,17 +35,6 @@ struct StoreView: View {
                     )
                 }
             }
-            .customAlert(
-                title: viewModel.alertTitle,
-                message: viewModel.alertMessage,
-                placeholder: viewModel.alertPlaceholder,
-                onConfirm: viewModel.alertType == AlertType.rename
-                ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
-                : { viewModel.addStore(storeName: $0)},
-                onDismiss: viewModel.dismissAlert,
-                alertType: viewModel.alertType,
-                $text: viewModel.alertTextBinding
-            )
             .onAppear {
                 viewModel.observe()
             }
@@ -58,7 +48,17 @@ struct StoreView: View {
                     self.selectedStoreId = selectedStoreId
                 }
             }
-            .navigationTitle(Text("Stores"))
+            .customAlert(
+                title: viewModel.alertTitle,
+                message: viewModel.alertMessage,
+                placeholder: viewModel.alertPlaceholder,
+                onConfirm: viewModel.alertType == AlertType.rename
+                ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
+                : { viewModel.addStore(storeName: $0)},
+                onDismiss: viewModel.dismissAlert,
+                alertType: viewModel.alertType,
+                $text: viewModel.alertTextBinding
+            )
         }
     }
     

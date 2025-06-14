@@ -62,13 +62,12 @@ final class AppDatabase: Sendable {
         
 // Uncomment to enable SQL Logging
 #if DEBUG
-#if false
+        config.publicStatementArguments = true
         config.prepareDatabase { db in
             db.trace {
                 print("SQL: \($0)")
             }
         }
-#endif
 #endif
         
         return config
