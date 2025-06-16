@@ -56,25 +56,64 @@ struct RecipeView: View {
     
     @ViewBuilder
     private func allRecipes() -> some View {
-        ForEach(recipes) { recipe in
-            Text(recipe.recipeName)
-            .swipeActions(edge: .leading) {
-                Button(
-                    action: { viewModel.queueRenameItemAlert(itemId: recipe.recipeId, itemName: recipe.recipeName) },
-                    label: { Text("Rename") }
-                )
-                .tint(.blue)
-            }
-            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                Button(
-                    action: {
-                        viewModel.queueDeleteItemAlert(itemId: recipe.recipeId, itemsInUse: ["Test", "test2"])
-                    },
-                    label: { Text("Delete") }
-                )
-                .tint(.red)
+        let recipeSections = splitRecipes(recipes: recipes)
+        
+        ForEach(recipeSections, id: \.title) { section in
+            recipeList(title: section.title, recipes: section.recipes)
+        }
+
+    }
+    
+    @ViewBuilder
+    private func recipeList(title: String, recipes: [Recipe]) -> some View {
+        if (!recipes.isEmpty) {
+            Section(title) {
+                ForEach(recipes) { recipe in
+                    Text(recipe.recipeName)
+                    .swipeActions(edge: .leading) {
+                        Button(
+                            action: {
+                                viewModel.toggleRecipePin(recipeId: recipe.recipeId)
+                            },
+                            label: { Text(recipe.isPinned ? "Unpin" : "Pin") }
+                        )
+                        .tint(.orange)
+                        Button(
+                            action: { viewModel.queueRenameItemAlert(itemId: recipe.recipeId, itemName: recipe.recipeName) },
+                            label: { Text("Rename") }
+                        )
+                        .tint(.blue)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(
+                            action: {
+                                viewModel.queueDeleteItemAlert(itemId: recipe.recipeId, itemsInUse: ["Test", "test2"])
+                            },
+                            label: { Text("Delete") }
+                        )
+                        .tint(.red)
+                    }
+                }
             }
         }
+    }
+    
+    private func splitRecipes(recipes: [Recipe]) -> [(title: String, recipes: [Recipe])]{
+        var pinnedRecipes: [Recipe] = []
+        var unpinnedRecipes: [Recipe] = []
+        
+        for recipe in recipes {
+            if recipe.isPinned {
+                pinnedRecipes.append(recipe)
+            } else {
+                unpinnedRecipes.append(recipe)
+            }
+        }
+        
+        return [
+            ("Pinned", pinnedRecipes),
+            ("Unpinned", unpinnedRecipes)
+        ]
     }
 }
 

@@ -54,4 +54,12 @@ extension AppDatabase {
             try recipe.update(db, columns: [Recipe.Columns.recipeName])
         }
     }
+    
+    func toggleRecipePin(recipeId: Int) throws {
+        try dbWriter.write { db in
+            var recipe = try Recipe.find(db, key: recipeId)
+            recipe.isPinned = !recipe.isPinned
+            try recipe.update(db, columns: [Recipe.Columns.isPinned])
+        }
+    }
 }

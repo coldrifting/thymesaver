@@ -36,6 +36,10 @@ extension RecipeView {
             try? appDatabase.renameRecipe(recipeId: recipeId, newName: newName)
         }
         
+        func toggleRecipePin(recipeId: Int) {
+            try? appDatabase.toggleRecipePin(recipeId: recipeId)
+        }
+        
         var recipes: [Recipe] = []
         
         // MARK: - Alerts

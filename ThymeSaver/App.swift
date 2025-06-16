@@ -14,7 +14,7 @@ struct thymesaverApp: App {
 struct AppContentView: View {
     @Environment(\.appDatabase) var appDatabase
     
-    @State private var selectedTab: Int = 1
+    @State private var selectedTab: Int = 2
     
     var body: some View {
         TabView(selection: $selectedTab) {
