@@ -1,146 +1,146 @@
 [
-  {
-    "aisleId": 1,
-    "storeId": 1,
-    "aisleName": "Aisle 02",
-    "aisleOrder": 0
-  },
-  {
-    "aisleId": 2,
-    "storeId": 1,
-    "aisleName": "Aisle 02 End cap",
-    "aisleOrder": 1
-  },
-  {
-    "aisleId": 3,
-    "storeId": 1,
-    "aisleName": "Aisle 03",
-    "aisleOrder": 2
-  },
-  {
-    "aisleId": 4,
-    "storeId": 1,
-    "aisleName": "Aisle 04",
-    "aisleOrder": 3
-  },
-  {
-    "aisleId": 5,
-    "storeId": 1,
-    "aisleName": "Aisle 05",
-    "aisleOrder": 4
-  },
-  {
-    "aisleId": 6,
-    "storeId": 1,
-    "aisleName": "Aisle 06",
-    "aisleOrder": 5
-  },
-  {
-    "aisleId": 7,
-    "storeId": 1,
-    "aisleName": "Aisle 07",
-    "aisleOrder": 6
-  },
-  {
-    "aisleId": 8,
-    "storeId": 1,
-    "aisleName": "Aisle 08",
-    "aisleOrder": 7
-  },
-  {
-    "aisleId": 9,
-    "storeId": 1,
-    "aisleName": "Aisle 09",
-    "aisleOrder": 8
-  },
-  {
-    "aisleId": 10,
-    "storeId": 1,
-    "aisleName": "Aisle 10",
-    "aisleOrder": 9
-  },
-  {
-    "aisleId": 11,
-    "storeId": 1,
-    "aisleName": "Aisle 11",
-    "aisleOrder": 10
-  },
-  {
-    "aisleId": 12,
-    "storeId": 1,
-    "aisleName": "Aisle 12",
-    "aisleOrder": 11
-  },
-  {
-    "aisleId": 13,
-    "storeId": 1,
-    "aisleName": "Aisle 13",
-    "aisleOrder": 12
-  },
-  {
-    "aisleId": 14,
-    "storeId": 1,
-    "aisleName": "Aisle 14",
-    "aisleOrder": 13
-  },
-  {
-    "aisleId": 15,
-    "storeId": 1,
-    "aisleName": "Aisle 15",
-    "aisleOrder": 14
-  },
-  {
-    "aisleId": 16,
-    "storeId": 1,
-    "aisleName": "Back Right",
-    "aisleOrder": 15
-  },
-  {
-    "aisleId": 17,
-    "storeId": 1,
-    "aisleName": "Back Middle",
-    "aisleOrder": 16
-  },
-  {
-    "aisleId": 18,
-    "storeId": 1,
-    "aisleName": "Meat",
-    "aisleOrder": 17
-  },
-  {
-    "aisleId": 19,
-    "storeId": 1,
-    "aisleName": "Frozen Meat",
-    "aisleOrder": 18
-  },
-  {
-    "aisleId": 20,
-    "storeId": 1,
-    "aisleName": "Aisle 01 End cap",
-    "aisleOrder": 19
-  },
-  {
-    "aisleId": 21,
-    "storeId": 1,
-    "aisleName": "Aisle 01",
-    "aisleOrder": 20
-  },
-  {
-    "aisleId": 22,
-    "storeId": 1,
-    "aisleName": "Produce",
-    "aisleOrder": 21
-  },
-  {
-    "aisleId": 23,
-    "storeId": 1,
-    "aisleName": "Bakery",
-    "aisleOrder": 22
-  },
-  {
-    "aisleId": 24,
-    "storeId": 2,
-    "aisleName": "Example Aisle",
-    "aisleOrder": 0
-  }
+    {
+        "aisleId": 1,
+        "storeId": 1,
+        "aisleName": "Aisle 02",
+        "aisleOrder": 0
+    },
+    {
+        "aisleId": 2,
+        "storeId": 1,
+        "aisleName": "Aisle 02 End cap",
+        "aisleOrder": 1
+    },
+    {
+        "aisleId": 3,
+        "storeId": 1,
+        "aisleName": "Aisle 03",
+        "aisleOrder": 2
+    },
+    {
+        "aisleId": 4,
+        "storeId": 1,
+        "aisleName": "Aisle 04",
+        "aisleOrder": 3
+    },
+    {
+        "aisleId": 5,
+        "storeId": 1,
+        "aisleName": "Aisle 05",
+        "aisleOrder": 4
+    },
+    {
+        "aisleId": 6,
+        "storeId": 1,
+        "aisleName": "Aisle 06",
+        "aisleOrder": 5
+    },
+    {
+        "aisleId": 7,
+        "storeId": 1,
+        "aisleName": "Aisle 07",
+        "aisleOrder": 6
+    },
+    {
+        "aisleId": 8,
+        "storeId": 1,
+        "aisleName": "Aisle 08",
+        "aisleOrder": 7
+    },
+    {
+        "aisleId": 9,
+        "storeId": 1,
+        "aisleName": "Aisle 09",
+        "aisleOrder": 8
+    },
+    {
+        "aisleId": 10,
+        "storeId": 1,
+        "aisleName": "Aisle 10",
+        "aisleOrder": 9
+    },
+    {
+        "aisleId": 11,
+        "storeId": 1,
+        "aisleName": "Aisle 11",
+        "aisleOrder": 10
+    },
+    {
+        "aisleId": 12,
+        "storeId": 1,
+        "aisleName": "Aisle 12",
+        "aisleOrder": 11
+    },
+    {
+        "aisleId": 13,
+        "storeId": 1,
+        "aisleName": "Aisle 13",
+        "aisleOrder": 12
+    },
+    {
+        "aisleId": 14,
+        "storeId": 1,
+        "aisleName": "Aisle 14",
+        "aisleOrder": 13
+    },
+    {
+        "aisleId": 15,
+        "storeId": 1,
+        "aisleName": "Aisle 15",
+        "aisleOrder": 14
+    },
+    {
+        "aisleId": 16,
+        "storeId": 1,
+        "aisleName": "Back Right",
+        "aisleOrder": 15
+    },
+    {
+        "aisleId": 17,
+        "storeId": 1,
+        "aisleName": "Back Middle",
+        "aisleOrder": 16
+    },
+    {
+        "aisleId": 18,
+        "storeId": 1,
+        "aisleName": "Meat",
+        "aisleOrder": 17
+    },
+    {
+        "aisleId": 19,
+        "storeId": 1,
+        "aisleName": "Frozen Meat",
+        "aisleOrder": 18
+    },
+    {
+        "aisleId": 20,
+        "storeId": 1,
+        "aisleName": "Aisle 01 End cap",
+        "aisleOrder": 19
+    },
+    {
+        "aisleId": 21,
+        "storeId": 1,
+        "aisleName": "Aisle 01",
+        "aisleOrder": 20
+    },
+    {
+        "aisleId": 22,
+        "storeId": 1,
+        "aisleName": "Produce",
+        "aisleOrder": 21
+    },
+    {
+        "aisleId": 23,
+        "storeId": 1,
+        "aisleName": "Bakery",
+        "aisleOrder": 22
+    },
+    {
+        "aisleId": 24,
+        "storeId": 2,
+        "aisleName": "Example Aisle",
+        "aisleOrder": 0
+    }
 ]

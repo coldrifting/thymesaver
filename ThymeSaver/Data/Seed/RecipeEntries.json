@@ -1,0 +1,497 @@
+[
+  {
+    "recipeEntryId": 1,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 45,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "12",
+      "type": "WeightOunces"
+    }
+  },
+  {
+    "recipeEntryId": 2,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 195,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "4",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 3,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 150,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTablespoons"
+    }
+  },
+  {
+    "recipeEntryId": 4,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 209,
+    "itemPrepId": 1,
+    "amount": {
+      "fraction": "2",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 5,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 148,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 6,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 178,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "6",
+      "type": "VolumeOunces"
+    }
+  },
+  {
+    "recipeEntryId": 7,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 177,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "3/4",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 8,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 89,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 9,
+    "recipeId": 1,
+    "recipeSectionId": 1,
+    "itemId": 67,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/8",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 10,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 47,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "8",
+      "type": "WeightOunces"
+    }
+  },
+  {
+    "recipeEntryId": 11,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 150,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTablespoons"
+    }
+  },
+  {
+    "recipeEntryId": 12,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 101,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTablespoons"
+    }
+  },
+  {
+    "recipeEntryId": 13,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 100,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 14,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 181,
+    "itemPrepId": 2,
+    "amount": {
+      "fraction": "8",
+      "type": "VolumeOunces"
+    }
+  },
+  {
+    "recipeEntryId": 15,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 64,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "8",
+      "type": "VolumeOunces"
+    }
+  },
+  {
+    "recipeEntryId": 16,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 75,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/2",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 17,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 74,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/8",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 18,
+    "recipeId": 2,
+    "recipeSectionId": 2,
+    "itemId": 89,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 19,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 207,
+    "itemPrepId": 6,
+    "amount": {
+      "fraction": "1/2",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 222,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 207,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/2",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 20,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 211,
+    "itemPrepId": 5,
+    "amount": {
+      "fraction": "1",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 21,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 219,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 22,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 24,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "8",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 23,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 179,
+    "itemPrepId": 3,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeOunces"
+    }
+  },
+  {
+    "recipeEntryId": 24,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 176,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "4",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 25,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 189,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 26,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 6,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 27,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 89,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/8",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 28,
+    "recipeId": 3,
+    "recipeSectionId": 3,
+    "itemId": 67,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/8",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 29,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 217,
+    "itemPrepId": 7,
+    "amount": {
+      "fraction": "4",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 30,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 233,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTablespoons"
+    }
+  },
+  {
+    "recipeEntryId": 32,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 219,
+    "itemPrepId": 4,
+    "amount": {
+      "fraction": "1/3",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 34,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 218,
+    "itemPrepId": 8,
+    "amount": {
+      "fraction": "1/2",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 35,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 75,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/2",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 36,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 73,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/2",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 37,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 86,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/2",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 38,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 209,
+    "itemPrepId": 1,
+    "amount": {
+      "fraction": "1",
+      "type": "Count"
+    }
+  },
+  {
+    "recipeEntryId": 39,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 31,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "8",
+      "type": "VolumeOunces"
+    }
+  },
+  {
+    "recipeEntryId": 40,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 57,
+    "itemPrepId": 9,
+    "amount": {
+      "fraction": "1",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 41,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 195,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "3",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 42,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 62,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "2",
+      "type": "VolumeTablespoons"
+    }
+  },
+  {
+    "recipeEntryId": 43,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 65,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "3/4",
+      "type": "VolumeCups"
+    }
+  },
+  {
+    "recipeEntryId": 44,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 89,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 45,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 67,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 46,
+    "recipeId": 4,
+    "recipeSectionId": 4,
+    "itemId": 181,
+    "itemPrepId": 2,
+    "amount": {
+      "fraction": "1",
+      "type": "VolumeCups"
+    }
+  }
+]

@@ -5,6 +5,7 @@ import Combine
 struct ItemDetailsView: View {
     @State private var viewModel: ViewModel
     
+    @State private var itemPreps: [ItemPrepExpanded] = []
     private var itemId: Int
     private var itemName: String
     
@@ -13,12 +14,6 @@ struct ItemDetailsView: View {
         self.itemId = itemId
         self.itemName = itemName
     }
-    
-    @State private var preps: [String] = [
-        "Sliced",
-        "Diced",
-        "Chopped"
-    ]
     
     var body: some View {
         List {
@@ -55,23 +50,36 @@ struct ItemDetailsView: View {
             }
             
             Section("Preperations") {
-                if (viewModel.itemPreps.isEmpty) {
+                if (itemPreps.isEmpty) {
                     Text("Default").foregroundStyle(.secondary)
                 }
                 else {
-                    ForEach(viewModel.itemPreps, id: \.id) { itemPrep in
+                    ForEach(itemPreps, id: \.id) { itemPrep in
                         Text(itemPrep.prepName)
                         .swipeActions(edge: .leading) {
                             Button(
-                                action: { viewModel.queueRenameItemPrepAlert(itemPrepId: itemPrep.itemPrepId, itemPrepName: itemPrep.prepName) },
+                                action: { viewModel.queueRenameItemAlert(itemId: itemPrep.itemPrepId, itemName: itemPrep.prepName) },
                                 label: { Text("Rename") }
                             )
-                            .tint(Color(red: 0.2, green: 0.6, blue: 0.3))
+                            .tint(.blue)
                         }
+                        .if(itemPrep.usedIn.count > 0) { v in
+                            v
+                            .swipeActions(edge: .trailing) {
+                                Button(
+                                    action: {
+                                        viewModel.queueDeleteItemAlert(itemId: itemPrep.itemPrepId, itemsInUse: itemPrep.usedIn)
+                                    },
+                                    label: { Text("Delete") }
+                                )
+                                .tint(.red)
+                            }
+                        }
+                        .deleteDisabled(itemPrep.usedIn.count > 0)
                     }
                     .onDelete { offsets in
                         offsets.forEach { index in
-                            viewModel.deleteItemPrep(itemPrepId: viewModel.itemPreps[index].itemPrepId)
+                            viewModel.deleteItem(itemId: itemPreps[index].itemPrepId)
                         }
                     }
                 }
@@ -81,7 +89,7 @@ struct ItemDetailsView: View {
         .toolbar {
             ToolbarItem {
                 Button (
-                    action: { viewModel.queueAddItemPrepAlert() },
+                    action: { viewModel.queueAddItemAlert() },
                     label: { Label("Add Item Preperation", systemImage: "plus") }
                 )
             }
@@ -89,13 +97,27 @@ struct ItemDetailsView: View {
         .onAppear() {
             viewModel.observe(itemId: self.itemId)
         }
+        .onReceive(Just(viewModel.itemPreps)) { itemPreps in
+            withAnimation {
+                self.itemPreps = viewModel.itemPreps
+            }
+        }
         .customAlert(
             title: viewModel.alertTitle,
             message: viewModel.alertMessage,
             placeholder: viewModel.alertPlaceholder,
-            onConfirm: viewModel.alertType == AlertType.rename
-            ? { viewModel.renameItemPrep(itemPrepId: viewModel.alertId, newName: $0)}
-            : { viewModel.addItemPrep(itemPrepName: $0)},
+            onConfirm: { stringValue in
+                switch viewModel.alertType {
+                case .add:
+                    viewModel.addItem(itemName: stringValue)
+                case .rename:
+                    viewModel.renameItem(itemId: viewModel.alertId, newName: stringValue)
+                case .delete:
+                    viewModel.deleteItem(itemId: viewModel.alertId)
+                case .none:
+                    break
+                }
+            },
             onDismiss: viewModel.dismissAlert,
             alertType: viewModel.alertType,
             $text: viewModel.alertTextBinding
@@ -105,6 +127,6 @@ struct ItemDetailsView: View {
 
 #Preview {
     NavigationStack {
-        ItemDetailsView(.shared, itemId: 184, itemName: "Pepper Jack Cheese")
+        ItemDetailsView(.shared, itemId: 207, itemName: "Cucumbers")
     }
 }

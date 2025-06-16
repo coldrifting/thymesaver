@@ -21,6 +21,12 @@ struct ItemsView: View {
             .navigationTitle(Text("Items"))
             .searchable(text: viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(
+                        action: { viewModel.addRecipe() },
+                        label: { Text("Update") }
+                    )
+                }
                 ToolbarItem {
                     Button(
                         action: { viewModel.cycleSectionSplitType() },
@@ -46,9 +52,18 @@ struct ItemsView: View {
                 title: viewModel.alertTitle,
                 message: viewModel.alertMessage,
                 placeholder: viewModel.alertPlaceholder,
-                onConfirm: viewModel.alertType == AlertType.rename
-                ? { viewModel.renameItem(itemId: viewModel.alertId, newName: $0)}
-                : { viewModel.addItem(itemName: $0)},
+                onConfirm: { stringValue in
+                    switch viewModel.alertType {
+                    case .add:
+                        viewModel.addItem(itemName: stringValue)
+                    case .rename:
+                        viewModel.renameItem(itemId: viewModel.alertId, newName: stringValue)
+                    case .delete:
+                        viewModel.deleteItem(itemId: viewModel.alertId)
+                    case .none:
+                        break
+                    }
+                },
                 onDismiss: viewModel.dismissAlert,
                 alertType: viewModel.alertType,
                 $text: viewModel.alertTextBinding
@@ -95,8 +110,21 @@ struct ItemsView: View {
                     action: { viewModel.queueRenameItemAlert(itemId: item.itemId, itemName: item.itemName) },
                     label: { Text("Rename") }
                 )
-                .tint(Color(red: 0.2, green: 0.6, blue: 0.3))
+                .tint(.blue)
             }
+            .if(item.usedIn.count > 0) { v in
+                v
+                .swipeActions(edge: .trailing) {
+                    Button(
+                        action: {
+                            viewModel.queueDeleteItemAlert(itemId: item.itemId, itemsInUse: item.usedIn)
+                        },
+                        label: { Text("Delete") }
+                    )
+                    .tint(.red)
+                }
+            }
+            .deleteDisabled(item.usedIn.count > 0)
         }
         .onDelete { offsets in
             offsets.forEach { index in

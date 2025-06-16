@@ -69,6 +69,13 @@ extension ItemsView {
             )
         }
         
+        func addRecipe() {
+            try? appDatabase.dbWriter.write{ db in
+                let recipeEntry = RecipeEntryInsert(recipeSectionId: 4, recipeId: 4, itemId: 44, amount: Amount(1.0, type: .count))
+                try recipeEntry.insert(db)
+            }
+        }
+        
         func addItem(itemName: String) {
             try? appDatabase.addItem(itemName: itemName)
         }
@@ -116,6 +123,20 @@ extension ItemsView {
             alertTitle = "Rename Item"
             alertMessage = "Please enter the new name for the Item"
             alertConfirmText = "Rename"
+        }
+        
+        func queueDeleteItemAlert(itemId: Int, itemsInUse: String) {
+            let itemsInUseArr: [String] = itemsInUse.components(separatedBy: ",")
+            let itemsInUseString: String = itemsInUseArr.count > 8
+            ? itemsInUseArr.prefix(8).joined(separator: "\n") + "\n..."
+            : itemsInUseArr.joined(separator: "\n")
+            
+            alertId = itemId
+            alertTextEntry = ""
+            alertType = .delete
+            alertTitle = "Delete Item?"
+            alertMessage = "This Item is used by the following recipes:\n\(itemsInUseString)"
+            alertConfirmText = "Delete"
         }
         
         func dismissAlert() {

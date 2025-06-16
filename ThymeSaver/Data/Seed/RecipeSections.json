@@ -1,0 +1,32 @@
+[
+    {
+        "recipeSectionId": 1,
+        "recipeId": 1,
+        "recipeSectionOrder": 1,
+        "recipeSectionName": "Main"
+    },
+    {
+        "recipeSectionId": 2,
+        "recipeId": 2,
+        "recipeSectionOrder": 1,
+        "recipeSectionName": "Main"
+    },
+    {
+        "recipeSectionId": 3,
+        "recipeId": 3,
+        "recipeSectionOrder": 1,
+        "recipeSectionName": "Main"
+    },
+    {
+        "recipeSectionId": 4,
+        "recipeId": 4,
+        "recipeSectionOrder": 1,
+        "recipeSectionName": "Main"
+    },
+    {
+        "recipeSectionId": 5,
+        "recipeId": 4,
+        "recipeSectionOrder": 2,
+        "recipeSectionName": "Empty Section"
+    }
+]

@@ -15,9 +15,11 @@ extension View {
             title,
             isPresented: Binding<Bool>(get: { alertType != AlertType.none}, set: {_ in onDismiss()}),
             actions: {
-                TextField(placeholder, text: $text)
+                if (alertType != .delete) {
+                    TextField(placeholder, text: $text)
+                }
                 
-                Button(alertType.description, action: {
+                Button(alertType.description, role: alertType == .delete ? .destructive : .none, action: {
                     withAnimation {
                         onConfirm(text.trim())
                     }
@@ -26,6 +28,21 @@ extension View {
                 })
             },
             message: { Text(message) })
+    }
+}
+
+extension View {
+    /// Applies the given transform if the given condition evaluates to `true`.
+    /// - Parameters:
+    ///   - condition: The condition to evaluate.
+    ///   - transform: The transform to apply to the source `View`.
+    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
+    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
     }
 }
 

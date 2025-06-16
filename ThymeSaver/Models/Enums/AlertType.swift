@@ -4,6 +4,7 @@ enum AlertType: String, Codable, CaseIterable, Identifiable, CustomStringConvert
     case none
     case add
     case rename
+    case delete
     
     var id: Self { self }
     

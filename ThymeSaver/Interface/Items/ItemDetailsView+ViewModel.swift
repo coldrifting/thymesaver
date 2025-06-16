@@ -18,7 +18,7 @@ extension ItemDetailsView {
                     aisles: Aisle.getAisles(db),
                     item: Item.fetchOne(db, key: itemId),
                     itemLocs: ItemAisle.getItemAisles(db, itemId: itemId),
-                    itemPreps: ItemPrep.getItemPreps(db, itemId: itemId)
+                    itemPreps: ItemPrepExpanded.getItemPreps(db, itemId: itemId)
                 )
             }
             
@@ -42,7 +42,7 @@ extension ItemDetailsView {
         
         private var item: Item? = nil
         private var itemLocs: [ItemAisle] = []
-        private(set) var itemPreps: [ItemPrep] = []
+        private(set) var itemPreps: [ItemPrepExpanded] = []
         
         private(set) var showBay: Bool = false
         
@@ -91,16 +91,16 @@ extension ItemDetailsView {
             try? self.appDatabase.updateItemAisleBay(itemId: itemId, storeId: selectedStoreId, newBay: bay)
         }
         
-        func addItemPrep(itemPrepName: String) {
-            try? self.appDatabase.addItemPrep(itemId: self.item?.id ?? -1, prepName: itemPrepName)
+        func addItem(itemName: String) {
+            try? self.appDatabase.addItemPrep(itemId: self.item?.id ?? -1, prepName: itemName)
         }
         
-        func deleteItemPrep(itemPrepId: Int) {
-            try? self.appDatabase.deleteItemPrep(itemPrepId: itemPrepId)
+        func deleteItem(itemId: Int) {
+            try? self.appDatabase.deleteItemPrep(itemPrepId: itemId)
         }
         
-        func renameItemPrep(itemPrepId: Int, newName: String) {
-            try? self.appDatabase.renameItemPrep(itemPrepId: itemPrepId, newName: newName)
+        func renameItem(itemId: Int, newName: String) {
+            try? self.appDatabase.renameItemPrep(itemPrepId: itemId, newName: newName)
         }
         
         // MARK: - Alerts
@@ -122,7 +122,7 @@ extension ItemDetailsView {
             )
         }
         
-        func queueAddItemPrepAlert() {
+        func queueAddItemAlert() {
             alertId = -1
             alertTextEntry = ""
             alertType = .add
@@ -131,13 +131,27 @@ extension ItemDetailsView {
             alertConfirmText = "Add"
         }
         
-        func queueRenameItemPrepAlert(itemPrepId: Int, itemPrepName: String) {
-            alertId = itemPrepId
-            alertTextEntry = itemPrepName
+        func queueRenameItemAlert(itemId: Int, itemName: String) {
+            alertId = itemId
+            alertTextEntry = itemName
             alertType = .rename
             alertTitle = "Rename Item Preperation"
             alertMessage = "Please enter the new name for the Item Preperation"
             alertConfirmText = "Rename"
+        }
+        
+        func queueDeleteItemAlert(itemId: Int, itemsInUse: String) {
+            let itemsInUseArr: [String] = itemsInUse.components(separatedBy: ",")
+            let itemsInUseString: String = itemsInUseArr.count > 8
+            ? itemsInUseArr.prefix(8).joined(separator: "\n") + "\n..."
+            : itemsInUseArr.joined(separator: "\n")
+            
+            alertId = itemId
+            alertTextEntry = ""
+            alertType = .delete
+            alertTitle = "Delete Item Prep?"
+            alertMessage = "This Item Prep is used by the following recipes:\n\(itemsInUseString)"
+            alertConfirmText = "Delete"
         }
         
         func dismissAlert() {

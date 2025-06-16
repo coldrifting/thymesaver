@@ -40,6 +40,18 @@ struct ItemInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
+    func getItems(filter: String = "") throws -> [(item: Item, referencees: [String])] {
+        try dbWriter.write { db in
+            let items: [Item] = try Item.getItems(db, filter: filter)
+            
+            let recipeEntries: [RecipeEntry] = try RecipeEntry.fetchAll(db)
+            
+            return items.map { item in
+                (item: item, recipeEntries.contains(where: { $0.itemId == item.itemId }) ? ["referenced"] : [""])
+            }
+        }
+    }
+    
     func addItem(
         itemName: String,
         itemTemp: ItemTemp = ItemTemp.ambient,
