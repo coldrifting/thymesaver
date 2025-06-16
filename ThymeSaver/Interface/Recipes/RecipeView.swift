@@ -3,9 +3,9 @@ import Observation
 import Combine
 
 struct RecipeView: View {
-    @State private var viewModel: ViewModel
+    @Environment(\.appDatabase) var appDatabase
     
-    @State private var recipes: [Recipe] = []
+    @State private var viewModel: ViewModel
     
     init(_ appDatabase: AppDatabase) {
         _viewModel = State(initialValue: ViewModel(appDatabase))
@@ -14,9 +14,12 @@ struct RecipeView: View {
     var body: some View {
         NavigationStack {
             List {
-                allRecipes()
+                RecipeViewSubView(viewModel)
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                }
                 ToolbarItem {
                     Button(
                         action: { viewModel.queueAddItemAlert() },
@@ -24,13 +27,8 @@ struct RecipeView: View {
                     )
                 }
             }
-            .navigationTitle(Text("Recipes"))
             .onAppear(perform: viewModel.observe)
-            .onReceive(Just(viewModel.recipes)) { recipes in
-                withAnimation {
-                    self.recipes = recipes
-                }
-            }
+            .navigationTitle(Text("Recipes"))
             .customAlert(
                 title: viewModel.alertTitle,
                 message: viewModel.alertMessage,
@@ -53,6 +51,27 @@ struct RecipeView: View {
             )
         }
     }
+}
+
+struct RecipeViewSubView: View {
+    @Environment(\.appDatabase) var appDatabase
+    @Environment(\.editMode) var editMode
+    
+    @State private var viewModel: RecipeView.ViewModel
+    @State private var recipes: [Recipe] = []
+    
+    init(_ viewModel: RecipeView.ViewModel) {
+        self.viewModel = viewModel
+    }
+    
+    var body: some View {
+        allRecipes()
+        .onReceive(Just(viewModel.recipes)) { recipes in
+            withAnimation {
+                self.recipes = recipes
+            }
+        }
+    }
     
     @ViewBuilder
     private func allRecipes() -> some View {
@@ -69,15 +88,26 @@ struct RecipeView: View {
         if (!recipes.isEmpty) {
             Section(title) {
                 ForEach(recipes) { recipe in
-                    Text(recipe.recipeName)
+                    HStack {
+                        if (editMode?.wrappedValue.isEditing == true) {
+                            
+                                Button(
+                                    action: {
+                                        viewModel.toggleRecipePin(recipeId: recipe.recipeId)
+                                    },
+                                    label: { Label("Pin", systemImage: recipe.isPinned ? "star.fill" : "star").labelStyle(.iconOnly) }
+                                )
+                                .padding(.trailing).frame(width: 20, height: 0)
+                                Text(recipe.recipeName)
+                        }
+                        else {
+                            NavigationLink(
+                                destination: { RecipeDetailsView(appDatabase, recipeId: recipe.recipeId) },
+                                label: { Text(recipe.recipeName) }
+                            )
+                        }
+                    }
                     .swipeActions(edge: .leading) {
-                        Button(
-                            action: {
-                                viewModel.toggleRecipePin(recipeId: recipe.recipeId)
-                            },
-                            label: { Text(recipe.isPinned ? "Unpin" : "Pin") }
-                        )
-                        .tint(.orange)
                         Button(
                             action: { viewModel.queueRenameItemAlert(itemId: recipe.recipeId, itemName: recipe.recipeName) },
                             label: { Text("Rename") }
