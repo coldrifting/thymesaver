@@ -1,8 +1,71 @@
-struct Fraction: Codable, Identifiable, Hashable {
+struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
     var num: Int
     var dem: Int = 1
     
     var id: Int { num.concat(dem) }
+    
+    var description: String { Fraction.getFractionChar(fraction: self) }
+    
+    var decimalString: String {
+        let test = Int((Double(self.num) * 1000.0) / Double(self.dem))
+        return String(Double(test) / 1000.0)
+    }
+    
+    init(_ string: String) {
+        if let value: Float = Float(string) {
+            
+            let whole: Int = Int(value)
+            let partialFraction: Float = value - Float(whole)
+            
+            switch string {
+            case _ where string.hasSuffix(".16"): fallthrough
+            case _ where string.hasSuffix(".167"): fallthrough
+            case _ where string.hasSuffix(".166"):
+                self.num = (whole * 6) + 1
+                self.dem = 6
+                return
+                
+            case _ where string.hasSuffix(".33"): fallthrough
+            case _ where string.hasSuffix(".334"): fallthrough
+            case _ where string.hasSuffix(".333"):
+                self.num = (whole * 3) + 1
+                self.dem = 3
+                return
+                
+            case _ where string.hasSuffix(".66"): fallthrough
+            case _ where string.hasSuffix(".667"): fallthrough
+            case _ where string.hasSuffix(".666"):
+                self.num = (whole * 3) + 2
+                self.dem = 3
+                return
+                
+            case _ where string.hasSuffix(".83"): fallthrough
+            case _ where string.hasSuffix(".834"): fallthrough
+            case _ where string.hasSuffix(".833"):
+                self.num = (whole * 6) + 5
+                self.dem = 6
+                return
+                
+            default:
+                break
+            }
+            
+            for i in stride(from: 2, through: 16, by: 1) {
+                let rounded: Int = Int(partialFraction * Float(i) * 1000.0)
+                if (rounded % 1000 == 0) {
+                    self.num = Int((Float(whole) + Float(partialFraction) * Float(i)))
+                    self.dem = i
+                    return
+                }
+            }
+            
+            // Fallback
+            self.num = Int(value * 1000.0)
+            self.dem = 1000
+            return
+        }
+        self.num = -1
+    }
     
     init(_ num: Int, dem: Int) {
         self.num = num
@@ -43,6 +106,17 @@ struct Fraction: Codable, Identifiable, Hashable {
     }
     
     private static func getFractionChar(fraction: Fraction) -> String {
+        if (fraction.num > fraction.dem) {
+            let whole: Int = fraction.num / fraction.dem
+            let partial: Int = fraction.num % fraction.dem
+            
+            if (partial == 0) {
+                return whole.description
+            }
+            
+            return whole.description + " " + Fraction.getFractionChar(fraction: Fraction(partial, dem: fraction.dem))
+        }
+        
         switch "\(fraction.num)/\(fraction.dem)" {
         case "1/2": return "½"
 
@@ -79,6 +153,10 @@ struct Fraction: Codable, Identifiable, Hashable {
     // Math Functions
     func toInt() -> Int {
         num / dem;
+    }
+    
+    func toDouble() -> Double {
+        Double(num) / Double(dem);
     }
     
     static func + (left: Fraction, right: Fraction) -> Fraction {

@@ -38,6 +38,10 @@ extension AppDatabase {
         try dbWriter.write { db in
             let recipe = RecipeInsert(recipeName: recipeName)
             _ = try recipe.insert(db)
+            
+            let recipeId: Int = try Int.fetchOne(db, sql: "SELECT last_insert_rowid()")!
+            let recipeSection = RecipeSectionInsert(recipeSectionName: "Main", recipeId: recipeId)
+            _ = try recipeSection.insert(db)
         }
     }
     

@@ -187,9 +187,20 @@
     }
   },
   {
-    "recipeEntryId": 18,
+    "recipeEntryId": 222,
     "recipeId": 2,
     "recipeSectionId": 2,
+    "itemId": 1,
+    "itemPrepId": null,
+    "amount": {
+      "fraction": "1/4",
+      "type": "VolumeTeaspoons"
+    }
+  },
+  {
+    "recipeEntryId": 18,
+    "recipeId": 2,
+    "recipeSectionId": 5,
     "itemId": 89,
     "itemPrepId": null,
     "amount": {
@@ -203,17 +214,6 @@
     "recipeSectionId": 3,
     "itemId": 207,
     "itemPrepId": 6,
-    "amount": {
-      "fraction": "1/2",
-      "type": "Count"
-    }
-  },
-  {
-    "recipeEntryId": 222,
-    "recipeId": 3,
-    "recipeSectionId": 3,
-    "itemId": 207,
-    "itemPrepId": null,
     "amount": {
       "fraction": "1/2",
       "type": "Count"

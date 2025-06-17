@@ -21,12 +21,6 @@ struct ItemsView: View {
             .navigationTitle(Text("Items"))
             .searchable(text: viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(
-                        action: { viewModel.addRecipe() },
-                        label: { Text("Update") }
-                    )
-                }
                 ToolbarItem {
                     Button(
                         action: { viewModel.cycleSectionSplitType() },

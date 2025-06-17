@@ -1,8 +1,12 @@
-struct Amount: Codable, Identifiable, Hashable {
+import GRDB
+
+struct Amount: Codable, Identifiable, Hashable, DatabaseValueConvertible, CustomStringConvertible {
     var fraction: Fraction
     var type: UnitType
     
     var id: Int { fraction.id.concat(type.hashValue) }
+    
+    var description: String { "\(fraction) \(type.getAbbreviation(fraction.isPlural()))" }
     
     init(_ fraction: Fraction, type: UnitType) {
         self.fraction = fraction

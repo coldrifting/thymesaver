@@ -85,7 +85,7 @@ struct ItemDetailsView: View {
                 }
             }
         }
-        .navigationTitle(Text(itemName))
+        .navigationTitle(Text(itemName)).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem {
                 Button (

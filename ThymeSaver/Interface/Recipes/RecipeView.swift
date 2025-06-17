@@ -17,7 +17,7 @@ struct RecipeView: View {
                 RecipeViewSubView(viewModel)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem() {
                     EditButton()
                 }
                 ToolbarItem {
@@ -102,7 +102,7 @@ struct RecipeViewSubView: View {
                         }
                         else {
                             NavigationLink(
-                                destination: { RecipeDetailsView(appDatabase, recipeId: recipe.recipeId) },
+                                destination: { RecipeDetailsView(appDatabase, recipeId: recipe.recipeId, recipeName: recipe.recipeName) },
                                 label: { Text(recipe.recipeName) }
                             )
                         }

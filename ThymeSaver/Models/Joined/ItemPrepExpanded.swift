@@ -18,21 +18,21 @@ struct ItemPrepExpanded: FetchableRecord, Identifiable {
     }
     
     static func get(itemId: Int) -> SQLRequest<ItemPrepExpanded> {
-            """
-                SELECT
-                    ItemPreps.itemPrepId,
-                    ItemPreps.itemId,
-                    ItemPreps.prepName,
-                    COALESCE(group_concat(DISTINCT Recipes.recipeName), '') AS usedIn
-                FROM ItemPreps
-                LEFT JOIN (RecipeEntries NATURAL JOIN Recipes)
-                    ON RecipeEntries.itemId = ItemPreps.itemId
-                WHERE ItemPreps.itemId = \(itemId)
-                GROUP BY
-                    ItemPreps.itemPrepId
-                ORDER BY 
-                    ItemPreps.prepName;
-            """
+        """
+        SELECT
+            ItemPreps.itemPrepId,
+            ItemPreps.itemId,
+            ItemPreps.prepName,
+            COALESCE(group_concat(DISTINCT Recipes.recipeName), '') AS usedIn
+        FROM ItemPreps
+        LEFT JOIN (RecipeEntries NATURAL JOIN Recipes)
+            ON RecipeEntries.itemId = ItemPreps.itemId
+        WHERE ItemPreps.itemId = \(itemId)
+        GROUP BY
+            ItemPreps.itemPrepId
+        ORDER BY 
+            ItemPreps.prepName;
+        """
     }
     
     static func getItemPreps(_ db: Database, itemId: Int) throws -> [ItemPrepExpanded] {

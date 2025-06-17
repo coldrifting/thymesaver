@@ -11,7 +11,7 @@ struct AisleView: View {
     private var storeName: String
     
     init(_ appDatabase: AppDatabase, storeId: Int, storeName: String) {
-        _viewModel = State(initialValue: ViewModel(appDatabase))
+        _viewModel = State(initialValue: ViewModel(appDatabase, storeId: storeId))
         self.storeId = storeId
         self.storeName = storeName
     }
@@ -22,7 +22,7 @@ struct AisleView: View {
                 allAisles()
             }
         }
-        .navigationTitle(Text(storeName))
+        .navigationTitle(Text(storeName)).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem {
                 EditButton()
@@ -34,9 +34,7 @@ struct AisleView: View {
                 )
             }
         }
-        .onAppear {
-            viewModel.observe(storeId: self.storeId)
-        }
+        .onAppear(perform: viewModel.observe)
         .onReceive(Just(viewModel.aisles)) { aisles in
             withAnimation {
                 self.aisles = aisles

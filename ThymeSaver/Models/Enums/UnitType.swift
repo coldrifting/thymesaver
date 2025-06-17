@@ -21,4 +21,29 @@ enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConverti
             .replacingOccurrences(of: "Volume", with: "")
             .replacingOccurrences(of: "Weight", with: "")
     }
+    
+    func getAbbreviation(_ isPlural: Bool = false) -> String {
+        return switch self {
+        case .count:
+            "ea."
+        case .volumeTeaspoons:
+            "tsp"
+        case .volumeTablespoons:
+            "Tbsp"
+        case .volumeOunces:
+            "oz"
+        case .volumeCups:
+            isPlural ? "cups" : "cup"
+        case .volumePints:
+            "pt"
+        case .volumeQuarts:
+            "qt"
+        case .volumeGallons:
+            "gal"
+        case .weightOunces:
+            "oz"
+        case .weightPounds:
+            isPlural ? "lbs" : "lb"
+        }
+    }
 }

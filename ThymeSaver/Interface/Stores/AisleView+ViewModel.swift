@@ -7,11 +7,12 @@ extension AisleView {
         private let appDatabase: AppDatabase
         @ObservationIgnored private var cancellable: AnyDatabaseCancellable?
         
-        init(_ appDatabase: AppDatabase) {
+        init(_ appDatabase: AppDatabase, storeId: Int) {
             self.appDatabase = appDatabase
+            self.storeId = storeId
         }
         
-        func observe(storeId: Int) {
+        func observe() {
             let observation = ValueObservation.tracking { db in
                 return try Aisle.getAisles(db)
             }
@@ -22,6 +23,7 @@ extension AisleView {
             }
         }
         
+        private let storeId: Int
         private(set) var aisles: [Aisle] = []
         
         func addAisle(aisleName: String, storeId: Int) {
