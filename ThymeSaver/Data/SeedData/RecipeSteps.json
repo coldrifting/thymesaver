@@ -1,0 +1,107 @@
+[
+    {
+        "recipeId": 1,
+        "recipeStepId": 1,
+        "recipeStepContent": "Start by cooking 12 oz. penne pasta according to the package directions (boil a large pot of water, add the pasta, and continue to boil until al dente). While the pasta is cooking, start the “alfredo” sauce. Mince two cloves of garlic and add them to a deep skillet or pot with 2 Tbsp butter. Sauté over medium heat for 1-2 minutes, or just until the garlic is soft and fragrant, but not brown.",
+        "recipeStepOrder": 1,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 2,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Add-Milk-to-Butter-and-Garlic.jpg",
+        "recipeStepOrder": 2,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 3,
+        "recipeStepContent": "Add 2 cups of whole milk to the skillet and turn the heat down to medium-low.",
+        "recipeStepOrder": 3,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 4,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Add-Cream-Cheese-to-Lighter-Spinach-Alfredo-Sauce.jpg",
+        "recipeStepOrder": 4,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 5,
+        "recipeStepContent": "Also add 6 oz. cream cheese, cut into chunks. Heat and stir or whisk the milk and cheese until it is fully heated through and the cheese has melted into the milk. You’ll want to use a whisk once the cheese begins to melt.",
+        "recipeStepOrder": 5,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 6,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Add-Parmesan-to-Lighter-Spinach-Alfredo-Sauce.jpg",
+        "recipeStepOrder": 6,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 7,
+        "recipeStepContent": "Whisk 3/4 cup grated Parmesan into the milk sauce. Continue to whisk while the mixture heats, allowing it to come up to a gentle simmer. When it reaches a simmer, the sauce will thicken. Once the Parmesan has fully melted in and the sauce has thickened, turn the heat down to low to keep the sauce warm. Season the sauce with 1/4 tsp salt and a generous amount of freshly cracked pepper.",
+        "recipeStepOrder": 7,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 8,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Fresh-Baby-Spinach-for-Lighter-Spinach-Alfredo-Pasta.jpg",
+        "recipeStepOrder": 8,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 9,
+        "recipeStepContent": "Add the spinach: Now it’s time to add the spinach. I buy these huge bags of fresh spinach, which are the same amount as those large tubs you can buy, but it’s only $3.99 (the large tubs are usually more like $5.99). Anyway, add about 4 cups of spinach to the hot alfredo sauce…",
+        "recipeStepOrder": 9,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 10,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Wilted-Spinach-in-Sauce.jpg",
+        "recipeStepOrder": 10,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 11,
+        "recipeStepContent": "And stir it in until it has wilted and limp. This should only take a few minutes.",
+        "recipeStepOrder": 11,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 12,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Add-Cooked-Pasta-to-Lighter-Spinach-Alfredo-Sauce.jpg",
+        "recipeStepOrder": 12,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 13,
+        "recipeStepContent": "Add the pasta: Finally, add the cooked and drained penne pasta and stir until everything is combined and coated in the thick sauce.",
+        "recipeStepOrder": 13,
+        "isImage": false
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 14,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2017/07/Lighter-Spinach-Alfredo-Pasta-finished.jpg",
+        "recipeStepOrder": 14,
+        "isImage": true
+    },
+    {
+        "recipeId": 1,
+        "recipeStepId": 15,
+        "recipeStepContent": "And that’s it! Now you’re ready to get your pasta on.",
+        "recipeStepOrder": 15,
+        "isImage": false
+    }
+]

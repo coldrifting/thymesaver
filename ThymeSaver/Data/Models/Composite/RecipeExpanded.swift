@@ -4,7 +4,6 @@ struct RecipeTree: Identifiable {
     var recipeId: Int = -1
     var recipeName: String = ""
     var url: String? = nil
-    var steps: String? = nil
     var recipeSections: [RecipeSectionTree] = []
     
     var id: Int { recipeId }
@@ -43,7 +42,6 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
     var recipeId: Int
     var recipeName: String
     var url: String?
-    var steps: String?
     
     // RecipeSection
     var recipeSectionId: Int?
@@ -70,7 +68,6 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
         recipeId = row["recipeId"]
         recipeName = row["recipeName"]
         url = row["url"]
-        steps = row["steps"]
         
         recipeSectionId = row["recipeSectionId"]
         recipeSectionName = row["recipeSectionName"]
@@ -93,7 +90,6 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
             Recipes.recipeId,
             Recipes.recipeName,
             Recipes.url,
-            Recipes.steps,
             RecipeSections.recipeSectionId,
             RecipeSections.recipeSectionName,
             RecipeEntries.recipeEntryId,
@@ -167,7 +163,6 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
             recipeId: entries[0].recipeId,
             recipeName: entries[0].recipeName,
             url: entries[0].url,
-            steps: entries[0].steps,
             recipeSections: sectionMap.values.sorted(by: { $0.recipeSectionId < $1.recipeSectionId }))
         
         return recipe

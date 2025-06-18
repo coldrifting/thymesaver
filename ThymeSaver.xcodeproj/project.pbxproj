@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		07326BC12DFB8E7400CD3A74 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 07326BC02DFB8E7400CD3A74 /* GRDB */; };
+		07567DEC2E02AD6F0074A4CE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 07567DEB2E02AD6F0074A4CE /* Kingfisher */; };
 		079A72932DFA590B0098A2EB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 079A72922DFA59070098A2EB /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07567DEC2E02AD6F0074A4CE /* Kingfisher in Frameworks */,
 				07326BC12DFB8E7400CD3A74 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,6 +81,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		07567DEA2E02AD6F0074A4CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		079A72592DFA1BED0098A2EB = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +95,7 @@
 				079A72642DFA1BED0098A2EB /* ThymeSaver */,
 				079A72742DFA1BEF0098A2EB /* ThymeSaverTests */,
 				079A727E2DFA1BEF0098A2EB /* ThymeSaverUITests */,
+				07567DEA2E02AD6F0074A4CE /* Frameworks */,
 				079A72632DFA1BED0098A2EB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -121,6 +131,7 @@
 			name = ThymeSaver;
 			packageProductDependencies = (
 				07326BC02DFB8E7400CD3A74 /* GRDB */,
+				07567DEB2E02AD6F0074A4CE /* Kingfisher */,
 			);
 			productName = thymesaver;
 			productReference = 079A72622DFA1BED0098A2EB /* ThymeSaver.app */;
@@ -206,6 +217,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				07326BBF2DFB8E7400CD3A74 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				07567DE92E02AC820074A4CE /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 079A72632DFA1BED0098A2EB /* Products */;
@@ -589,6 +601,14 @@
 				kind = branch;
 			};
 		};
+		07567DE92E02AC820074A4CE /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -596,6 +616,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 07326BBF2DFB8E7400CD3A74 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
+		};
+		07567DEB2E02AD6F0074A4CE /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07567DE92E02AC820074A4CE /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

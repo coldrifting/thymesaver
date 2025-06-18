@@ -63,7 +63,6 @@ extension RecipeDetailsView {
                 recipeId: recipeItems.recipeId,
                 recipeName: recipeItems.recipeName,
                 url: recipeItems.url,
-                steps: recipeItems.steps,
                 recipeSections: recipeItems.recipeSections.map { recipeSection in
                     self.usedItemIds[recipeSection.recipeSectionId] = []
                     return RecipeSectionTree(
@@ -100,7 +99,7 @@ extension RecipeDetailsView {
                 || (self.recipeEntryAndItemId != nil && self.recipeEntryAndItemId?.itemId == $0.itemId)
             }.map { item in
                 (id: item.itemId, name: item.itemName)
-            }
+            }.sorted(by: {$0.name < $1.name })
         }
         
         private(set) var recipeEntryAndItemId: (recipeEntryId: Int, itemId: Int)?
@@ -121,6 +120,7 @@ extension RecipeDetailsView {
             selectedItemIdBinding.wrappedValue != -1
         }
         
+        // TODO - Use ItemId + ItemPrepId instead of just ItemId
         private var selectedItemId: Int = -1
         var selectedSectionIdBinding: Binding<Int> {
             Binding(

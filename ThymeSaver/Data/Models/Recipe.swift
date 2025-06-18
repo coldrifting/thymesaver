@@ -5,7 +5,6 @@ struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashab
     var recipeId: Int
     var recipeName: String
     var url: String? = nil
-    var steps: String? = nil
     var isPinned: Bool = false
     var cartAmount: Int = 0
     
@@ -15,7 +14,6 @@ struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashab
         static let recipeId = Column(CodingKeys.recipeId)
         static let recipeName = Column(CodingKeys.recipeName)
         static let url = Column(CodingKeys.url)
-        static let steps = Column(CodingKeys.steps)
         static let isPinned = Column(CodingKeys.isPinned)
         static let cartAmount = Column(CodingKeys.cartAmount)
     }
@@ -26,7 +24,6 @@ struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashab
 struct RecipeInsert: Codable, FetchableRecord, PersistableRecord {
     var recipeName: String
     var url: String? = nil
-    var steps: String? = nil
     var isPinned: Bool = false
     var cartAmount: Int = 0
     
@@ -64,6 +61,14 @@ extension AppDatabase {
             var recipe = try Recipe.find(db, key: recipeId)
             recipe.isPinned = !recipe.isPinned
             try recipe.update(db, columns: [Recipe.Columns.isPinned])
+        }
+    }
+    
+    func updateRecipeUrl(recipeId: Int, newUrl: String) {
+        try? dbWriter.write { db in
+            var recipe = try Recipe.find(db, key: recipeId)
+            recipe.url = newUrl
+            try recipe.update(db, columns: [Recipe.Columns.url])
         }
     }
 }

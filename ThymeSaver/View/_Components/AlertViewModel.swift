@@ -103,7 +103,7 @@ class AlertViewModel {
             ? itemsInUse.prefix(8).joined(separator: "\n") + "\n..."
             : itemsInUse.joined(separator: "\n")
             
-            self.message = itemsInUseString
+            self.message = "The following recipes use this item: \n \(itemsInUseString)"
         }
         
         self.itemId = id

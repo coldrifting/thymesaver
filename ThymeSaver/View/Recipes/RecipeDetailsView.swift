@@ -3,6 +3,8 @@ import Observation
 import Combine
 
 struct RecipeDetailsView: View {
+    @Environment(\.appDatabase) var appDatabase
+    
     @State private var viewModel: ViewModel
     
     @State private var recipeItems: RecipeTree = RecipeTree()
@@ -15,10 +17,11 @@ struct RecipeDetailsView: View {
     }
     
     var body: some View {
+        Text(viewModel.recipeName)
         List {
             Section("Steps") {
                 NavigationLink(
-                    destination: { EmptyView() },
+                    destination: { RecipeStepsView(appDatabase, recipeId: viewModel.recipeId, recipeName: viewModel.recipeName) },
                     label: { Text("Steps") }
                 )
             }
@@ -27,7 +30,7 @@ struct RecipeDetailsView: View {
                 sectionContents(section)
             }
         }
-        .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Recipe Ingredients").navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem() {
                 Button(
