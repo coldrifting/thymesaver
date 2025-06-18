@@ -11,60 +11,65 @@ struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
         return String(Double(test) / 1000.0)
     }
     
-    init(_ string: String) {
-        if let value: Float = Float(string) {
-            
-            let whole: Int = Int(value)
-            let partialFraction: Float = value - Float(whole)
-            
-            switch string {
-            case _ where string.hasSuffix(".16"): fallthrough
-            case _ where string.hasSuffix(".167"): fallthrough
-            case _ where string.hasSuffix(".166"):
-                self.num = (whole * 6) + 1
-                self.dem = 6
-                return
-                
-            case _ where string.hasSuffix(".33"): fallthrough
-            case _ where string.hasSuffix(".334"): fallthrough
-            case _ where string.hasSuffix(".333"):
-                self.num = (whole * 3) + 1
-                self.dem = 3
-                return
-                
-            case _ where string.hasSuffix(".66"): fallthrough
-            case _ where string.hasSuffix(".667"): fallthrough
-            case _ where string.hasSuffix(".666"):
-                self.num = (whole * 3) + 2
-                self.dem = 3
-                return
-                
-            case _ where string.hasSuffix(".83"): fallthrough
-            case _ where string.hasSuffix(".834"): fallthrough
-            case _ where string.hasSuffix(".833"):
-                self.num = (whole * 6) + 5
-                self.dem = 6
-                return
-                
-            default:
-                break
-            }
-            
-            for i in stride(from: 2, through: 16, by: 1) {
-                let rounded: Int = Int(partialFraction * Float(i) * 1000.0)
-                if (rounded % 1000 == 0) {
-                    self.num = Int((Float(whole) + Float(partialFraction) * Float(i)))
-                    self.dem = i
-                    return
-                }
-            }
-            
-            // Fallback
-            self.num = Int(value * 1000.0)
-            self.dem = 1000
+    init(_ input: FixedPoint) {
+        let whole: Int = Int(input)
+        let fraction = input.fraction
+        
+        if (fraction == 0) {
+            self.num = whole
             return
         }
-        self.num = -1
+        
+        // Special handling for 3rds and 6ths
+        switch fraction {
+        case 160: fallthrough
+        case 166: fallthrough
+        case 167:
+            self.num = (whole * 6) + 1
+            self.dem = 6
+            return
+            
+        case 330: fallthrough
+        case 333: fallthrough
+        case 334:
+            self.num = (whole * 3) + 1
+            self.dem = 3
+            return
+            
+        case 660: fallthrough
+        case 666: fallthrough
+        case 667:
+            self.num = (whole * 3) + 2
+            self.dem = 3
+            return
+            
+        case 830: fallthrough
+        case 833: fallthrough
+        case 834:
+            self.num = (whole * 6) + 5
+            self.dem = 6
+            return
+            
+        default:
+            break
+        }
+        
+        for divisor in stride(from: 2, through: 16, by: 1) {
+            if ((fraction * divisor % 1000) == 0) {
+                self.num = (whole * divisor) + ((fraction * divisor) / 1000)
+                self.dem = divisor
+                return
+            }
+        }
+        
+        // Fallback
+        self.num = (whole * 1000) + fraction
+        self.dem = 1000
+    }
+    
+    init(_ string: String) {
+        let fixedPoint: FixedPoint = FixedPoint(string)
+        self = Fraction(fixedPoint)
     }
     
     init(_ num: Int, dem: Int) {
@@ -74,11 +79,6 @@ struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
     
     init(_ num: Int) {
         self.num = num
-    }
-    
-    init(_ num: Double) {
-        // TODO: - Convert to fraction instead of truncating
-        self.num = Int(num)
     }
     
     // Serialization
@@ -114,7 +114,9 @@ struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
                 return whole.description
             }
             
-            return whole.description + " " + Fraction.getFractionChar(fraction: Fraction(partial, dem: fraction.dem))
+            let output: String = whole.description + " " + Fraction.getFractionChar(fraction: Fraction(partial, dem: fraction.dem))
+            
+            return output.replacingOccurrences(of: " 0.", with: ".")
         }
         
         switch "\(fraction.num)/\(fraction.dem)" {

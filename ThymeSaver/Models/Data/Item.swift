@@ -53,40 +53,46 @@ extension AppDatabase {
     }
     
     func addItem(
+        itemName: String
+    ) {
+        addItem(itemName: itemName, itemTemp: .ambient, defaultUnits: .count)
+    }
+    
+    func addItem(
         itemName: String,
-        itemTemp: ItemTemp = ItemTemp.ambient,
-        defaultUnits: UnitType = UnitType.count
-    ) throws {
-        try dbWriter.write { db in
+        itemTemp: ItemTemp,
+        defaultUnits: UnitType
+    ) {
+        try? dbWriter.write { db in
             let item = ItemInsert(itemName: itemName, itemTemp: itemTemp, defaultUnits: defaultUnits)
             try item.insert(db)
         }
     }
     
-    func deleteItem(itemId: Int) throws {
-        try dbWriter.write { db in
+    func deleteItem(itemId: Int) {
+        try? dbWriter.write { db in
             _ = try Item.deleteOne(db, key: itemId)
         }
     }
     
-    func renameItem(itemId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameItem(itemId: Int, newName: String) {
+        try? dbWriter.write { db in
             var item = try Item.find(db, key: itemId)
             item.itemName = newName
             try item.update(db, columns: [Item.Columns.itemName])
         }
     }
     
-    func updateItemTemp(itemId: Int, itemTemp: ItemTemp) throws {
-        try dbWriter.write { db in
+    func updateItemTemp(itemId: Int, itemTemp: ItemTemp) {
+        try? dbWriter.write { db in
             var item = try Item.find(db, key: itemId)
             item.itemTemp = itemTemp
             try item.update(db, columns: [Item.Columns.itemTemp])
         }
     }
     
-    func updateItemDefaultUnits(itemId: Int, defaultUnits: UnitType) throws {
-        try dbWriter.write { db in
+    func updateItemDefaultUnits(itemId: Int, defaultUnits: UnitType) {
+        try? dbWriter.write { db in
             var item = try Item.find(db, key: itemId)
             item.defaultUnits = defaultUnits
             try item.update(db, columns: [Item.Columns.defaultUnits])

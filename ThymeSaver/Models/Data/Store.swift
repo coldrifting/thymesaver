@@ -22,21 +22,21 @@ struct StoreInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addStore(storeName: String) throws {
-        try dbWriter.write { db in
+    func addStore(storeName: String) {
+        try? dbWriter.write { db in
             let store = StoreInsert(storeName: storeName)
             try store.insert(db)
         }
     }
     
-    func deleteStore(storeId: Int) throws {
-        try dbWriter.write { db in
+    func deleteStore(storeId: Int) {
+        try? dbWriter.write { db in
             _ = try Store.deleteOne(db, key: storeId)
         }
     }
     
-    func renameStore(storeId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameStore(storeId: Int, newName: String) {
+        try? dbWriter.write { db in
             var store = try Store.find(db, key: storeId)
             store.storeName = newName
             try store.update(db, columns: [Store.Columns.storeName])

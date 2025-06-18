@@ -15,11 +15,18 @@ extension ItemsView {
         
         init(_ appDatabase: AppDatabase) {
             self.appDatabase = appDatabase
+            
+            self.alert = AlertViewModel.init(
+                itemName: "Item",
+                addAction: appDatabase.addItem,
+                renameAction: appDatabase.renameItem,
+                deleteAction: appDatabase.deleteItem
+            )
         }
         
         func observe(filterText: String) {
             let observation = ValueObservation.tracking { db in
-                try ItemExpanded.getItemsFiltered(db, itemNameFilter: filterText)
+                ItemExpanded.getItemsFiltered(db, itemNameFilter: filterText)
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
@@ -70,72 +77,17 @@ extension ItemsView {
         }
         
         func addItem(itemName: String) {
-            try? appDatabase.addItem(itemName: itemName)
+            appDatabase.addItem(itemName: itemName)
         }
         
         func deleteItem(itemId: Int) {
-            try? appDatabase.deleteItem(itemId: itemId)
+            appDatabase.deleteItem(itemId: itemId)
         }
         
         func renameItem(itemId: Int, newName: String) {
-            try? appDatabase.renameItem(itemId: itemId, newName: newName)
+            appDatabase.renameItem(itemId: itemId, newName: newName)
         }
         
-        // MARK: - Alerts
-        private(set) var alertType: AlertType = AlertType.none
-        private(set) var alertId: Int = -1
-        
-        private(set) var alertTitle: String = ""
-        private(set) var alertMessage: String = ""
-        private(set) var alertConfirmText: String = ""
-        private(set) var alertDismissText: String = "Cancel"
-        private(set) var alertPlaceholder: String = "Aisle Name"
-        
-        private(set) var alertTextEntry: String = ""
-        
-        var alertTextBinding: Binding<String> {
-            Binding(
-                get: { self.alertTextEntry },
-                set: { self.alertTextEntry = $0 }
-            )
-        }
-        
-        func queueAddItemAlert() {
-            alertId = -1
-            alertTextEntry = ""
-            alertType = .add
-            alertTitle = "Add Item"
-            alertMessage = "Please enter the name for the new Item"
-            alertConfirmText = "Add"
-        }
-        
-        func queueRenameItemAlert(itemId: Int, itemName: String) {
-            alertId = itemId
-            alertTextEntry = itemName
-            alertType = .rename
-            alertTitle = "Rename Item"
-            alertMessage = "Please enter the new name for the Item"
-            alertConfirmText = "Rename"
-        }
-        
-        func queueDeleteItemAlert(itemId: Int, itemsInUse: String) {
-            let itemsInUseArr: [String] = itemsInUse.components(separatedBy: ",")
-            let itemsInUseString: String = itemsInUseArr.count > 8
-            ? itemsInUseArr.prefix(8).joined(separator: "\n") + "\n..."
-            : itemsInUseArr.joined(separator: "\n")
-            
-            alertId = itemId
-            alertTextEntry = ""
-            alertType = .delete
-            alertTitle = "Delete Item?"
-            alertMessage = "This Item is used by the following recipes:\n\(itemsInUseString)"
-            alertConfirmText = "Delete"
-        }
-        
-        func dismissAlert() {
-            alertId = -1
-            alertTextEntry = ""
-            alertType = .none
-        }
+        var alert: AlertViewModel
     }
 }

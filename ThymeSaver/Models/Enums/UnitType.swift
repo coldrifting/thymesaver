@@ -46,4 +46,29 @@ enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConverti
             isPlural ? "lbs" : "lb"
         }
     }
+    
+    func getUnits() -> Int {
+        return switch self {
+        case .count:
+            1
+        case .volumeTeaspoons:
+            1
+        case .volumeTablespoons:
+            3
+        case .volumeOunces:
+            6
+        case .volumeCups:
+            48
+        case .volumePints:
+            96
+        case .volumeQuarts:
+            192
+        case .volumeGallons:
+            768
+        case .weightOunces:
+            1
+        case .weightPounds:
+            16
+        }
+    }
 }

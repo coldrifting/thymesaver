@@ -42,31 +42,31 @@ extension AppDatabase {
         }
     }
     
-    func addAisle(aisleName: String, storeId: Int, aisleOrder: Int = Int.max) throws {
-        try dbWriter.write { db in
+    func addAisle(aisleName: String, storeId: Int, aisleOrder: Int = Int.max) {
+        try? dbWriter.write { db in
             let aisle = AisleInsert(storeId: storeId, aisleName: aisleName, aisleOrder: aisleOrder)
             try aisle.insert(db)
             try syncAisleOrder(db: db)
         }
     }
     
-    func renameAisle(aisleId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameAisle(aisleId: Int, newName: String) {
+        try? dbWriter.write { db in
             var aisle = try Aisle.find(db, key: aisleId)
             aisle.aisleName = newName
             try aisle.update(db, columns: [Aisle.Columns.aisleName])
         }
     }
     
-    func deleteAisle(aisleId: Int, storeId: Int) throws {
-        try dbWriter.write { db in
+    func deleteAisle(aisleId: Int, storeId: Int) {
+        try? dbWriter.write { db in
             try Aisle.deleteOne(db, key: aisleId)
             try syncAisleOrder(db: db)
         }
     }
     
-    func moveAisle(aisleId: Int, newIndex: Int) throws {
-        try dbWriter.write { db in
+    func moveAisle(aisleId: Int, newIndex: Int) {
+        try? dbWriter.write { db in
             if var aisle: Aisle = try? Aisle.find(db, key: aisleId) {
                 aisle.aisleOrder = newIndex
                 try aisle.update(db)

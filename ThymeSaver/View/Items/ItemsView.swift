@@ -29,7 +29,7 @@ struct ItemsView: View {
                 }
                 ToolbarItem {
                     Button(
-                        action: { viewModel.queueAddItemAlert() },
+                        action: { viewModel.alert.queueAdd() },
                         label: { Label("Add Item", systemImage: "plus") }
                     )
                 }
@@ -42,26 +42,7 @@ struct ItemsView: View {
                     self.itemsWithAisleInfo = items
                 }
             }
-            .customAlert(
-                title: viewModel.alertTitle,
-                message: viewModel.alertMessage,
-                placeholder: viewModel.alertPlaceholder,
-                onConfirm: { stringValue in
-                    switch viewModel.alertType {
-                    case .add:
-                        viewModel.addItem(itemName: stringValue)
-                    case .rename:
-                        viewModel.renameItem(itemId: viewModel.alertId, newName: stringValue)
-                    case .delete:
-                        viewModel.deleteItem(itemId: viewModel.alertId)
-                    case .none:
-                        break
-                    }
-                },
-                onDismiss: viewModel.dismissAlert,
-                alertType: viewModel.alertType,
-                $text: viewModel.alertTextBinding
-            )
+            .alertCustom(viewModel.alert)
         }
     }
     
@@ -85,7 +66,9 @@ struct ItemsView: View {
     private func sectionItems(items: [ItemExpanded], ) -> some View {
         ForEach(items) { item in
             NavigationLink(
-                destination: { ItemDetailsView(appDatabase, itemId: item.itemId, itemName: item.itemName) },
+                destination: {
+                    ItemDetailsView(appDatabase, itemId: item.itemId, itemName: item.itemName)
+                },
                 label: {
                     HStack {
                         Text(item.itemName)
@@ -101,7 +84,7 @@ struct ItemsView: View {
             )
             .swipeActions(edge: .leading) {
                 Button(
-                    action: { viewModel.queueRenameItemAlert(itemId: item.itemId, itemName: item.itemName) },
+                    action: { viewModel.alert.queueRename(id: item.itemId, name: item.itemName) },
                     label: { Text("Rename") }
                 )
                 .tint(.blue)
@@ -111,7 +94,7 @@ struct ItemsView: View {
                 .swipeActions(edge: .trailing) {
                     Button(
                         action: {
-                            viewModel.queueDeleteItemAlert(itemId: item.itemId, itemsInUse: item.usedIn)
+                            viewModel.alert.queueDelete(id: item.itemId, itemsInUse: item.usedIn)
                         },
                         label: { Text("Delete") }
                     )

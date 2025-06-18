@@ -34,8 +34,8 @@ struct RecipeEntryInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addRecipeEntry(recipeSectionId: Int, recipeId: Int, itemId: Int, itemPrepId: Int? = nil, amount: Amount) throws {
-        try dbWriter.write { db in
+    func addRecipeEntry(recipeSectionId: Int, recipeId: Int, itemId: Int, itemPrepId: Int? = nil, amount: Amount) {
+        try? dbWriter.write { db in
             let recipeEntry = RecipeEntryInsert(
                 recipeSectionId: recipeSectionId,
                 recipeId: recipeId,
@@ -47,8 +47,8 @@ extension AppDatabase {
         }
     }
     
-    func updateRecipeEntry(recipeEntryId: Int, itemId: Int, itemPrepId: Int? = nil, amount: Amount) throws {
-        try dbWriter.write { db in
+    func updateRecipeEntry(recipeEntryId: Int, itemId: Int, itemPrepId: Int? = nil, amount: Amount) {
+        try? dbWriter.write { db in
             let recipeEntry = RecipeEntry(
                 recipeEntryId: recipeEntryId,
                 recipeSectionId: -1,
@@ -61,8 +61,8 @@ extension AppDatabase {
         }
     }
     
-    func deleteRecipeEntry(recipeEntryId: Int) throws {
-        try dbWriter.write { db in
+    func deleteRecipeEntry(recipeEntryId: Int) {
+        try? dbWriter.write { db in
             _ = try RecipeEntry.deleteOne(db, key: recipeEntryId)
         }
     }

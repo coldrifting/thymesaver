@@ -34,8 +34,8 @@ struct RecipeInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addRecipe(recipeName: String) throws {
-        try dbWriter.write { db in
+    func addRecipe(recipeName: String) {
+        try? dbWriter.write { db in
             let recipe = RecipeInsert(recipeName: recipeName)
             _ = try recipe.insert(db)
             
@@ -45,22 +45,22 @@ extension AppDatabase {
         }
     }
     
-    func deleteRecipe(recipeId: Int) throws {
-        try dbWriter.write { db in
+    func deleteRecipe(recipeId: Int) {
+        try? dbWriter.write { db in
             _ = try Recipe.deleteOne(db, key: recipeId)
         }
     }
     
-    func renameRecipe(recipeId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameRecipe(recipeId: Int, newName: String) {
+        try? dbWriter.write { db in
             var recipe = try Recipe.find(db, key: recipeId)
             recipe.recipeName = newName
             try recipe.update(db, columns: [Recipe.Columns.recipeName])
         }
     }
     
-    func toggleRecipePin(recipeId: Int) throws {
-        try dbWriter.write { db in
+    func toggleRecipePin(recipeId: Int) {
+        try? dbWriter.write { db in
             var recipe = try Recipe.find(db, key: recipeId)
             recipe.isPinned = !recipe.isPinned
             try recipe.update(db, columns: [Recipe.Columns.isPinned])

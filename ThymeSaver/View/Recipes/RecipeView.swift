@@ -7,6 +7,10 @@ struct RecipeView: View {
     
     @State private var viewModel: ViewModel
     
+    @State private var recipes: [Recipe] = []
+    
+    @State private var isInEditMode: Bool = false
+    
     init(_ appDatabase: AppDatabase) {
         _viewModel = State(initialValue: ViewModel(appDatabase))
     }
@@ -14,62 +18,30 @@ struct RecipeView: View {
     var body: some View {
         NavigationStack {
             List {
-                RecipeViewSubView(viewModel)
+                allRecipes()
             }
             .toolbar {
                 ToolbarItem() {
-                    EditButton()
+                    Button(
+                        action: { $isInEditMode.wrappedValue = !isInEditMode },
+                        label: { Text(isInEditMode ? "Done" : "Edit") }
+                    )
                 }
                 ToolbarItem {
                     Button(
-                        action: { viewModel.queueAddItemAlert() },
+                        action: { viewModel.alert.queueAdd() },
                         label: { Label("Add Item", systemImage: "plus") }
                     )
                 }
             }
             .onAppear(perform: viewModel.observe)
-            .navigationTitle(Text("Recipes"))
-            .customAlert(
-                title: viewModel.alertTitle,
-                message: viewModel.alertMessage,
-                placeholder: viewModel.alertPlaceholder,
-                onConfirm: { stringValue in
-                    switch viewModel.alertType {
-                    case .add:
-                        viewModel.addRecipe(recipeName: stringValue)
-                    case .rename:
-                        viewModel.renameRecipe(recipeId: viewModel.alertId, newName: stringValue)
-                    case .delete:
-                        viewModel.deleteRecipe(recipeId: viewModel.alertId)
-                    case .none:
-                        break
-                    }
-                },
-                onDismiss: viewModel.dismissAlert,
-                alertType: viewModel.alertType,
-                $text: viewModel.alertTextBinding
-            )
-        }
-    }
-}
-
-struct RecipeViewSubView: View {
-    @Environment(\.appDatabase) var appDatabase
-    @Environment(\.editMode) var editMode
-    
-    @State private var viewModel: RecipeView.ViewModel
-    @State private var recipes: [Recipe] = []
-    
-    init(_ viewModel: RecipeView.ViewModel) {
-        self.viewModel = viewModel
-    }
-    
-    var body: some View {
-        allRecipes()
-        .onReceive(Just(viewModel.recipes)) { recipes in
-            withAnimation {
-                self.recipes = recipes
+            .onReceive(Just(viewModel.recipes)) { recipes in
+                withAnimation {
+                    self.recipes = recipes
+                }
             }
+            .navigationTitle(Text("Recipes"))
+            .alertCustom(viewModel.alert)
         }
     }
     
@@ -89,8 +61,7 @@ struct RecipeViewSubView: View {
             Section(title) {
                 ForEach(recipes) { recipe in
                     HStack {
-                        if (editMode?.wrappedValue.isEditing == true) {
-                            
+                        if (isInEditMode) {
                                 Button(
                                     action: {
                                         viewModel.toggleRecipePin(recipeId: recipe.recipeId)
@@ -109,7 +80,7 @@ struct RecipeViewSubView: View {
                     }
                     .swipeActions(edge: .leading) {
                         Button(
-                            action: { viewModel.queueRenameItemAlert(itemId: recipe.recipeId, itemName: recipe.recipeName) },
+                            action: { viewModel.alert.queueRename(id: recipe.recipeId, name: recipe.recipeName) },
                             label: { Text("Rename") }
                         )
                         .tint(.blue)
@@ -117,7 +88,7 @@ struct RecipeViewSubView: View {
                     .swipeActions(edge: .trailing) {
                         Button(
                             action: {
-                                viewModel.queueDeleteItemAlert(itemId: recipe.recipeId, itemsInUse: ["Test", "test2"])
+                                viewModel.alert.queueDelete(id: recipe.recipeId, itemsInUse: ["Test", "test2"])
                             },
                             label: { Text("Delete") }
                         )

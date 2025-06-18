@@ -27,6 +27,7 @@ struct RecipeDetailsView: View {
                 sectionContents(section)
             }
         }
+        .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem() {
                 Button(
@@ -34,16 +35,19 @@ struct RecipeDetailsView: View {
                     label: { Text(isInEditMode ? "Done" : "Edit") }
                 )
             }
-            if (isInEditMode) {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(
-                        action: {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(
+                    action: {
+                        if (isInEditMode) {
                             viewModel.setupNewItemScreen()
                             showBottomSheet = true
-                        },
-                        label: { Label("Add", systemImage: "plus") }
-                    )
-                }
+                        }
+                        else {
+                            viewModel.alert.queueAdd()
+                        }
+                    },
+                    label: { Label("Add", systemImage: "plus") }
+                )
             }
         }
         .sheet(isPresented: $showBottomSheet, content: {
@@ -100,33 +104,13 @@ struct RecipeDetailsView: View {
             }.presentationDetents([.height(500)])
             
         })
-        .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: viewModel.observe )
         .onReceive(Just(viewModel.recipeItems)) { recipeItems in
             withAnimation {
                 self.recipeItems = recipeItems
             }
         }
-        .customAlert(
-            title: viewModel.alertTitle,
-            message: viewModel.alertMessage,
-            placeholder: viewModel.alertPlaceholder,
-            onConfirm: { stringValue in
-                switch viewModel.alertType {
-                case .add:
-                    viewModel.addRecipeSection()
-                case .rename:
-                    viewModel.renameRecipeSection()
-                case .delete:
-                    break
-                case .none:
-                    break
-                }
-            },
-            onDismiss: viewModel.dismissAlert,
-            alertType: viewModel.alertType,
-            $text: viewModel.alertTextBinding
-        )
+        .alertCustom(viewModel.alert)
     }
     
     func showUpdateSheet(section: RecipeSectionTree, item: ItemTree) {
@@ -146,21 +130,23 @@ struct RecipeDetailsView: View {
             content: {
                 ForEach(section.items) { item in
                     if (isInEditMode) {
-                        HStack {
-                            Text(item.itemName)
-                            Spacer()
-                            Button(
-                                action: {
-                                    showUpdateSheet(section: section, item: item)
-                                },
-                                label: {
+                        Button(
+                            action: {
+                                showUpdateSheet(section: section, item: item)
+                            },
+                            label: {
+                                HStack {
+                                    Text(item.itemName).foregroundStyle(.blue)
+                                    Spacer()
                                     Text(item.amount.description)
-                                        .font(.footnote)
-                                        .frame(width: 50, height: 14)
+                                        .font(.callout)
+                                        .foregroundStyle(.primary)
+                                        .backgroundStyle(.secondary)
+                                    Label("", systemImage: "chevron.right").labelStyle(.iconOnly).foregroundStyle(.secondary)
                                 }
-                            )
-                            .buttonStyle(.bordered).foregroundStyle(.primary)
-                        }
+                            }
+                        )
+                        .foregroundStyle(.primary)
                         .swipeActions(edge: .leading) {
                             Button(
                                 action: {
@@ -190,22 +176,15 @@ struct RecipeDetailsView: View {
                 }
             },
             header: {
-                if (isInEditMode && viewModel.recipeItems.recipeSections.count > 1) {
-                    Button(
-                        action: { viewModel.queueRenameItemAlert(itemId: section.recipeSectionId, itemName: section.recipeSectionName) },
-                        label: { Text(headerText).font(.footnote) }
-                    )
-                }
-                else {
+                HStack {
                     Text(headerText)
-                }
-            },
-            footer: {
-                if (isInEditMode && viewModel.recipeItems.recipeSections.last?.recipeSectionId == section.recipeSectionId) {
-                    Button(
-                        action: { viewModel.queueAddItemAlert() },
-                        label: { Text("Add New Section").font(.footnote).textCase(.uppercase) }
-                    )
+                    Spacer()
+                    if (isInEditMode && viewModel.recipeItems.recipeSections.count > 1) {
+                        Button(
+                            action: { viewModel.alert.queueRename(id: section.recipeSectionId, name: section.recipeSectionName) },
+                            label: { Text("Rename Section").textCase(.none).font(.footnote) }
+                        )
+                    }
                 }
             }
         )

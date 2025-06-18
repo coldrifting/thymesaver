@@ -29,7 +29,7 @@ struct AisleView: View {
             }
             ToolbarItem {
                 Button(
-                    action: { viewModel.queueAddItemAlert() },
+                    action: { viewModel.alert.queueAdd() },
                     label: { Label("Add Aisle", systemImage: "plus") }
                 )
             }
@@ -40,17 +40,7 @@ struct AisleView: View {
                 self.aisles = aisles
             }
         }
-        .customAlert(
-            title: viewModel.alertTitle,
-            message: viewModel.alertMessage,
-            placeholder: viewModel.alertPlaceholder,
-            onConfirm: viewModel.alertType == AlertType.rename
-            ? { viewModel.renameAisle(aisleId: viewModel.alertId, newName: $0)}
-            : { viewModel.addAisle(aisleName: $0, storeId: storeId)},
-            onDismiss: viewModel.dismissAlert,
-            alertType: viewModel.alertType,
-            $text: viewModel.alertTextBinding
-        )
+        .alertCustom(viewModel.alert)
     }
     
     private func allAisles() -> some View {
@@ -62,7 +52,7 @@ struct AisleView: View {
             }
             .swipeActions(edge: .leading) {
                 Button(
-                    action: { viewModel.queueRenameItemAlert(itemId: aisle.aisleId, itemName: aisle.aisleName) },
+                    action: { viewModel.alert.queueRename(id: aisle.aisleId, name: aisle.aisleName) },
                     label: { Text("Rename") }
                 )
                 .tint(Color(red: 0.2, green: 0.6, blue: 0.3))

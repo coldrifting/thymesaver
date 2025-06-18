@@ -21,8 +21,8 @@ extension AppDatabase {
         }
     }
     
-    func selectStore(storeId: Int) throws {
-        try dbWriter.write { db in
+    func selectStore(storeId: Int) {
+        try? dbWriter.write { db in
             let config: Config = Config(selectedStore: storeId)
             try config.update(db)
         }

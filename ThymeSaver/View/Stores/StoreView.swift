@@ -30,14 +30,12 @@ struct StoreView: View {
                 }
                 ToolbarItem {
                     Button(
-                        action: { viewModel.queueAddItemAlert() },
+                        action: { viewModel.alert.queueAdd() },
                         label: { Label("Add Store", systemImage: "plus") }
                     )
                 }
             }
-            .onAppear {
-                viewModel.observe()
-            }
+            .onAppear { viewModel.observe() }
             .onReceive(Just(viewModel.stores)) { stores in
                 withAnimation {
                     self.stores = stores
@@ -48,17 +46,7 @@ struct StoreView: View {
                     self.selectedStoreId = selectedStoreId
                 }
             }
-            .customAlert(
-                title: viewModel.alertTitle,
-                message: viewModel.alertMessage,
-                placeholder: viewModel.alertPlaceholder,
-                onConfirm: viewModel.alertType == AlertType.rename
-                ? { viewModel.renameStore(storeId: viewModel.alertId, newName: $0)}
-                : { viewModel.addStore(storeName: $0)},
-                onDismiss: viewModel.dismissAlert,
-                alertType: viewModel.alertType,
-                $text: viewModel.alertTextBinding
-            )
+            .alertCustom(viewModel.alert)
         }
     }
     
@@ -93,8 +81,10 @@ struct StoreView: View {
     
     func allStores() -> some View {
         Section("All Stores") {
-            ForEach(stores) { store in
-                let selected : Bool = store.storeId == selectedStoreId
+            ForEach(self.stores) { store in
+                let storeId: Int = store.storeId
+                let storeName: String = store.storeName
+                let selected: Bool = storeId == self.selectedStoreId
                 
                 Button(
                     action: { viewModel.selectStore(storeId: store.storeId) },
@@ -103,14 +93,15 @@ struct StoreView: View {
                 .foregroundStyle(.primary)
                 .swipeActions(edge: .leading) {
                     Button {
-                        viewModel.queueRenameItemAlert(itemId: store.storeId, itemName: store.storeName)
+                        viewModel.alert.queueRename(id: storeId, name: storeName)
                     } label: {
                         Text("Rename")
                     }
                     .tint(Color(red: 0.2, green: 0.6, blue: 0.3))
                 }
                 .deleteDisabled(selected)
-            }.onDelete { offsets in
+            }
+            .onDelete { offsets in
                 offsets.forEach { index in
                     viewModel.deleteStore(storeId: stores[index].storeId)
                 }

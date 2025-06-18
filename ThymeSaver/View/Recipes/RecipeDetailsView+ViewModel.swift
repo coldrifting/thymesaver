@@ -4,7 +4,6 @@ import GRDB
 extension RecipeDetailsView {
     @Observable @MainActor
     class ViewModel {
-        
         private var indexToEntryId: [String:Int] = [:]
         private var indexToItemId: [String:Int] = [:]
         
@@ -34,6 +33,12 @@ extension RecipeDetailsView {
             self.appDatabase = appDatabase
             self.recipeId = recipeId
             self.recipeName = recipeName
+            
+            self.alert = AlertViewModel.init(
+                itemName: "Recipe Section",
+                addAction: { newName in appDatabase.addRecipeSection(recipeSectionName: newName, recipeId: recipeId) },
+                renameAction: appDatabase.renameRecipeSection
+            )
         }
         
         func observe() {
@@ -173,19 +178,11 @@ extension RecipeDetailsView {
             self.selectedItemIdBinding.wrappedValue = itemId
         }
         
-        func addRecipeSection() {
-            try? appDatabase.addRecipeSection(recipeSectionName: self.alertTextEntry, recipeId: self.recipeId)
-        }
-        
-        func renameRecipeSection() {
-            try? appDatabase.renameRecipeSection(recipeSectionId: self.alertId, newName: self.alertTextEntry)
-        }
-        
         func addRecipeEntry() {
             let frac: Fraction = Fraction(selectedAmountString)
             let amount: Amount = Amount(frac, type: selectedAmountUnitType)
             
-            try? appDatabase.addRecipeEntry(
+            appDatabase.addRecipeEntry(
                 recipeSectionId: selectedSectionId,
                 recipeId: self.recipeId,
                 itemId: selectedItemIdBinding.wrappedValue,
@@ -200,7 +197,7 @@ extension RecipeDetailsView {
             let frac: Fraction = Fraction(selectedAmountString)
             let amount: Amount = Amount(frac, type: selectedAmountUnitType)
             
-            try? appDatabase.updateRecipeEntry(
+            appDatabase.updateRecipeEntry(
                 recipeEntryId: recipeEntryId,
                 itemId: selectedItemIdBinding.wrappedValue,
                 amount: amount
@@ -213,57 +210,16 @@ extension RecipeDetailsView {
         func deleteRecipeEntry(sectionIndex: Int, index: Int) {
             let key: String = "\(sectionIndex),\(index)"
             let recipeEntryId: Int = self.indexToEntryId[key] ?? -1
-            try? appDatabase.deleteRecipeEntry(recipeEntryId: recipeEntryId)
+            appDatabase.deleteRecipeEntry(recipeEntryId: recipeEntryId)
             
             // Auto delete empty sections
             for section in recipeItems.recipeSections {
                 if (section.items.isEmpty || section.items.count == 1 && section.items[0].entryId == recipeEntryId) {
-                    try? appDatabase.deleteRecipeSection(recipeId: self.recipeId, recipeSectionId: section.recipeSectionId)
+                    appDatabase.deleteRecipeSection(recipeId: self.recipeId, recipeSectionId: section.recipeSectionId)
                 }
             }
         }
         
-        // MARK: - Alerts
-        private(set) var alertType: AlertType = AlertType.none
-        private(set) var alertId: Int = -1
-        
-        private(set) var alertTitle: String = ""
-        private(set) var alertMessage: String = ""
-        private(set) var alertConfirmText: String = ""
-        private(set) var alertDismissText: String = "Cancel"
-        private(set) var alertPlaceholder: String = "Recipe Section Name"
-        
-        private(set) var alertTextEntry: String = ""
-        
-        var alertTextBinding: Binding<String> {
-            Binding(
-                get: { self.alertTextEntry },
-                set: { self.alertTextEntry = $0 }
-            )
-        }
-        
-        func queueAddItemAlert() {
-            alertId = -1
-            alertTextEntry = ""
-            alertType = .add
-            alertTitle = "Add Recipe Section"
-            alertMessage = "Please enter a name for the new Section"
-            alertConfirmText = "Add"
-        }
-        
-        func queueRenameItemAlert(itemId: Int, itemName: String) {
-            alertId = itemId
-            alertTextEntry = itemName
-            alertType = .rename
-            alertTitle = "Rename Recipe Section"
-            alertMessage = "Please enter a new name for this Section"
-            alertConfirmText = "Rename"
-        }
-        
-        func dismissAlert() {
-            alertId = -1
-            alertTextEntry = ""
-            alertType = .none
-        }
+        var alert: AlertViewModel
     }
 }

@@ -6,13 +6,9 @@ struct ItemDetailsView: View {
     @State private var viewModel: ViewModel
     
     @State private var itemPreps: [ItemPrepExpanded] = []
-    private var itemId: Int
-    private var itemName: String
     
     init(_ appDatabase: AppDatabase, itemId: Int, itemName: String) {
-        _viewModel = State(initialValue: ViewModel(appDatabase))
-        self.itemId = itemId
-        self.itemName = itemName
+        _viewModel = State(initialValue: ViewModel(appDatabase, itemId: itemId, itemName: itemName))
     }
     
     var body: some View {
@@ -58,7 +54,7 @@ struct ItemDetailsView: View {
                         Text(itemPrep.prepName)
                         .swipeActions(edge: .leading) {
                             Button(
-                                action: { viewModel.queueRenameItemAlert(itemId: itemPrep.itemPrepId, itemName: itemPrep.prepName) },
+                                action: { viewModel.alert.queueRename(id: itemPrep.itemPrepId, name: itemPrep.prepName) },
                                 label: { Text("Rename") }
                             )
                             .tint(.blue)
@@ -68,7 +64,7 @@ struct ItemDetailsView: View {
                             .swipeActions(edge: .trailing) {
                                 Button(
                                     action: {
-                                        viewModel.queueDeleteItemAlert(itemId: itemPrep.itemPrepId, itemsInUse: itemPrep.usedIn)
+                                        viewModel.alert.queueDelete(id: itemPrep.itemPrepId, itemsInUse: itemPrep.usedIn)
                                     },
                                     label: { Text("Delete") }
                                 )
@@ -85,43 +81,24 @@ struct ItemDetailsView: View {
                 }
             }
         }
-        .navigationTitle(Text(itemName)).navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(Text(viewModel.itemName)).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem {
                 Button (
-                    action: { viewModel.queueAddItemAlert() },
+                    action: { viewModel.alert.queueAdd() },
                     label: { Label("Add Item Preperation", systemImage: "plus") }
                 )
             }
         }
         .onAppear() {
-            viewModel.observe(itemId: self.itemId)
+            viewModel.observe()
         }
         .onReceive(Just(viewModel.itemPreps)) { itemPreps in
             withAnimation {
                 self.itemPreps = viewModel.itemPreps
             }
         }
-        .customAlert(
-            title: viewModel.alertTitle,
-            message: viewModel.alertMessage,
-            placeholder: viewModel.alertPlaceholder,
-            onConfirm: { stringValue in
-                switch viewModel.alertType {
-                case .add:
-                    viewModel.addItem(itemName: stringValue)
-                case .rename:
-                    viewModel.renameItem(itemId: viewModel.alertId, newName: stringValue)
-                case .delete:
-                    viewModel.deleteItem(itemId: viewModel.alertId)
-                case .none:
-                    break
-                }
-            },
-            onDismiss: viewModel.dismissAlert,
-            alertType: viewModel.alertType,
-            $text: viewModel.alertTextBinding
-        )
+        .alertCustom(viewModel.alert)
     }
 }
 

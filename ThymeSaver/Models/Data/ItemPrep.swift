@@ -31,21 +31,21 @@ struct ItemPrepInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addItemPrep(itemId: Int, prepName: String) throws {
-        try dbWriter.write { db in
+    func addItemPrep(itemId: Int, prepName: String) {
+        try? dbWriter.write { db in
             let itemPrep = ItemPrepInsert(itemId: itemId, prepName: prepName)
             _ = try itemPrep.insert(db)
         }
     }
     
-    func deleteItemPrep(itemPrepId: Int) throws {
-        try dbWriter.write { db in
+    func deleteItemPrep(itemPrepId: Int) {
+        try? dbWriter.write { db in
             _ = try ItemPrep.deleteOne(db, key: itemPrepId)
         }
     }
     
-    func renameItemPrep(itemPrepId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameItemPrep(itemPrepId: Int, newName: String) {
+        try? dbWriter.write { db in
             var itemPrep = try ItemPrep.find(db, key: itemPrepId)
             itemPrep.prepName = newName
             try itemPrep.update(db, columns: [ItemPrep.Columns.prepName])

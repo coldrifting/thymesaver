@@ -1,21 +1,40 @@
 import GRDB
 
-struct ItemExpanded: FetchableRecord, Identifiable {
-    // Item
+struct ItemExpanded: Identifiable {
     var itemId: Int
     var itemName: String
     var itemTemp: ItemTemp
     var defaultUnits: UnitType
     
-    // ItemAisle
-    //var itemId: Int
     var aisleId: Int?
-    //var storeId: Int
-    //var bay: BayType = BayType.middle
+    var aisleName: String?
+    var aisleOrder: Int?
     
-    // Aisle
-    //var aisleId: Int
-    //var storeId: Int
+    var usedIn: [String]
+    
+    var id: Int { itemId }
+    
+    static func getItemsFiltered(_ db: Database, itemNameFilter: String = "") -> [ItemExpanded] {
+        let items: [ItemExpandedFetch] = (try? ItemExpandedFetch.filter(itemNameFilter: itemNameFilter).fetchAll(db)) ?? []
+        return items.map {
+            ItemExpanded(
+                itemId: $0.itemId,
+                itemName: $0.itemName,
+                itemTemp: $0.itemTemp,
+                defaultUnits: $0.defaultUnits,
+                usedIn: $0.usedIn.split(separator: ",", omittingEmptySubsequences: true).map{String($0)}
+            )
+        }
+    }
+}
+
+private struct ItemExpandedFetch: FetchableRecord, Identifiable {
+    var itemId: Int
+    var itemName: String
+    var itemTemp: ItemTemp
+    var defaultUnits: UnitType
+    
+    var aisleId: Int?
     var aisleName: String?
     var aisleOrder: Int?
     
@@ -35,7 +54,7 @@ struct ItemExpanded: FetchableRecord, Identifiable {
     }
     
     // TODO: - Check cart as well? -
-    static func filter(itemNameFilter: String = "") -> SQLRequest<ItemExpanded> {
+    static func filter(itemNameFilter: String = "") -> SQLRequest<ItemExpandedFetch> {
         """
         SELECT
             Items.itemId, 
@@ -63,9 +82,5 @@ struct ItemExpanded: FetchableRecord, Identifiable {
             Aisles.aisleOrder, 
             Items.itemTemp;
         """
-    }
-    
-    static func getItemsFiltered(_ db: Database, itemNameFilter: String = "") throws -> [ItemExpanded] {
-        try ItemExpanded.filter(itemNameFilter: itemNameFilter).fetchAll(db)
     }
 }

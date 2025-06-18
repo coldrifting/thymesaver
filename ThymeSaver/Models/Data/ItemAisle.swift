@@ -26,21 +26,21 @@ struct ItemAisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addItemAisle(itemId: Int, aisleId: Int, storeId: Int, bay: BayType = BayType.middle) throws {
-        try dbWriter.write { db in
+    func addItemAisle(itemId: Int, aisleId: Int, storeId: Int, bay: BayType = BayType.middle) {
+        try? dbWriter.write { db in
             let itemAisle = ItemAisle(itemId: itemId, aisleId: aisleId, storeId: storeId, bay: bay)
             try itemAisle.insert(db)
         }
     }
     
-    func deleteItemAisle(itemId: Int, storeId: Int) throws {
-        try dbWriter.write { db in
+    func deleteItemAisle(itemId: Int, storeId: Int) {
+        try? dbWriter.write { db in
             _ = try ItemAisle.deleteAll(db, keys: [itemId, storeId])
         }
     }
     
-    func updateItemAisle(itemId: Int, storeId: Int, aisleId: Int) throws {
-        try dbWriter.write { db in
+    func updateItemAisle(itemId: Int, storeId: Int, aisleId: Int) {
+        try? dbWriter.write { db in
             let compositeKey = [
                 ItemAisle.Columns.itemId.name: itemId,
                 ItemAisle.Columns.storeId.name: storeId
@@ -53,8 +53,8 @@ extension AppDatabase {
         }
     }
     
-    func updateItemAisleBay(itemId: Int, storeId: Int, newBay: BayType) throws {
-        try dbWriter.write { db in
+    func updateItemAisleBay(itemId: Int, storeId: Int, newBay: BayType) {
+        try? dbWriter.write { db in
             let compositeKey = [
                 ItemAisle.Columns.itemId.name: itemId,
                 ItemAisle.Columns.storeId.name: storeId

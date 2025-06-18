@@ -25,23 +25,23 @@ struct RecipeSectionInsert: Codable, FetchableRecord, PersistableRecord {
 }
 
 extension AppDatabase {
-    func addRecipeSection(recipeSectionName: String, recipeId: Int) throws {
-        try dbWriter.write { db in
+    func addRecipeSection(recipeSectionName: String, recipeId: Int) {
+        try? dbWriter.write { db in
             let recipeSection = RecipeSectionInsert(recipeSectionName: recipeSectionName, recipeId: recipeId)
             try recipeSection.insert(db)
         }
     }
     
-    func renameRecipeSection(recipeSectionId: Int, newName: String) throws {
-        try dbWriter.write { db in
+    func renameRecipeSection(recipeSectionId: Int, newName: String) {
+        try? dbWriter.write { db in
             var recipeSection = try RecipeSection.find(db, key: recipeSectionId)
             recipeSection.recipeSectionName = newName
             try recipeSection.update(db, columns: [RecipeSection.Columns.recipeSectionName])
         }
     }
     
-    func deleteRecipeSection(recipeId: Int, recipeSectionId: Int) throws {
-        try dbWriter.write { db in
+    func deleteRecipeSection(recipeId: Int, recipeSectionId: Int) {
+        try? dbWriter.write { db in
             let numSections = try RecipeSection.filter{$0.recipeId == recipeId}.fetchAll(db).count
             if (numSections > 1) {
                 _ = try RecipeSection.deleteOne(db, key: recipeSectionId)

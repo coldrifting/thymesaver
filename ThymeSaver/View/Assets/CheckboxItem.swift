@@ -27,7 +27,7 @@ struct CheckboxItem: View {
                     Text(text)
                     Spacer()
                     if (subtitle != nil) {
-                        Text(subtitle ?? "").foregroundStyle(.secondary).font(.footnote)
+                        Text(subtitle ?? "").foregroundStyle(.secondary).font(.callout)
                     }
                     Image(systemName: isChecked ? "checkmark.square.fill" : "square")
                         .renderingMode(.original)

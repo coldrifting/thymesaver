@@ -1,35 +1,4 @@
 import SwiftUI
-import SwiftData
-
-extension View {
-    func customAlert(
-        title: String,
-        message: String,
-        placeholder: String,
-        onConfirm: @escaping (String) -> Void,
-        onDismiss: @escaping () -> Void,
-        alertType: AlertType,
-        @Binding text: String
-    ) -> some View {
-        self.alert(
-            title,
-            isPresented: Binding<Bool>(get: { alertType != AlertType.none}, set: {_ in onDismiss()}),
-            actions: {
-                if (alertType != .delete) {
-                    TextField(placeholder, text: $text)
-                }
-                
-                Button(alertType.description, role: alertType == .delete ? .destructive : .none, action: {
-                    withAnimation {
-                        onConfirm(text.trim())
-                    }
-                })
-                Button("Cancel", role: .cancel, action: {
-                })
-            },
-            message: { Text(message) })
-    }
-}
 
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
