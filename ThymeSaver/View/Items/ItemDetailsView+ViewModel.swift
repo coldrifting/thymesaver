@@ -34,7 +34,7 @@ extension ItemDetailsView {
             cancellable = observation.start(in: appDatabase.reader) { _ in
             } onChange: { (stores, aisles, item, itemLocs, itemPreps) in
                 self.stores = stores
-                self.aisles = aisles.map { (id: $0.id, name: $0.aisleName) }
+                self.aisles = aisles
                 self.item = item
                 self.itemLocs = itemLocs
                 self.itemPreps = itemPreps
@@ -50,7 +50,7 @@ extension ItemDetailsView {
         let itemName: String
         
         private(set) var stores: [Store] = []
-        private(set) var aisles: [(id: Int, name: String)] = []
+        private(set) var aisles: [Aisle] = []
         
         private var item: Item? = nil
         private var itemLocs: [ItemAisle] = []
@@ -79,10 +79,19 @@ extension ItemDetailsView {
             )
         }
         
-        var currentAisleId: Binding<Int> {
+        var currentAisle: Binding<Aisle?> {
             Binding(
-                get: { self.itemLocs.first{ $0.storeId == (try? self.appDatabase.getSelectedStoreId()) ?? -1 }?.aisleId ?? -1 },
-                set: { aisleId in self.addOrUpdateItemAisle(aisleId: aisleId) }
+                get: {
+                    if let aisleId: Int? = self.itemLocs.first(where: { $0.storeId == (try? self.appDatabase.getSelectedStoreId()) ?? -1 })?.aisleId {
+                        return self.aisles.first(where: {$0.aisleId == aisleId })
+                    }
+                    return nil
+                },
+                set: { aisle in
+                    if let aisleNotNull = aisle {
+                        self.addOrUpdateItemAisle(aisleId: aisleNotNull.id)
+                    }
+                }
             )
         }
         

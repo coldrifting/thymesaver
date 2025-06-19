@@ -68,8 +68,10 @@ struct RecipeIngredientsView: View {
         .sheet(isPresented: $showBottomSheet, content: {
             NavigationStack {
                 List {
-                    Section() {
-                        if (viewModel.recipeEntryAndItemId == nil && viewModel.recipeItems.recipeSections.count > 1) {
+                    let showSection: Bool = viewModel.recipeEntryAndItemId == nil && viewModel.recipeItems.recipeSections.count > 1
+                    let sectionHeader: String = showSection ? "Item and Section" : "Item"
+                    Section(sectionHeader) {
+                        if (showSection) {
                             Picker("Section", selection: viewModel.selectedSectionIdBinding) {
                                 ForEach(recipeItems.recipeSections, id: \.recipeSectionId) { recipeSection in
                                     Text(recipeSection.recipeSectionName).tag(recipeSection.recipeSectionName)
@@ -80,9 +82,12 @@ struct RecipeIngredientsView: View {
                         FilterSelectionPicker(
                             "Ingredient",
                             selection: viewModel.selectedItemIdBinding,
-                            options: viewModel.itemsFiltered
+                            options: viewModel.itemsWithPrep,
+                            getSubtitle: { $0.itemPrep?.prepName },
+                            subTitleLabel: "Preperation"
                         )
                     }
+                        
                     
                     Section("Amount") {
                         Picker("Unit Type", selection: viewModel.selectedUnitTypeBinding) {
@@ -134,7 +139,9 @@ struct RecipeIngredientsView: View {
             recipeSectionId: section.recipeSectionId,
             type: item.amount.type,
             fraction: item.amount.fraction,
-            itemId: item.itemId)
+            itemId: item.itemId,
+            itemPrepId: item.itemPrep?.itemPrepId
+        )
         $showBottomSheet.wrappedValue = true
     }
     
@@ -153,10 +160,15 @@ struct RecipeIngredientsView: View {
                                 HStack {
                                     Text(item.itemName).foregroundStyle(.primary)
                                     Spacer()
-                                    Text(item.amount.description)
-                                        .font(.callout)
-                                        .foregroundStyle(.secondary)
-                                        .backgroundStyle(.secondary)
+                                    VStack(alignment: .trailing) {
+                                        Text(item.amount.description)
+                                        if let itemPrep = item.itemPrep?.prepName {
+                                            Text(itemPrep).font(.caption)
+                                        }
+                                    }
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                    .backgroundStyle(.secondary)
                                     Label("", systemImage: "chevron.up.chevron.down")
                                         .labelStyle(.iconOnly)
                                         .foregroundStyle(.secondary)
@@ -174,7 +186,9 @@ struct RecipeIngredientsView: View {
                                 viewModel.update()
                             },
                             text: item.itemName,
-                            subtitle: item.amount.description)
+                            subtitle: item.amount.description,
+                            subsubtitle: item.itemPrep?.prepName
+                        )
                         .deleteDisabled(true)
                     }
                 }
@@ -202,6 +216,6 @@ struct RecipeIngredientsView: View {
 
 #Preview {
     NavigationStack {
-        RecipeIngredientsView(.shared, recipeId: 1, recipeName: "Green Chili Mac & Cheese")
+        RecipeIngredientsView(.shared, recipeId: 2, recipeName: "Green Chili Mac & Cheese")
     }
 }

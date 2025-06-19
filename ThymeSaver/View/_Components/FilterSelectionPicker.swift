@@ -2,34 +2,56 @@ import SwiftUI
 import Observation
 import Combine
 
-public struct FilterSelectionPicker: View {
+public struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: View {
     private let title: String
-    private let selection: Binding<Int>
-    private let options: [(id: Int, name: String)]
+    private let selection: Binding<T?>
+    private let options: [T]
+    private let getSubtitle: ((T) -> String?)?
+    private let subTitleLabel: String?
     
     public init(
         _ title: String,
-        selection: Binding<Int>,
-        options: [(id: Int, name: String)]
+        selection: Binding<T?>,
+        options: [T],
+        getSubtitle: ((T) -> String?)? = nil,
+        subTitleLabel: String? = nil
     ) {
         self.title = title
         self.selection = selection
         self.options = options
+        self.getSubtitle = getSubtitle
+        self.subTitleLabel = subTitleLabel
     }
     
     public var body: some View {
         NavigationLink {
-            FilterSelectionPickerModal(title, selection: selection, options: options)
+            FilterSelectionPickerModal(title, selection: selection, options: options, getSubtitle: getSubtitle)
         } label: {
-            let selectionText = options.first(where: { $0.id == selection.wrappedValue })?.name ?? "(Unset)"
+            let selectionText = options.first(where: {$0.id == selection.wrappedValue?.id })?.description ?? "(Unset)"
             VStack {
                 Button(
                     action: { },
                     label: {
-                        HStack {
-                            Text(title)
-                            Spacer()
-                            Text(verbatim: selectionText).foregroundStyle(.secondary)
+                        VStack {
+                            HStack {
+                                Text(title)
+                                Spacer()
+                                Text(selectionText).foregroundStyle(.secondary)
+                            }
+                            if let subTitleLabel {
+                                if let selection = selection.wrappedValue {
+                                    if let getSubtitle {
+                                        if let caption = getSubtitle(selection) {
+                                            Divider()
+                                            HStack {
+                                                Text(subTitleLabel)
+                                                Spacer()
+                                                Text(caption).foregroundStyle(.secondary)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 )
@@ -38,24 +60,37 @@ public struct FilterSelectionPicker: View {
         }
     }
     
-    private struct FilterSelectionPickerModal: View {
+    struct FilterSelectionPickerModal: View {
         @Environment(\.dismiss) private var dismiss
         
         @State private var filterText: String = ""
         
         private let title: String
-        private let selection: Binding<Int>
-        private let options: [(id: Int, name: String)]
-        
+        private let selection: Binding<T?>
+        private let options: [T]
+        private let getSubtitle: ((T) -> String?)?
         
         public init(
             _ title: String,
-            selection: Binding<Int>,
-            options: [(id: Int, name: String)]
+            selection: Binding<T?>,
+            options: [T],
+            getSubtitle: ((T) -> String?)? = nil
         ) {
             self.title = title
             self.selection = selection
             self.options = options
+            self.getSubtitle = getSubtitle
+        }
+        
+        func getText(_ option: T) -> String {
+            let text: String = option.description
+            if let getSubtitle {
+                let caption: String? = getSubtitle(option)
+                if let caption {
+                    return "\(text) - \(caption)"
+                }
+            }
+            return text
         }
         
         func filter(_ isIncluded: any StringProtocol) -> Bool {
@@ -65,25 +100,30 @@ public struct FilterSelectionPicker: View {
         
         var body: some View {
             List {
-                ForEach(options.filter{ filter($0.name) }, id: \.id) { option in
-                    Button(
-                        action: {
-                            self.selection.wrappedValue = option.id
-                            dismiss()
-                        },
-                        label: {
-                            HStack {
-                                Text(option.name)
-                                if (self.selection.wrappedValue == option.id) {
-                                    Spacer()
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(.tint)
-                                        .font(.body.weight(.semibold))
-                                        .accessibilityHidden(true)
+                Section("Aisles") {
+                    let optionsFiltered: [T] = options.filter{ opt in self.filter(getText(opt)) }
+                    
+                    ForEach(optionsFiltered) { option in
+                        Button(
+                            action: {
+                                self.selection.wrappedValue = option
+                                dismiss()
+                            },
+                            label: {
+                                HStack {
+                                    let text: String = getText(option)
+                                    Text(text)
+                                    if (self.selection.wrappedValue?.id == option.id) {
+                                        Spacer()
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.tint)
+                                            .font(.body.weight(.semibold))
+                                            .accessibilityHidden(true)
+                                    }
                                 }
                             }
-                        }
-                    ).foregroundStyle(.primary)
+                        ).foregroundStyle(.primary)
+                    }
                 }
             }
             .navigationTitle(title).navigationBarTitleDisplayMode(.inline)

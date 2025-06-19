@@ -1,12 +1,13 @@
 import GRDB
 
-struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
+struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible {
     var aisleId: Int
     var storeId: Int
     var aisleName: String
     var aisleOrder: Int = -1
     
     var id: Int { aisleId }
+    var description: String { aisleName }
     
     enum Columns {
         static let aisleId = Column(CodingKeys.aisleId)

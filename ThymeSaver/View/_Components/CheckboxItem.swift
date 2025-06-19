@@ -5,14 +5,19 @@ struct CheckboxItem: View {
     var onToggle: () -> Void
     var text: String
     var subtitle: String?
+    var subsubtitle: String?
     
     init(isChecked: Bool,
          onToggle: @escaping () -> Void,
-         text: String, subtitle: String? = nil) {
+         text: String,
+         subtitle: String? = nil,
+         subsubtitle: String? = nil
+    ) {
         self.isChecked = isChecked
         self.onToggle = onToggle
         self.text = text
         self.subtitle = subtitle
+        self.subsubtitle = subsubtitle
     }
     
     var body: some View {
@@ -26,8 +31,16 @@ struct CheckboxItem: View {
                 HStack {
                     Text(text)
                     Spacer()
-                    if (subtitle != nil) {
-                        Text(subtitle ?? "").foregroundStyle(.secondary).font(.callout)
+                    if let subtitle = subtitle {
+                        VStack(alignment: .trailing) {
+                            Text(subtitle)
+                            if let subsubtitle = subsubtitle {
+                                Text(subsubtitle).font(.caption)
+                            }
+                        }
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .backgroundStyle(.secondary)
                     }
                     Image(systemName: isChecked ? "checkmark.square.fill" : "square")
                         .renderingMode(.original)

@@ -34,7 +34,7 @@ struct ItemDetailsView: View {
                     }
                 }
                 
-                FilterSelectionPicker("Aisle", selection: viewModel.currentAisleId, options: viewModel.aisles)
+                FilterSelectionPicker("Aisle", selection: viewModel.currentAisle, options: viewModel.aisles)
                 
                 if (viewModel.showBay) {
                     Picker("Bay", selection: viewModel.bay) {

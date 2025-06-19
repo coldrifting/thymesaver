@@ -46,14 +46,16 @@ extension RecipeIngredientsView {
             let observation = ValueObservation.tracking { db in
                 (
                     recipes: try RecipeExpanded.getRecipeEntries(db, recipeId: recipeId),
-                    items: try Item.fetchAll(db)
+                    items: try Item.fetchAll(db),
+                    itemsWithPrep: ItemWithPrep.getAll(db)
                 )
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
-            } onChange: { (recipeItems, items) in
+            } onChange: { (recipeItems, items, itemsWithPrep) in
                 self.items = items
                 self.updateRecipeTree(recipeItems)
+                self.itemsWithPrep = itemsWithPrep
             }
         }
         
@@ -90,17 +92,19 @@ extension RecipeIngredientsView {
                 self.selectedSectionId = self.recipeItems.recipeSections.first?.recipeSectionId ?? defaultSectionId
             }
             
-            self.selectedItemIdBinding.wrappedValue = ViewModel.defaultSection[self.recipeId] ?? -1
+            //self.selectedItemIdBinding.wrappedValue = ViewModel.defaultSection[self.recipeId] ?? -1
         }
         
+        /*
         private func updateItemFilter() {
-            self.itemsFiltered = self.items.filter {
+            self.itemsWithPrepFiltered = self.itemsWithPrep.filter {
                 !(self.usedItemIds[self.selectedSectionId] ?? []).contains($0.itemId)
                 || (self.recipeEntryAndItemId != nil && self.recipeEntryAndItemId?.itemId == $0.itemId)
             }.map { item in
                 (id: item.itemId, name: item.itemName)
             }.sorted(by: {$0.name < $1.name })
         }
+         */
         
         private(set) var recipeEntryAndItemId: (recipeEntryId: Int, itemId: Int)?
         private(set) var recipeId: Int
@@ -112,36 +116,38 @@ extension RecipeIngredientsView {
         private var selectedAmountUnitType: UnitType = .count
         private(set) var recipeItems: RecipeTree = RecipeTree()
         private(set) var items: [Item] = []
-        private(set) var itemsFiltered: [(id: Int, name: String)] = []
+        private(set) var itemsWithPrep: [ItemWithPrep] = []
+        //private(set) var itemsWithPrepFiltered: [ItemWithPrep] = []
+        //private(set) var itemsFiltered: [(id: Int, name: String)] = []
         
         var selectedOkay: Bool {
             selectedAmountFraction.toDouble() > 0 &&
             selectedSectionId != -1 &&
-            selectedItemIdBinding.wrappedValue != -1
+            selectedItemIdBinding.wrappedValue != nil
         }
         
         // TODO - Use ItemId + ItemPrepId instead of just ItemId
-        private var selectedItemId: Int = -1
         var selectedSectionIdBinding: Binding<Int> {
             Binding(
                 get: { self.selectedSectionId },
                 set: {
                     self.selectedSectionId = $0
-                    self.updateItemFilter()
-                    if (!self.itemsFiltered.contains(where: { $0.id == self.selectedItemIdBinding.wrappedValue })) {
-                        self.selectedItemId = -1
-                        self.updateItemFilter()
-                    }
+                    //self.updateItemFilter()
+                    //if (!self.itemsFiltered.contains(where: { $0.id == self.selectedItemIdBinding.wrappedValue })) {
+                    //    self.selectedItemId = -1
+                    //    self.updateItemFilter()
+                    //}
                 }
             )
         }
         
-        var selectedItemIdBinding: Binding<Int> {
+        var selectedItemId: ItemWithPrep? = nil
+        var selectedItemIdBinding: Binding<ItemWithPrep?> {
             Binding(
                 get: { self.selectedItemId },
                 set: {
                     self.selectedItemId = $0
-                    self.updateItemFilter()
+                    //self.updateItemFilter()
                 }
             )
         }
@@ -167,29 +173,33 @@ extension RecipeIngredientsView {
             self.recipeEntryAndItemId = nil
             self.selectedAmountBinding.wrappedValue = "1"
             self.selectedUnitTypeBinding.wrappedValue = .count
-            self.selectedItemIdBinding.wrappedValue = -1
+            self.selectedItemIdBinding.wrappedValue = nil
         }
         
-        func setupUpdateItemScreen(recipeEntryId: Int, recipeSectionId: Int, type: UnitType, fraction: Fraction, itemId: Int) {
+        func setupUpdateItemScreen(recipeEntryId: Int, recipeSectionId: Int, type: UnitType, fraction: Fraction, itemId: Int, itemPrepId: Int?) {
             self.recipeEntryAndItemId = (recipeEntryId: recipeEntryId, itemId: itemId)
             self.selectedSectionIdBinding.wrappedValue = recipeSectionId
             self.selectedUnitTypeBinding.wrappedValue = type
             self.selectedAmountBinding.wrappedValue = fraction.decimalString
-            self.selectedItemIdBinding.wrappedValue = itemId
+            self.selectedItemIdBinding.wrappedValue = itemsWithPrep.first(where: { $0.itemId == itemId && $0.itemPrep?.prepId == itemPrepId })
         }
         
         func addRecipeEntry() {
             let frac: Fraction = Fraction(selectedAmountString)
             let amount: Amount = Amount(frac, type: selectedAmountUnitType)
             
-            appDatabase.addRecipeEntry(
-                recipeSectionId: selectedSectionId,
-                recipeId: self.recipeId,
-                itemId: selectedItemIdBinding.wrappedValue,
-                amount: amount
-            )
+            if let currentItemWithPrep = selectedItemIdBinding.wrappedValue {
+                appDatabase.addRecipeEntry(
+                    recipeSectionId: selectedSectionId,
+                    recipeId: self.recipeId,
+                    itemId: currentItemWithPrep.itemId,
+                    itemPrepId: currentItemWithPrep.itemPrep?.prepId,
+                    amount: amount
+                )
+            }
+            
             ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            selectedItemIdBinding.wrappedValue = -1
+            selectedItemIdBinding.wrappedValue = nil
             selectedAmountString = "1"
         }
         
@@ -197,13 +207,17 @@ extension RecipeIngredientsView {
             let frac: Fraction = Fraction(selectedAmountString)
             let amount: Amount = Amount(frac, type: selectedAmountUnitType)
             
-            appDatabase.updateRecipeEntry(
-                recipeEntryId: recipeEntryId,
-                itemId: selectedItemIdBinding.wrappedValue,
-                amount: amount
-            )
+            if let currentItemWithPrep = selectedItemIdBinding.wrappedValue {
+                appDatabase.updateRecipeEntry(
+                    recipeEntryId: recipeEntryId,
+                    itemId: currentItemWithPrep.itemId,
+                    itemPrepId: currentItemWithPrep.itemPrep?.prepId,
+                    amount: amount
+                )
+            }
+            
             ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            selectedItemIdBinding.wrappedValue = -1
+            selectedItemIdBinding.wrappedValue = nil
             selectedAmountString = "1"
         }
         
