@@ -31,12 +31,6 @@ struct RecipeIngredientsView: View {
             ForEach(recipeItems.recipeSections) { section in
                 sectionContents(section)
             }
-            
-            if (isInEditMode) {
-                Button("Add New Section") {
-                    viewModel.alert.queueAdd()
-                }
-            }
         }
         .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -82,7 +76,7 @@ struct RecipeIngredientsView: View {
                         FilterSelectionPicker(
                             "Ingredient",
                             selection: viewModel.selectedItemIdBinding,
-                            options: viewModel.itemsWithPrep,
+                            options: viewModel.currentValidItems,
                             getSubtitle: { $0.itemPrep?.prepName },
                             subTitleLabel: "Preperation"
                         )
@@ -207,6 +201,18 @@ struct RecipeIngredientsView: View {
                             action: { viewModel.alert.queueRename(id: section.recipeSectionId, name: section.recipeSectionName) },
                             label: { Text("Rename Section").textCase(.none).font(.footnote) }
                         )
+                    }
+                }
+            },
+            footer: {
+                if (section.recipeSectionId == viewModel.lastRecipeSectionId) {
+                    if (isInEditMode) {
+                        HStack {
+                            Spacer()
+                            Button("Add New Section") {
+                                viewModel.alert.queueAdd()
+                            }.font(.footnote)
+                        }
                     }
                 }
             }
