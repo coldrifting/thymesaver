@@ -2,24 +2,26 @@ import SwiftUI
 import Observation
 import Combine
 
-struct RecipeDetailsView: View {
+struct RecipeIngredientsView: View {
     @Environment(\.appDatabase) var appDatabase
     
     @State private var viewModel: ViewModel
     
     @State private var recipeItems: RecipeTree = RecipeTree()
     
-    @State private var isInEditMode: Bool = false
+    @State private var isInEditMode: Bool = true
     @State private var showBottomSheet: Bool = false
+    
+    @State private var test: Bool = false
     
     init(_ appDatabase: AppDatabase, recipeId: Int, recipeName: String) {
         _viewModel = State(initialValue: ViewModel(appDatabase, recipeId: recipeId, recipeName: recipeName))
     }
     
     var body: some View {
-        Text(viewModel.recipeName)
         List {
-            Section("Steps") {
+            
+            Section("Details") {
                 NavigationLink(
                     destination: { RecipeStepsView(appDatabase, recipeId: viewModel.recipeId, recipeName: viewModel.recipeName) },
                     label: { Text("Steps") }
@@ -29,28 +31,38 @@ struct RecipeDetailsView: View {
             ForEach(recipeItems.recipeSections) { section in
                 sectionContents(section)
             }
+            
+            if (isInEditMode) {
+                Button("Add New Section") {
+                    viewModel.alert.queueAdd()
+                }
+            }
         }
-        .navigationTitle("Recipe Ingredients").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem() {
-                Button(
-                    action: { $isInEditMode.wrappedValue = !isInEditMode },
-                    label: { Text(isInEditMode ? "Done" : "Edit") }
-                )
+            ToolbarItem(placement: .principal) {
+                VStack {
+                    Text("Recipe Ingredients").font(.headline)
+                    Text(viewModel.recipeName).font(.subheadline)
+                }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(
-                    action: {
-                        if (isInEditMode) {
+                HStack {
+                    Button(
+                        action: { $isInEditMode.wrappedValue = !isInEditMode },
+                        label: {
+                            Label(isInEditMode ? "Done" : "Edit" , systemImage: isInEditMode ? "xmark" : "pencil")
+                        }
+                    )
+                    .tint(isInEditMode ? .red : .accentColor)
+                    Button(
+                        action: {
                             viewModel.setupNewItemScreen()
                             showBottomSheet = true
-                        }
-                        else {
-                            viewModel.alert.queueAdd()
-                        }
-                    },
-                    label: { Label("Add", systemImage: "plus") }
-                )
+                        },
+                        label: { Label("Add", systemImage: "plus") }
+                    )
+                }
             }
         }
         .sheet(isPresented: $showBottomSheet, content: {
@@ -139,26 +151,20 @@ struct RecipeDetailsView: View {
                             },
                             label: {
                                 HStack {
-                                    Text(item.itemName).foregroundStyle(.blue)
+                                    Text(item.itemName).foregroundStyle(.primary)
                                     Spacer()
                                     Text(item.amount.description)
                                         .font(.callout)
-                                        .foregroundStyle(.primary)
+                                        .foregroundStyle(.secondary)
                                         .backgroundStyle(.secondary)
-                                    Label("", systemImage: "chevron.right").labelStyle(.iconOnly).foregroundStyle(.secondary)
+                                    Label("", systemImage: "chevron.up.chevron.down")
+                                        .labelStyle(.iconOnly)
+                                        .foregroundStyle(.secondary)
+                                        .frame(width: 24, height: 24)
                                 }
                             }
                         )
                         .foregroundStyle(.primary)
-                        .swipeActions(edge: .leading) {
-                            Button(
-                                action: {
-                                    showUpdateSheet(section: section, item: item)
-                                },
-                                label: { Text("Update") }
-                            )
-                            .tint(.blue)
-                        }
                     }
                     else {
                         CheckboxItem(
@@ -196,6 +202,6 @@ struct RecipeDetailsView: View {
 
 #Preview {
     NavigationStack {
-        RecipeDetailsView(.shared, recipeId: 2, recipeName: "Green Chili Mac & Cheese")
+        RecipeIngredientsView(.shared, recipeId: 1, recipeName: "Green Chili Mac & Cheese")
     }
 }

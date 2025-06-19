@@ -2,7 +2,7 @@ import SwiftUI
 import Observation
 import Combine
 
-struct RecipeView: View {
+struct RecipesView: View {
     @Environment(\.appDatabase) var appDatabase
     
     @State private var viewModel: ViewModel
@@ -73,7 +73,7 @@ struct RecipeView: View {
                         }
                         else {
                             NavigationLink(
-                                destination: { RecipeDetailsView(appDatabase, recipeId: recipe.recipeId, recipeName: recipe.recipeName) },
+                                destination: { RecipeIngredientsView(appDatabase, recipeId: recipe.recipeId, recipeName: recipe.recipeName) },
                                 label: { Text(recipe.recipeName) }
                             )
                         }
@@ -120,5 +120,5 @@ struct RecipeView: View {
 
 
 #Preview {
-    RecipeView(.shared)
+    RecipesView(.shared)
 }

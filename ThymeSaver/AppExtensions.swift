@@ -17,8 +17,18 @@ extension View {
 
 extension String {
     func trim() -> String {
-    return self.trimmingCharacters(in: .whitespaces)
-   }
+        return self.trimmingCharacters(in: .whitespaces)
+    }
+    
+    func chop(_ maxChars: Int = 58) -> String {
+        let maxChars = self.count < maxChars ? self.count : maxChars
+        let endIndex: String.Index = self.index(self.startIndex, offsetBy: maxChars)
+        let finalString = self[..<endIndex]
+        if (finalString.count < self.count) {
+            return "\(finalString)".trim() + "..."
+        }
+        return finalString.description
+    }
 }
 
 extension UUID {

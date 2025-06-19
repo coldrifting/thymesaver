@@ -18,7 +18,7 @@ struct AppContentView: View {
         _selectedTab.wrappedValue = defaultTab
     }
     
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Int = 2
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -29,7 +29,7 @@ struct AppContentView: View {
                 ItemsView(appDatabase)
             }
             Tab("Recipes", systemImage: "list.bullet.rectangle", value: 2) {
-                RecipeView(appDatabase)
+                RecipesView(appDatabase)
             }
             Tab("Cart", systemImage: "cart", value: 3) {
                 CartView(appDatabase)

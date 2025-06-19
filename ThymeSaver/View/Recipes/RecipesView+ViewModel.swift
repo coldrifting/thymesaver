@@ -1,7 +1,7 @@
 import SwiftUI
 import GRDB
 
-extension RecipeView {
+extension RecipesView {
     @Observable @MainActor
     class ViewModel {
         private let appDatabase: AppDatabase

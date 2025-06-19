@@ -5,6 +5,7 @@ import Combine
 
 struct RecipeStepsView: View {
     @Environment(\.appDatabase) var appDatabase
+    @Environment(\.openURL) private var openURL
     
     @State private var viewModel: ViewModel
     
@@ -16,54 +17,46 @@ struct RecipeStepsView: View {
     
     @State private var showBottomSheet: Bool = false
     
+    @State private var opacity: Double = 1.0
+    
     init(_ appDatabase: AppDatabase, recipeId: Int, recipeName: String) {
         _viewModel = State(initialValue: ViewModel(appDatabase, recipeId: recipeId, recipeName: recipeName))
     }
     
+    private func showUpdateSheet(_ step: RecipeStep) {
+        viewModel.recipeStepId = step.recipeStepId
+        viewModel.recipeStepContent.wrappedValue = step.recipeStepContent
+        $showBottomSheet.wrappedValue = true
+    }
+    
     var body: some View {
-        Text(viewModel.recipeName)
         List {
-            Section("Url") {
-                if (editMode.isEditing) {
+            if (editMode.isEditing) {
+                Section("Url") {
                     TextField("Recipe URL", text: viewModel.recipeUrl)
-                } else {
-                    let url = viewModel.recipe?.url ?? ""
-                    if (url != "") {
-                        let urlWithoutPrefix = url.replacingOccurrences(of: "https://www.", with: "")
-                        
-                        let startIndex = urlWithoutPrefix.startIndex
-                        let endIndex = urlWithoutPrefix.firstIndex(of: "/") ?? urlWithoutPrefix.endIndex
-                        
-                        let urlShortName = urlWithoutPrefix[startIndex..<endIndex]
-                        HStack {
-                            Link(urlShortName, destination: URL(string: url)!)
-                            Spacer()
-                            Image(systemName: "chevron.right").foregroundStyle(.secondary)
-                        }
-                    }
                 }
             }
-            Section("Steps") {
+            
+            Section {
                 ForEach(steps) { step in
                     HStack {
                         if (editMode == .active) {
                             let string: String = step.recipeStepContent
                             
-                            if (step.isImage) {
-                                RecipeStepImage(step.recipeStepContent, height: 50, width: 280)
-                            }
-                            else {
-                                let maxChars = string.count < 58 ? string.count : 58
-                                let endIndex: String.Index = string.index(string.startIndex, offsetBy: maxChars)
-                                let finalString = string[..<endIndex]
-                                if (finalString.count < string.count) {
-                                    let finalStringWithDots: String = "\(finalString)".trim() + "..."
-                                    Text(finalStringWithDots)
+                            let editText = string.chop()
+                            
+                            Button(
+                                action: { showUpdateSheet(step) },
+                                label: {
+                                    if (step.isImage) {
+                                        RecipeStepImage(step.recipeStepContent, height: 50, width: 280)
+                                    }
+                                    else {
+                                        Text(editText)
+                                    }
                                 }
-                                else {
-                                    Text(finalString)
-                                }
-                            }
+                            )
+                            .foregroundStyle(.primary)
                         }
                         else {
                             if (step.isImage) {
@@ -73,17 +66,6 @@ struct RecipeStepsView: View {
                                 Text(step.recipeStepContent)
                             }
                         }
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button(
-                            action: {
-                                viewModel.recipeStepId = step.recipeStepId
-                                viewModel.recipeStepContent.wrappedValue = step.recipeStepContent
-                                $showBottomSheet.wrappedValue = true
-                            },
-                            label: { Text("Update") }
-                        )
-                        .tint(.blue)
                     }
                     .deleteDisabled(edit)
                 }
@@ -106,23 +88,52 @@ struct RecipeStepsView: View {
             }
         }
         .toolbar {
-            ToolbarItem {
-                Button(editMode.isEditing ? "Done" : "Edit") {
-                    edit = !edit
-                    withAnimation {
-                        editMode = editMode.isEditing ? .inactive : .active
+            ToolbarItem(placement: .principal) {
+                let label = {
+                    VStack {
+                        Text("Recipe Steps").font(.headline)
+                        Text(viewModel.recipeName).font(.subheadline)
                     }
+                }
+                let urlString: String = viewModel.recipe?.url ?? ""
+                let urlValid: Bool = urlString.lowercased().hasPrefix("http")
+                let url: URL = URL(string: urlString) ?? URL.homeDirectory
+                
+                if (urlValid) {
+                    Button(
+                        action: { openURL(url) },
+                        label: label
+                    )
+                    .foregroundStyle(.primary)
+                }
+                else {
+                    label()
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(
-                    action: {
-                        viewModel.recipeStepId = nil
-                        viewModel.recipeStepContent.wrappedValue = ""
-                        $showBottomSheet.wrappedValue = true
-                    },
-                    label: { Label("Add", systemImage: "plus") }
-                )
+                HStack {
+                    Button(
+                        action: {
+                            edit = !edit
+                            withAnimation {
+                                editMode = editMode.isEditing ? .inactive : .active
+                            }
+                        },
+                        label: {
+                            Label(editMode.isEditing ? "Done" : "Edit" , systemImage: editMode.isEditing ? "xmark" : "pencil")
+                        }
+                    )
+                    .tint(editMode.isEditing ? .red : .accentColor)
+                    
+                    Button(
+                        action: {
+                            viewModel.recipeStepId = nil
+                            viewModel.recipeStepContent.wrappedValue = ""
+                            $showBottomSheet.wrappedValue = true
+                        },
+                        label: { Label("Add", systemImage: "plus") }
+                    )
+                }
             }
         }
         .sheet(

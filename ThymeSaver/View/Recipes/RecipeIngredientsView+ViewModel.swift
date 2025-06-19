@@ -1,7 +1,7 @@
 import SwiftUI
 import GRDB
 
-extension RecipeDetailsView {
+extension RecipeIngredientsView {
     @Observable @MainActor
     class ViewModel {
         private var indexToEntryId: [String:Int] = [:]
