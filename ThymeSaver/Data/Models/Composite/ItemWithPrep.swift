@@ -3,6 +3,7 @@ import GRDB
 struct ItemWithPrep: Identifiable, CustomStringConvertible, Hashable {
     var itemId: Int
     var itemName: String
+    var defaultUnits: UnitType
     
     var itemPrep: Prep? = nil
     
@@ -26,6 +27,7 @@ struct ItemWithPrep: Identifiable, CustomStringConvertible, Hashable {
     fileprivate init(_ item: ItemWithPrepFetch) {
         self.itemId = item.itemId
         self.itemName = item.itemName
+        self.defaultUnits = item.defaultUnits
         
         if let prepId = item.itemPrepId, let prepName = item.prepName {
             self.itemPrep = Prep(prepId: prepId, prepName: prepName)
@@ -55,6 +57,7 @@ struct ItemWithPrep: Identifiable, CustomStringConvertible, Hashable {
 private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
     var itemId: Int
     var itemName: String
+    var defaultUnits: UnitType
     var itemPrepId: Int?
     var prepName: String?
     
@@ -63,6 +66,7 @@ private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
     init(row: GRDB.Row) throws {
         itemId = row["itemId"]
         itemName = row["itemName"]
+        defaultUnits = row["defaultUnits"]
         itemPrepId = row["itemPrepId"]
         prepName = row["prepName"]
     }
@@ -72,6 +76,7 @@ private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
         SELECT 
             Items.itemId,
             Items.itemName,
+            Items.defaultUnits,
             ItemPreps.itemPrepId,
             ItemPreps.prepName
         FROM Items 
@@ -88,6 +93,7 @@ private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
         SELECT 
             Items.itemId, 
             Items.itemname, 
+            Items.defaultUnits,
             ItemPreps.itemPrepId, 
             ItemPreps.prepName 
         FROM (

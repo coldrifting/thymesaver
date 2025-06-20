@@ -24,40 +24,36 @@ public struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: 
     }
     
     public var body: some View {
-        NavigationLink {
-            FilterSelectionPickerModal(title, selection: selection, options: options, getSubtitle: getSubtitle)
-        } label: {
-            let selectionText = options.first(where: {$0.id == selection.wrappedValue?.id })?.description ?? "(Unset)"
-            VStack {
-                Button(
-                    action: { },
-                    label: {
-                        VStack {
-                            HStack {
-                                Text(title)
-                                Spacer()
-                                Text(selectionText).foregroundStyle(.secondary)
-                            }
-                            if let subTitleLabel {
-                                if let selection = selection.wrappedValue {
-                                    if let getSubtitle {
-                                        if let caption = getSubtitle(selection) {
-                                            Divider()
-                                            HStack {
-                                                Text(subTitleLabel)
-                                                Spacer()
-                                                Text(caption).foregroundStyle(.secondary)
-                                            }
-                                        }
+        NavigationLink(
+            destination: {
+                FilterSelectionPickerModal(title, selection: selection, options: options, getSubtitle: getSubtitle)
+            },
+            label: {
+                let selectionText = options.first(where: {$0.id == selection.wrappedValue?.id })?.description ?? "(Unset)"
+                VStack {
+                    HStack {
+                        Text(title)
+                        Spacer()
+                        Text(selectionText).foregroundStyle(.secondary)
+                    }
+                    if let subTitleLabel {
+                        if let selection = selection.wrappedValue {
+                            if let getSubtitle {
+                                if let caption = getSubtitle(selection) {
+                                    Divider()
+                                    HStack {
+                                        Text(subTitleLabel)
+                                        Spacer()
+                                        Text(caption).foregroundStyle(.secondary)
                                     }
                                 }
                             }
                         }
                     }
-                )
-                .foregroundStyle(.primary)
+                    
+                }
             }
-        }
+        )
     }
     
     struct FilterSelectionPickerModal: View {

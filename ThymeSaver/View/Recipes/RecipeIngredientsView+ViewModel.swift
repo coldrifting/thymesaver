@@ -101,11 +101,9 @@ extension RecipeIngredientsView {
         private(set) var recipeName: String
         private var selectedSectionId: Int = -1
         private var usedItemIds: [Int:Set<Int>] = [:]
-        private var selectedAmountString: String = "1"
-        private var selectedAmountFraction: Fraction = Fraction(1)
-        private var selectedAmountUnitType: UnitType = .count
         private(set) var recipeItems: RecipeTree = RecipeTree()
         private(set) var lastRecipeSectionId: Int = -1
+        private(set) var isNewItemScreen: Bool = false
         
         private(set) var validItems: [Int:Set<ItemWithPrep>] = [:]
         
@@ -113,9 +111,9 @@ extension RecipeIngredientsView {
         private(set) var itemsWithPrepFiltered: [ItemWithPrep] = []
         
         var selectedOkay: Bool {
-            selectedAmountFraction.toDouble() > 0 &&
+            selectedAmount != nil &&
             selectedSectionId != -1 &&
-            selectedItemIdBinding.wrappedValue != nil
+            selectedItemBinding.wrappedValue != nil
         }
         
         var selectedSectionIdBinding: Binding<Int> {
@@ -125,8 +123,8 @@ extension RecipeIngredientsView {
                     self.selectedSectionId = $0
                     
                     // Remove invalid entries after changing sections
-                    if !( self.currentValidItems.contains(where: { $0.id == self.selectedItemId?.id  } )) {
-                        self.selectedItemId = nil
+                    if !( self.currentValidItems.contains(where: { $0.id == self.selectedItem?.id  } )) {
+                        self.selectedItem = nil
                     }
                 }
             )
@@ -134,7 +132,7 @@ extension RecipeIngredientsView {
         
         var currentValidItems: [ItemWithPrep] {
             if let validItems: Set<ItemWithPrep> = self.validItems[self.selectedSectionId] {
-                if let currentItem: ItemWithPrep = self.initialItemId {
+                if let currentItem: ItemWithPrep = self.initialItem {
                     var result: Set<ItemWithPrep> = []
                     for item in validItems {
                         result.insert(item)
@@ -148,54 +146,44 @@ extension RecipeIngredientsView {
             return []
         }
         
-        var initialItemId: ItemWithPrep? = nil
-        var selectedItemId: ItemWithPrep? = nil
-        var selectedItemIdBinding: Binding<ItemWithPrep?> {
+        var initialItem: ItemWithPrep? = nil
+        var selectedItem: ItemWithPrep? = nil
+        var selectedItemBinding: Binding<ItemWithPrep?> {
             Binding(
-                get: { self.selectedItemId },
-                set: { self.selectedItemId = $0 }
-            )
-        }
-        
-        var selectedUnitTypeBinding: Binding<UnitType> {
-            Binding(
-                get: { self.selectedAmountUnitType },
-                set: { self.selectedAmountUnitType = $0 }
-            )
-        }
-        
-        var selectedAmountBinding: Binding<String> {
-            Binding(
-                get: { self.selectedAmountString },
-                set: {
-                    self.selectedAmountString = $0
-                    self.selectedAmountFraction = Fraction($0)
+                get: { self.selectedItem },
+                set: { item in
+                    self.selectedItem = item
+                    
+                    if let item = item {
+                        if (self.selectedAmount == Amount()) {
+                            self.selectedAmount = Amount(1, type: item.defaultUnits)
+                        }
+                    }
                 }
             )
         }
         
+        var selectedAmount: Amount? = nil
+        
         func setupNewItemScreen() {
+            self.isNewItemScreen = true
             self.recipeEntryAndItemId = nil
-            self.selectedAmountBinding.wrappedValue = "1"
-            self.selectedUnitTypeBinding.wrappedValue = .count
-            self.selectedItemIdBinding.wrappedValue = nil
-            self.initialItemId = nil
+            self.selectedAmount = Amount()
+            self.selectedItemBinding.wrappedValue = nil
+            self.initialItem = nil
         }
         
         func setupUpdateItemScreen(recipeEntryId: Int, recipeSectionId: Int, type: UnitType, fraction: Fraction, itemId: Int, itemPrepId: Int?) {
+            self.isNewItemScreen = false
             self.recipeEntryAndItemId = (recipeEntryId: recipeEntryId, itemId: itemId)
             self.selectedSectionIdBinding.wrappedValue = recipeSectionId
-            self.selectedUnitTypeBinding.wrappedValue = type
-            self.selectedAmountBinding.wrappedValue = fraction.decimalString
-            self.selectedItemIdBinding.wrappedValue = itemsWithPrep.first(where: { $0.itemId == itemId && $0.itemPrep?.prepId == itemPrepId })
-            self.initialItemId = self.selectedItemIdBinding.wrappedValue
+            self.selectedAmount = Amount(fraction, type: type)
+            self.selectedItemBinding.wrappedValue = itemsWithPrep.first(where: { $0.itemId == itemId && $0.itemPrep?.prepId == itemPrepId })
+            self.initialItem = self.selectedItemBinding.wrappedValue
         }
         
         func addRecipeEntry() {
-            let frac: Fraction = Fraction(selectedAmountString)
-            let amount: Amount = Amount(frac, type: selectedAmountUnitType)
-            
-            if let currentItemWithPrep = selectedItemIdBinding.wrappedValue {
+            if let currentItemWithPrep = selectedItemBinding.wrappedValue, let amount = self.selectedAmount {
                 appDatabase.addRecipeEntry(
                     recipeSectionId: selectedSectionId,
                     recipeId: self.recipeId,
@@ -206,16 +194,13 @@ extension RecipeIngredientsView {
             }
             
             ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            self.selectedItemIdBinding.wrappedValue = nil
-            self.selectedAmountString = "1"
-            self.initialItemId = nil
+            self.selectedItemBinding.wrappedValue = nil
+            self.selectedAmount = nil
+            self.initialItem = nil
         }
         
         func updateRecipeEntry(recipeEntryId: Int) {
-            let frac: Fraction = Fraction(selectedAmountString)
-            let amount: Amount = Amount(frac, type: selectedAmountUnitType)
-            
-            if let currentItemWithPrep = selectedItemIdBinding.wrappedValue {
+            if let currentItemWithPrep = selectedItemBinding.wrappedValue, let amount = self.selectedAmount {
                 appDatabase.updateRecipeEntry(
                     recipeEntryId: recipeEntryId,
                     itemId: currentItemWithPrep.itemId,
@@ -225,9 +210,9 @@ extension RecipeIngredientsView {
             }
             
             ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            self.selectedItemIdBinding.wrappedValue = nil
-            self.selectedAmountString = "1"
-            self.initialItemId = nil
+            self.selectedItemBinding.wrappedValue = nil
+            self.selectedAmount = nil
+            self.initialItem = nil
         }
         
         func deleteRecipeEntry(sectionIndex: Int, index: Int) {

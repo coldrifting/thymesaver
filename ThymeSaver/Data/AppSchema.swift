@@ -19,6 +19,7 @@ extension AppDatabase {
             t.column("itemName", .text).notNull()
             t.column("itemTemp", .text).notNull()
             t.column("defaultUnits", .text).notNull()
+            t.column("cartAmount", .text)
         }
         try db.create(table: ItemAisle.databaseTableName) { t in
             t.column("itemId", .integer).notNull()

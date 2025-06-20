@@ -9,7 +9,7 @@ struct RecipeIngredientsView: View {
     
     @State private var recipeItems: RecipeTree = RecipeTree()
     
-    @State private var isInEditMode: Bool = true
+    @State private var isInEditMode: Bool = false
     @State private var showBottomSheet: Bool = false
     
     @State private var test: Bool = false
@@ -43,7 +43,11 @@ struct RecipeIngredientsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack {
                     Button(
-                        action: { $isInEditMode.wrappedValue = !isInEditMode },
+                        action: {
+                            withAnimation {
+                                $isInEditMode.wrappedValue = !isInEditMode
+                            }
+                        },
                         label: {
                             Label(isInEditMode ? "Done" : "Edit" , systemImage: isInEditMode ? "xmark" : "pencil")
                         }
@@ -62,34 +66,34 @@ struct RecipeIngredientsView: View {
         .sheet(isPresented: $showBottomSheet, content: {
             NavigationStack {
                 List {
+                    let showItem: Bool = viewModel.recipeEntryAndItemId == nil
                     let showSection: Bool = viewModel.recipeEntryAndItemId == nil && viewModel.recipeItems.recipeSections.count > 1
                     let sectionHeader: String = showSection ? "Item and Section" : "Item"
-                    Section(sectionHeader) {
-                        if (showSection) {
-                            Picker("Section", selection: viewModel.selectedSectionIdBinding) {
-                                ForEach(recipeItems.recipeSections, id: \.recipeSectionId) { recipeSection in
-                                    Text(recipeSection.recipeSectionName).tag(recipeSection.recipeSectionName)
+                    if (showItem || showSection) {
+                        Section(sectionHeader) {
+                            if (showSection) {
+                                Picker("Section", selection: viewModel.selectedSectionIdBinding) {
+                                    ForEach(recipeItems.recipeSections, id: \.recipeSectionId) { recipeSection in
+                                        Text(recipeSection.recipeSectionName).tag(recipeSection.recipeSectionName)
+                                    }
                                 }
                             }
+                            
+                            if (showItem) {
+                                FilterSelectionPicker(
+                                    "Ingredient",
+                                    selection: viewModel.selectedItemBinding,
+                                    options: viewModel.currentValidItems,
+                                    getSubtitle: { $0.itemPrep?.prepName },
+                                    subTitleLabel: "Preperation"
+                                )
+                            }
                         }
-                        
-                        FilterSelectionPicker(
-                            "Ingredient",
-                            selection: viewModel.selectedItemIdBinding,
-                            options: viewModel.currentValidItems,
-                            getSubtitle: { $0.itemPrep?.prepName },
-                            subTitleLabel: "Preperation"
-                        )
                     }
                         
                     
                     Section("Amount") {
-                        Picker("Unit Type", selection: viewModel.selectedUnitTypeBinding) {
-                            ForEach(UnitType.allCases) { text in
-                                Text(text.description).tag(text.description)
-                            }
-                        }
-                        TextField("Unit Quantity", text: viewModel.selectedAmountBinding)
+                        AmountPicker(amount: $viewModel.selectedAmount)
                     }
                     
                     VStack {
@@ -163,14 +167,11 @@ struct RecipeIngredientsView: View {
                                     .font(.callout)
                                     .foregroundStyle(.secondary)
                                     .backgroundStyle(.secondary)
-                                    Label("", systemImage: "chevron.up.chevron.down")
-                                        .labelStyle(.iconOnly)
-                                        .foregroundStyle(.secondary)
-                                        .frame(width: 24, height: 24)
                                 }
                             }
                         )
                         .foregroundStyle(.primary)
+                        .transition(.slide)
                     }
                     else {
                         CheckboxItem(

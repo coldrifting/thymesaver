@@ -11,7 +11,7 @@
         "recipeName": "Green Chile Mac & Cheese",
         "url": "https://www.budgetbytes.com/green-chile-mac-and-cheese/",
         "isPinned": true,
-        "cartAmount": 0
+        "cartAmount": 2
     },
     {
         "recipeId": 3,
@@ -25,6 +25,6 @@
         "recipeName": "Stuffed Poblano Peppers",
         "url": "https://www.loveandlemons.com/stuffed-poblano-peppers/",
         "isPinned": false,
-        "cartAmount": 0
+        "cartAmount": 1
     }
 ]

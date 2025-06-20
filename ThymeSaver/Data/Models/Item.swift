@@ -1,18 +1,21 @@
 import GRDB
 
-struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord {
+struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible {
     var itemId: Int
     var itemName: String
     var itemTemp: ItemTemp
     var defaultUnits: UnitType
+    var cartAmount: Amount?
     
     var id: Int { itemId }
+    var description: String { itemName }
     
     enum Columns {
         static let itemId = Column(CodingKeys.itemId)
         static let itemName = Column(CodingKeys.itemName)
         static let itemTemp = Column(CodingKeys.itemTemp)
         static let defaultUnits = Column(CodingKeys.defaultUnits)
+        static let cartAmount = Column(CodingKeys.cartAmount)
     }
     
     static var databaseTableName: String = "Items"
@@ -35,6 +38,7 @@ struct ItemInsert: Codable, FetchableRecord, PersistableRecord {
     var itemName: String
     var itemTemp: ItemTemp
     var defaultUnits: UnitType
+    var cartAmount: Amount? = nil
     
     static var databaseTableName: String { Item.databaseTableName }
 }
@@ -96,6 +100,14 @@ extension AppDatabase {
             var item = try Item.find(db, key: itemId)
             item.defaultUnits = defaultUnits
             try item.update(db, columns: [Item.Columns.defaultUnits])
+        }
+    }
+    
+    func updateItemCartAmount(itemId: Int, cartAmount: Amount? = nil) {
+        try? dbWriter.write { db in
+            var item = try Item.find(db, key: itemId)
+            item.cartAmount = cartAmount
+            try item.update(db, columns: [Item.Columns.cartAmount])
         }
     }
 }

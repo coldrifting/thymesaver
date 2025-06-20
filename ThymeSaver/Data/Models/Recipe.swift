@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 
-struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
+struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable, CustomStringConvertible {
     var recipeId: Int
     var recipeName: String
     var url: String? = nil
@@ -9,6 +9,7 @@ struct Recipe: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashab
     var cartAmount: Int = 0
     
     var id: Int { recipeId }
+    var description: String { recipeName }
     
     enum Columns {
         static let recipeId = Column(CodingKeys.recipeId)
@@ -69,6 +70,14 @@ extension AppDatabase {
             var recipe = try Recipe.find(db, key: recipeId)
             recipe.url = newUrl
             try recipe.update(db, columns: [Recipe.Columns.url])
+        }
+    }
+    
+    func updateRecipeCartAmount(recipeId: Int, newAmount: Int) {
+        try? dbWriter.write { db in
+            var recipe = try Recipe.find(db, key: recipeId)
+            recipe.cartAmount = newAmount
+            try recipe.update(db, columns: [Recipe.Columns.cartAmount])
         }
     }
 }

@@ -8,6 +8,11 @@ struct Amount: Codable, Identifiable, Hashable, DatabaseValueConvertible, Custom
     
     var description: String { "\(fraction) \(type.getAbbreviation(fraction.isPlural()))" }
     
+    init() {
+        self.fraction = Fraction(1)
+        self.type = UnitType.count
+    }
+    
     init(_ fraction: Fraction, type: UnitType) {
         self.fraction = fraction
         self.type = type

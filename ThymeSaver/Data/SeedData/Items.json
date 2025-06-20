@@ -15,7 +15,11 @@
         "itemId": 3,
         "itemName": "Red Wine Vinegar",
         "itemTemp": "Ambient",
-        "defaultUnits": "VolumeTablespoons"
+        "defaultUnits": "VolumeTablespoons",
+        "cartAmount": {
+          "fraction": "4",
+          "type": "VolumeCups"
+        }
     },
     {
         "itemId": 4,
