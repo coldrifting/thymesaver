@@ -21,6 +21,16 @@ struct ItemsView: View {
             .navigationTitle(Text("Items"))
             .searchable(text: viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink(
+                        destination: {
+                            StoreView(appDatabase)
+                        },
+                        label: {
+                            Label("Stores", systemImage: "location")
+                        }
+                    )
+                }
                 ToolbarItem {
                     Button(
                         action: { viewModel.cycleSectionSplitType() },

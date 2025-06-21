@@ -18,20 +18,17 @@ struct AppContentView: View {
         _selectedTab.wrappedValue = defaultTab
     }
     
-    @State private var selectedTab: Int = 2
+    @State private var selectedTab: Int = 0
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Stores", systemImage: "location", value: 0) {
-                StoreView(appDatabase)
-            }
-            Tab("Items", systemImage: "square.stack.3d.down.right", value: 1) {
+            Tab("Items", systemImage: "square.stack.3d.down.right", value: 0) {
                 ItemsView(appDatabase)
             }
-            Tab("Recipes", systemImage: "list.bullet.rectangle", value: 2) {
+            Tab("Recipes", systemImage: "list.bullet.rectangle", value: 1) {
                 RecipesView(appDatabase)
             }
-            Tab("Cart", systemImage: "cart", value: 3) {
+            Tab("Cart", systemImage: "cart", value: 2) {
                 CartView(appDatabase)
             }
         }

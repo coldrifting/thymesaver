@@ -22,12 +22,15 @@ struct StoreView: View {
             }
             .navigationTitle(Text("Stores"))
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                #if DEBUG
+                ToolbarItem() {
                     Button(
                         action: { viewModel.reset() },
-                        label: { Text("Reset Data").foregroundStyle(Color.red) }
+                        label: { Label("Reset Data", systemImage: "exclamationmark.triangle").foregroundStyle(Color.red) }
                     )
+                    .tint(.red)
                 }
+                #endif
                 ToolbarItem {
                     Button(
                         action: { viewModel.alert.queueAdd() },
