@@ -1,6 +1,6 @@
 import GRDB
 
-struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible {
+struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable {
     var aisleId: Int
     var storeId: Int
     var aisleName: String
@@ -17,6 +17,16 @@ struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomS
     }
     
     static var databaseTableName: String = "Aisles"
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: Aisle.databaseTableName) { t in
+            t.autoIncrementedPrimaryKey("aisleId")
+            t.column("storeId", .integer).notNull()
+                .references(Store.databaseTableName, onDelete: .cascade)
+            t.column("aisleName", .text).notNull()
+            t.column("aisleOrder", .integer).notNull()
+        }
+    }
     
     static func getAisles(_ db: Database) throws -> [Aisle] {
         let storeIdChecked = (try? Config.find(db).selectedStore) ?? -1

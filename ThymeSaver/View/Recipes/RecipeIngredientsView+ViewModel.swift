@@ -3,28 +3,17 @@ import GRDB
 
 extension RecipeIngredientsView {
     @Observable @MainActor
+    class ViewModelStatic {
+        // For each recipe, remember last used section / Entry Checked
+        var defaultSection: [Int:Int] = [:]
+        var checked: [Int:Bool] = [:]
+        
+        public static let shared = ViewModelStatic()
+    }
+    
+    @Observable @MainActor
     class ViewModel {
-        private var indexToEntryId: [String:Int] = [:]
-        private var indexToItemWithPrepId: [String:Int] = [:]
-        
-        private static var checked: [Int: Bool] = [:]
-        private static var defaultSection: [Int:Int] = [:]
-        
-        static func setValue(_ itemId: Int, value: Bool) {
-            checked[itemId] = value
-        }
-        
-        static func getValue(_ itemId: Int) -> Bool {
-            return checked[itemId] ?? false
-        }
-        
-        static func reset(_ recipeId: Int) {
-            checked = [:]
-        }
-        
-        func update() {
-            updateRecipeTree(self.recipeItems)
-        }
+        let staticProperties: ViewModelStatic = ViewModelStatic()
         
         private let appDatabase: AppDatabase
         @ObservationIgnored private var cancellable: AnyDatabaseCancellable?
@@ -45,115 +34,74 @@ extension RecipeIngredientsView {
             let recipeId: Int = self.recipeId
             let observation = ValueObservation.tracking { db in
                 (
-                    recipes: try RecipeExpanded.getRecipeEntries(db, recipeId: recipeId),
-                    itemsWithPrep: ItemWithPrep.getAll(db),
-                    validItems: ItemWithPrep.getAllNotInRecipeSections(db, recipeId: recipeId)
+                    recipeSections: RecipeSect.fetchAll(db, recipeId: recipeId),
+                    itemDefaultPreps: ItemWithPrep.getDefaultPreps(db),
+                    validItemsPerSection: ItemWithPrep.getValidPerRecipeSection(db, recipeId: recipeId)
                 )
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
-            } onChange: { (recipeItems, itemsWithPrep, validItems) in
-                self.itemsWithPrep = itemsWithPrep
-                self.validItems = validItems
-                self.updateRecipeTree(recipeItems)
+            } onChange: { (recipeSections, itemDefaultPreps, validItemsPerSection) in
+                self.recipeSections = recipeSections
+                self.itemDefaultPreps = itemDefaultPreps
+                self.validItemsPerSection = validItemsPerSection
             }
         }
         
-        private func updateRecipeTree(_ recipeItems: RecipeTree) {
-            self.usedItemIds = [:]
-            self.recipeItems = RecipeTree(
-                recipeId: recipeItems.recipeId,
-                recipeName: recipeItems.recipeName,
-                url: recipeItems.url,
-                recipeSections: recipeItems.recipeSections.map { recipeSection in
-                    self.usedItemIds[recipeSection.recipeSectionId] = []
-                    return RecipeSectionTree(
-                        recipeSectionId: recipeSection.recipeSectionId,
-                        recipeSectionName: recipeSection.recipeSectionName,
-                        items: recipeSection.items.enumerated().map { (index, recipeItem) in
-                            let id = recipeItem.itemId.concat(recipeItem.itemPrep?.itemPrepId ?? -1)
-                            self.usedItemIds[recipeSection.recipeSectionId]?.insert(id)
-                            self.indexToEntryId["\(recipeSection.recipeSectionId),\(index)"] = recipeItem.entryId
-                            return ItemTree(
-                                itemId: recipeItem.itemId,
-                                itemName: recipeItem.itemName,
-                                itemTemp: recipeItem.itemTemp,
-                                itemPrep: recipeItem.itemPrep,
-                                entryId: recipeItem.entryId,
-                                amount: recipeItem.amount,
-                                isChecked: ViewModel.getValue(recipeItem.itemId.concat(recipeItem.itemPrep?.id ?? 1))
-                            )
-                        }
-                    )
-                }
-            )
-            
-            let defaultSectionId: Int = ViewModel.defaultSection[self.recipeId] ?? -1
-            if (!self.recipeItems.recipeSections.map { $0.recipeSectionId }.contains(where: { $0 == defaultSectionId })) {
-                self.selectedSectionId = self.recipeItems.recipeSections.first?.recipeSectionId ?? defaultSectionId
-            }
-            
-            self.lastRecipeSectionId = self.recipeItems.recipeSections.map { $0.recipeSectionId }.sorted().last ?? -1
-        }
-        
-        private(set) var recipeEntryAndItemId: (recipeEntryId: Int, itemId: Int)?
-        private(set) var recipeId: Int
-        private(set) var recipeName: String
-        private var selectedSectionId: Int = -1
-        private var usedItemIds: [Int:Set<Int>] = [:]
-        private(set) var recipeItems: RecipeTree = RecipeTree()
-        private(set) var lastRecipeSectionId: Int = -1
+        // Fields
         private(set) var isNewItemScreen: Bool = false
         
-        private(set) var validItems: [Int:Set<ItemWithPrep>] = [:]
+        private(set) var recipeId: Int
+        private(set) var recipeName: String
+        private(set) var recipeSections: [RecipeSect] = []
         
-        private(set) var itemsWithPrep: [ItemWithPrep] = []
-        private(set) var itemsWithPrepFiltered: [ItemWithPrep] = []
+        private(set) var itemDefaultPreps: [Item:Set<Prep>] = [:]
         
-        var selectedOkay: Bool {
-            selectedAmount != nil &&
-            selectedSectionId != -1 &&
-            selectedItemBinding.wrappedValue != nil
+        private(set) var validItemsPerSection: [Int:[Item:Set<Prep>]] = [:]
+        
+        var alert: AlertViewModel
+        
+        // Properties
+        var selectedOkay: Bool { selectedAmount != nil && selectedSectionId != -1 && selItem != nil }
+        var showSectionPicker: Bool { return self.initSelItem == nil && self.recipeSections.count > 1 }
+        var enableItemPicker: Bool { return self.initSelItem == nil }
+        var enablePrepPicker: Bool { return self.curValidPreps.count > 1 }
+        var showPrepPicker: Bool { return (self.itemDefaultPreps[self.selItem ?? Item()] ?? []).count > 1 }
+        var lastRecipeSectionId : Int { return self.recipeSections.last?.recipeSectionId ?? -1}
+        var defaultSectionId: Int { return
+            self.staticProperties.defaultSection[self.recipeId] ?? self.recipeSections.first?.recipeSectionId ?? -1
         }
         
+        // Bindings
+        var selEntry: RecipeEnt? = nil
+        var selPrep: Prep = Prep()
+        var selectedAmount: Amount? = nil
+        var initSelItem: Item? = nil
+        var initSelPrep: Prep = Prep()
+        
+        private var selectedSectionId: Int = -1
         var selectedSectionIdBinding: Binding<Int> {
             Binding(
                 get: { self.selectedSectionId },
                 set: {
                     self.selectedSectionId = $0
-                    
-                    // Remove invalid entries after changing sections
-                    if !( self.currentValidItems.contains(where: { $0.id == self.selectedItem?.id  } )) {
-                        self.selectedItem = nil
-                    }
+                    self.validateItem()
                 }
             )
         }
         
-        var currentValidItems: [ItemWithPrep] {
-            if let validItems: Set<ItemWithPrep> = self.validItems[self.selectedSectionId] {
-                if let currentItem: ItemWithPrep = self.initialItem {
-                    var result: Set<ItemWithPrep> = []
-                    for item in validItems {
-                        result.insert(item)
-                    }
-                    result.insert(currentItem)
-                    return result.sorted(by: {$0.nameWithPrep < $1.nameWithPrep})
-                }
-                return validItems.sorted(by: {$0.nameWithPrep < $1.nameWithPrep})
-            }
-                                                
-            return []
-        }
-        
-        var initialItem: ItemWithPrep? = nil
-        var selectedItem: ItemWithPrep? = nil
-        var selectedItemBinding: Binding<ItemWithPrep?> {
+        var selItem: Item? = nil
+        var selItemBinding: Binding<Item?> {
             Binding(
-                get: { self.selectedItem },
+                get: { self.selItem },
                 set: { item in
-                    self.selectedItem = item
+                    self.selItem = item
                     
+                    if !self.curValidPreps.contains(where: { prep in prep.prepId == self.selPrep.prepId } ) {
+                        self.selPrep = self.curValidPreps.first ?? Prep()
+                    }
+                    
+                    // Reset default units if not set by user
                     if let item = item {
                         if (self.selectedAmount == Amount()) {
                             self.selectedAmount = Amount(1, type: item.defaultUnits)
@@ -163,71 +111,121 @@ extension RecipeIngredientsView {
             )
         }
         
-        var selectedAmount: Amount? = nil
+        func validateItem() {
+            if !self.curValidItems.contains(where: { item in item.itemId == self.selItem?.itemId } ) {
+                self.selItemBinding.wrappedValue = nil
+                self.selPrep = self.curValidPreps.first ?? Prep()
+            }
+            
+            if !self.curValidPreps.contains(where: { prep in prep.prepId == self.selPrep.prepId } ) {
+                self.selPrep = self.curValidPreps.first ?? Prep()
+            }
+        }
+        
+        var curValidItems: [Item] {
+            if let valid: [Item : Set<Prep>] = self.validItemsPerSection[self.selectedSectionId] {
+                var result: Set<Item> = []
+                
+                for (item, preps) in valid {
+                    if (!preps.isEmpty) {
+                        result.insert(item)
+                    }
+                }
+                
+                return result.sorted(by: {$0.itemName < $1.itemName})
+            }
+            return []
+        }
+        
+        var curValidPreps: [Prep] {
+            if let valid: [Item : Set<Prep>] = self.validItemsPerSection[self.selectedSectionId] {
+                if let curItem = self.selItem {
+                    var preps: Set<Prep> = valid[curItem] ?? []
+                    if (!self.isNewItemScreen) {
+                        preps.insert(initSelPrep)
+                    }
+                    return preps.sorted()
+                }
+            }
+            return []
+        }
         
         func setupNewItemScreen() {
             self.isNewItemScreen = true
-            self.recipeEntryAndItemId = nil
+            self.selEntry = nil
+            self.selItem = nil
+            self.selPrep = Prep()
+            self.initSelPrep = Prep()
             self.selectedAmount = Amount()
-            self.selectedItemBinding.wrappedValue = nil
-            self.initialItem = nil
+            self.selectedSectionId = defaultSectionId
+            self.initSelItem = nil
         }
         
-        func setupUpdateItemScreen(recipeEntryId: Int, recipeSectionId: Int, type: UnitType, fraction: Fraction, itemId: Int, itemPrepId: Int?) {
+        func setupUpdateItemScreen(section: RecipeSect, entry: RecipeEnt) {
             self.isNewItemScreen = false
-            self.recipeEntryAndItemId = (recipeEntryId: recipeEntryId, itemId: itemId)
-            self.selectedSectionIdBinding.wrappedValue = recipeSectionId
-            self.selectedAmount = Amount(fraction, type: type)
-            self.selectedItemBinding.wrappedValue = itemsWithPrep.first(where: { $0.itemId == itemId && $0.itemPrep?.prepId == itemPrepId })
-            self.initialItem = self.selectedItemBinding.wrappedValue
+            self.selEntry = entry
+            
+            self.selectedAmount = entry.amount
+            self.selectedSectionIdBinding.wrappedValue = section.recipeSectionId
+            
+            self.initSelItem = entry.item
+            self.initSelPrep = entry.prep
+            
+            self.selItem = entry.item
+            self.selPrep = entry.prep
+        }
+        
+        func addOrUpdateRecipeEntry() {
+            if let entry = self.selEntry {
+                updateRecipeEntry(recipeEntryId: entry.recipeEntryId)
+            }
+            else {
+                addRecipeEntry()
+            }
         }
         
         func addRecipeEntry() {
-            if let currentItemWithPrep = selectedItemBinding.wrappedValue, let amount = self.selectedAmount {
+            if let item = selItem, let amount = self.selectedAmount {
                 appDatabase.addRecipeEntry(
                     recipeSectionId: selectedSectionId,
                     recipeId: self.recipeId,
-                    itemId: currentItemWithPrep.itemId,
-                    itemPrepId: currentItemWithPrep.itemPrep?.prepId,
+                    itemId: item.itemId,
+                    prepId: selPrep.prepId,
                     amount: amount
                 )
             }
             
-            ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            self.selectedItemBinding.wrappedValue = nil
-            self.selectedAmount = nil
-            self.initialItem = nil
+            staticProperties.defaultSection[self.recipeId] = selectedSectionId
+            //self.selItem = nil
+            //self.selPrep = Prep()
+            //self.selectedAmount = nil
         }
         
         func updateRecipeEntry(recipeEntryId: Int) {
-            if let currentItemWithPrep = selectedItemBinding.wrappedValue, let amount = self.selectedAmount {
+            let prepId: Int = self.selPrep.prepId
+            if let currentItemWithPrep = self.selItem, let amount = self.selectedAmount {
                 appDatabase.updateRecipeEntry(
                     recipeEntryId: recipeEntryId,
                     itemId: currentItemWithPrep.itemId,
-                    itemPrepId: currentItemWithPrep.itemPrep?.prepId,
+                    prepId: prepId,
                     amount: amount
                 )
             }
             
-            ViewModel.defaultSection[self.recipeId] = selectedSectionId
-            self.selectedItemBinding.wrappedValue = nil
-            self.selectedAmount = nil
-            self.initialItem = nil
+            //self.staticProperties.defaultSection[self.recipeId] = selectedSectionId
+            //self.selectedAmount = nil
+            //self.initSelItem = nil
         }
         
-        func deleteRecipeEntry(sectionIndex: Int, index: Int) {
-            let key: String = "\(sectionIndex),\(index)"
-            let recipeEntryId: Int = self.indexToEntryId[key] ?? -1
-            self.appDatabase.deleteRecipeEntry(recipeEntryId: recipeEntryId)
+        func deleteRecipeEntry(_ entry: RecipeEnt) {
+            self.appDatabase.deleteRecipeEntry(recipeEntryId: entry.recipeEntryId)
             
             // Auto delete empty sections
-            for section in recipeItems.recipeSections {
-                if (section.items.isEmpty || section.items.count == 1 && section.items[0].entryId == recipeEntryId) {
+            for section in recipeSections {
+                if (section.entries.isEmpty || section.entries.count == 1 && section.entries[0].recipeEntryId == entry.recipeEntryId) {
                     self.appDatabase.deleteRecipeSection(recipeId: self.recipeId, recipeSectionId: section.recipeSectionId)
                 }
             }
         }
-        
-        var alert: AlertViewModel
     }
 }

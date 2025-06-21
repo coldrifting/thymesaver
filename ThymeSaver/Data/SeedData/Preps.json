@@ -1,0 +1,34 @@
+[
+    {
+        "prepId": 0,
+        "prepName": "(None)"
+    },
+    {
+        "prepId": 1,
+        "prepName": "Crumbled"
+    },
+    {
+        "prepId": 2,
+        "prepName": "Diced"
+    },
+    {
+        "prepId": 3,
+        "prepName": "Minced"
+    },
+    {
+        "prepId": 4,
+        "prepName": "Shredded"
+    },
+    {
+        "prepId": 5,
+        "prepName": "Sliced"
+    },
+    {
+        "prepId": 6,
+        "prepName": "Sliced (Halves)"
+    },
+    {
+        "prepId": 7,
+        "prepName": "Cooked"
+    },
+]

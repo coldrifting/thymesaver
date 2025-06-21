@@ -1,54 +1,48 @@
 import GRDB
 
-struct ItemPrep: Codable, Identifiable, FetchableRecord, PersistableRecord {
-    var itemPrepId: Int
+struct ItemPrep: Codable, Identifiable, FetchableRecord, PersistableRecord, CreateTable {
     var itemId: Int
-    var prepName: String
+    var prepId: Int
     
-    var id: Int { itemPrepId }
+    var id: Int { prepId }
     
     enum Columns {
-        static let itemPrepId = Column(CodingKeys.itemPrepId)
         static let itemId = Column(CodingKeys.itemId)
-        static let prepName = Column(CodingKeys.prepName)
+        static let prepId = Column(CodingKeys.prepId)
     }
     
     static var databaseTableName: String = "ItemPreps"
     
+    static func createTable(_ db: Database) throws {
+        try db.create(table: ItemPrep.databaseTableName) { t in
+            t.column("itemId", .integer).notNull()
+                .references(Item.databaseTableName, onDelete: .cascade)
+            t.column("prepId", .integer).notNull()
+                .references(Prep.databaseTableName, onDelete: .cascade)
+            
+            t.primaryKey(["itemId", "prepId"])
+        }
+    }
+    
     static func getItemPreps(_ db: Database, itemId: Int) throws -> [ItemPrep] {
         return try ItemPrep
             .filter{ $0.itemId == itemId }
-            .order(Columns.prepName.collating(.localizedCaseInsensitiveCompare).asc)
             .fetchAll(db)
     }
 }
 
-struct ItemPrepInsert: Codable, FetchableRecord, PersistableRecord {
-    var itemId: Int
-    var prepName: String
-    
-    static var databaseTableName: String { ItemPrep.databaseTableName }
-}
-
 extension AppDatabase {
-    func addItemPrep(itemId: Int, prepName: String) {
+    func addItemPrep(itemId: Int, prepId: Int) {
         try? dbWriter.write { db in
-            let itemPrep = ItemPrepInsert(itemId: itemId, prepName: prepName)
-            _ = try itemPrep.insert(db)
+            let itemPrep = ItemPrep(itemId: itemId, prepId: prepId)
+            try itemPrep.upsert(db)
         }
     }
     
-    func deleteItemPrep(itemPrepId: Int) {
+    func deleteItemPrep(itemId: Int, prepId: Int) {
         try? dbWriter.write { db in
-            _ = try ItemPrep.deleteOne(db, key: itemPrepId)
-        }
-    }
-    
-    func renameItemPrep(itemPrepId: Int, newName: String) {
-        try? dbWriter.write { db in
-            var itemPrep = try ItemPrep.find(db, key: itemPrepId)
-            itemPrep.prepName = newName
-            try itemPrep.update(db, columns: [ItemPrep.Columns.prepName])
+            let key: [String:Int] = ["itemId": itemId, "prepId": prepId]
+            _ = try ItemPrep.deleteOne(db, key: key)
         }
     }
 }

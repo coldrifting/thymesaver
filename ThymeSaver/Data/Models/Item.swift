@@ -1,11 +1,11 @@
 import GRDB
 
-struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible {
+struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable, Hashable {
     var itemId: Int
     var itemName: String
-    var itemTemp: ItemTemp
-    var defaultUnits: UnitType
-    var cartAmount: Amount?
+    var itemTemp: ItemTemp = ItemTemp.ambient
+    var defaultUnits: UnitType = UnitType.count
+    var cartAmount: Amount? = nil
     
     var id: Int { itemId }
     var description: String { itemName }
@@ -19,6 +19,35 @@ struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomSt
     }
     
     static var databaseTableName: String = "Items"
+    
+    init() {
+        self.itemId = -1
+        self.itemName = "(None)"
+    }
+    
+    init(
+        itemId: Int,
+        itemName: String,
+        itemTemp: ItemTemp = ItemTemp.ambient,
+        defaultUnits: UnitType = UnitType.count,
+        cartAmount: Amount? = nil
+    ) {
+        self.itemId = itemId
+        self.itemName = itemName
+        self.itemTemp = itemTemp
+        self.defaultUnits = defaultUnits
+        self.cartAmount = cartAmount
+    }
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: Item.databaseTableName) { t in
+            t.autoIncrementedPrimaryKey("itemId")
+            t.column("itemName", .text).notNull()
+            t.column("itemTemp", .text).notNull()
+            t.column("defaultUnits", .text).notNull()
+            t.column("cartAmount", .text)
+        }
+    }
     
     static func getItems(_ db: Database, filter: String = "") throws -> [Item] {
         if (filter.trim().isEmpty) {

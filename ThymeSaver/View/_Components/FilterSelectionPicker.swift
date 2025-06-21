@@ -2,91 +2,56 @@ import SwiftUI
 import Observation
 import Combine
 
-public struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: View {
-    private let title: String
-    private let selection: Binding<T?>
-    private let options: [T]
-    private let getSubtitle: ((T) -> String?)?
-    private let subTitleLabel: String?
+
+
+struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: View {
+    fileprivate struct Details {
+        let title: String
+        let selection: Binding<T?>
+        let options: [T]
+        
+        init(title: String, selection: Binding<T?>, options: [T]) {
+            self.title = title
+            self.selection = selection
+            self.options = options
+        }
+    }
     
-    public init(
-        _ title: String,
-        selection: Binding<T?>,
-        options: [T],
-        getSubtitle: ((T) -> String?)? = nil,
-        subTitleLabel: String? = nil
-    ) {
-        self.title = title
-        self.selection = selection
-        self.options = options
-        self.getSubtitle = getSubtitle
-        self.subTitleLabel = subTitleLabel
+    private var details: Details
+    
+    init(_ title: String, selection: Binding<T?>, options: [T] ) {
+        details = Details(
+            title: title,
+            selection: selection,
+            options: options
+        )
     }
     
     public var body: some View {
         NavigationLink(
             destination: {
-                FilterSelectionPickerModal(title, selection: selection, options: options, getSubtitle: getSubtitle)
+                FilterSelectionPickerModalContainer(details)
             },
             label: {
-                let selectionText = options.first(where: {$0.id == selection.wrappedValue?.id })?.description ?? "(Unset)"
-                VStack {
-                    HStack {
-                        Text(title)
-                        Spacer()
-                        Text(selectionText).foregroundStyle(.secondary)
-                    }
-                    if let subTitleLabel {
-                        if let selection = selection.wrappedValue {
-                            if let getSubtitle {
-                                if let caption = getSubtitle(selection) {
-                                    Divider()
-                                    HStack {
-                                        Text(subTitleLabel)
-                                        Spacer()
-                                        Text(caption).foregroundStyle(.secondary)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
+                let selectionText = details.options.first(where: {$0.id == details.selection.wrappedValue?.id })?.description ?? "(Unset)"
+                HStack {
+                    Text(details.title)
+                    Spacer()
+                    Text(selectionText).foregroundStyle(.secondary)
                 }
             }
         )
     }
     
-    struct FilterSelectionPickerModal: View {
+    struct FilterSelectionPickerModalContainer: View {
         @Environment(\.dismiss) private var dismiss
         
         @State private var filterText: String = ""
         
-        private let title: String
-        private let selection: Binding<T?>
-        private let options: [T]
-        private let getSubtitle: ((T) -> String?)?
+        private var details: Details
         
-        public init(
-            _ title: String,
-            selection: Binding<T?>,
-            options: [T],
-            getSubtitle: ((T) -> String?)? = nil
-        ) {
-            self.title = title
-            self.selection = selection
-            self.options = options
-            self.getSubtitle = getSubtitle
-        }
-        
-        func getText(_ option: T) -> String {
-            let text: String = option.description
-            if let getSubtitle {
-                let caption: String? = getSubtitle(option)
-                if let caption {
-                    return "\(text) - \(caption)"
-                }
-            }
-            return text
+        fileprivate init(_ details: Details) {
+            self.details = details
         }
         
         func filter(_ isIncluded: any StringProtocol) -> Bool {
@@ -96,20 +61,21 @@ public struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: 
         
         var body: some View {
             List {
-                Section("Aisles") {
-                    let optionsFiltered: [T] = options.filter{ opt in self.filter(getText(opt)) }
+                Section {
+                    let optionsFiltered: [T] = details.options.filter{ opt in self.filter(opt.description) }
                     
                     ForEach(optionsFiltered) { option in
                         Button(
                             action: {
-                                self.selection.wrappedValue = option
+                                self.details.selection.wrappedValue = option
+                                self.filterText = ""
                                 dismiss()
                             },
                             label: {
                                 HStack {
-                                    let text: String = getText(option)
+                                    let text: String = option.description
                                     Text(text)
-                                    if (self.selection.wrappedValue?.id == option.id) {
+                                    if (self.details.selection.wrappedValue?.id == option.id) {
                                         Spacer()
                                         Image(systemName: "checkmark")
                                             .foregroundStyle(.tint)
@@ -122,8 +88,8 @@ public struct FilterSelectionPicker<T: Identifiable & CustomStringConvertible>: 
                     }
                 }
             }
-            .navigationTitle(title).navigationBarTitleDisplayMode(.inline)
             .searchable(text: $filterText, placement: .navigationBarDrawer(displayMode: .always))
+            .navigationTitle(details.title).navigationBarTitleDisplayMode(.inline)
         }
     }
 }

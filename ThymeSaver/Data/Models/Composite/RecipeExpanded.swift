@@ -27,14 +27,14 @@ struct ItemTree: Identifiable {
     var amount: Amount
     var isChecked: Bool = false
     
-    var id: Int { itemId }
+    var id: Int { itemId.concat(itemPrep?.prepId ?? -1) }
 }
 
 struct ItemPrepTree: Identifiable {
-    var itemPrepId: Int
+    var prepId: Int
     var prepName: String
     
-    var id: Int { itemPrepId }
+    var id: Int { prepId }
 }
 
 struct RecipeExpanded: FetchableRecord, Identifiable {
@@ -59,7 +59,7 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
     var defaultUnits: UnitType?
     
     // ItemPrep
-    var itemPrepId: Int?
+    var prepId: Int?
     var prepName: String?
     
     var id: Int { recipeEntryId ?? -1 }
@@ -79,7 +79,7 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
         itemTemp = row["itemTemp"]
         defaultUnits = row["defaultUnits"]
         
-        itemPrepId = row["itemPrepId"]
+        prepId = row["prepId"]
         prepName = row["prepName"]
         amount = row["amount"]
     }
@@ -97,8 +97,8 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
             Items.itemId,
             Items.itemName,
             Items.itemTemp,
-            itemPreps.itemPrepId,
-            itemPreps.prepName
+            RecipeEntries.prepId,
+            Preps.prepName
         FROM Recipes
         LEFT JOIN RecipeSections
             ON Recipes.recipeId = RecipeSections.recipeId
@@ -106,14 +106,14 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
             ON RecipeEntries.recipeSectionId = RecipeSections.recipeSectionId
         LEFT JOIN Items
             ON Items.itemId = RecipeEntries.ItemId
-        LEFT JOIN ItemPreps
-            ON ItemPreps.itemPrepId = RecipeEntries.itemPrepId
+        LEFT JOIN Preps
+            ON Preps.prepId = RecipeEntries.prepId
         WHERE Recipes.recipeId = \(recipeId)
         ORDER BY 
             RecipeSections.recipeSectionId,
             Items.itemTemp,
             Items.itemName,
-            ItemPreps.prepName;
+            Preps.prepName;
         """
     }
     
@@ -131,9 +131,9 @@ struct RecipeExpanded: FetchableRecord, Identifiable {
                 continue
             }
             
-            let itemPrep : ItemPrepTree? = entry.itemPrepId != nil
+            let itemPrep : ItemPrepTree? = entry.prepId != nil
             ? ItemPrepTree(
-                itemPrepId: entry.itemPrepId!,
+                prepId: entry.prepId!,
                 prepName: entry.prepName!)
             : nil
             

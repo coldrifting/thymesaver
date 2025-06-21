@@ -44,7 +44,6 @@ struct AmountPicker: View {
             else {
                 self.type = UnitType.count
             }
-            print(newAmount?.description ?? "NULL")
         }
         self.lastAmount = newAmount
     }

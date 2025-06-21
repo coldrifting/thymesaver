@@ -11,13 +11,6 @@ extension ItemDetailsView {
             self.appDatabase = appDatabase
             self.itemId = itemId
             self.itemName = itemName
-            
-            self.alert = AlertViewModel.init(
-                itemName: "Item Preperation",
-                addAction: { newName in appDatabase.addItemPrep(itemId: itemId, prepName: newName) },
-                renameAction: appDatabase.renameItemPrep,
-                deleteAction: appDatabase.deleteItemPrep
-            )
         }
         
         func observe() {
@@ -27,17 +20,17 @@ extension ItemDetailsView {
                     aisles: Aisle.getAisles(db),
                     item: Item.fetchOne(db, key: self.itemId),
                     itemLocs: ItemAisle.getItemAisles(db, itemId: self.itemId),
-                    itemPreps: ItemPrepExpanded.getItemPreps(db, itemId: self.itemId)
+                    preps: Prep.get(itemId: self.itemId).fetchAll(db)
                 )
             }
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
-            } onChange: { (stores, aisles, item, itemLocs, itemPreps) in
+            } onChange: { (stores, aisles, item, itemLocs, preps) in
                 self.stores = stores
                 self.aisles = aisles
                 self.item = item
                 self.itemLocs = itemLocs
-                self.itemPreps = itemPreps
+                self.preps = preps
                 
                 let selectedStoreId = (try? self.appDatabase.getSelectedStoreId()) ?? -1
                 let hasItemAisle: Bool = self.itemLocs.first{ $0.storeId == selectedStoreId } != nil
@@ -54,7 +47,14 @@ extension ItemDetailsView {
         
         private var item: Item? = nil
         private var itemLocs: [ItemAisle] = []
-        private(set) var itemPreps: [ItemPrepExpanded] = []
+        
+        private var preps: [Prep] = []
+        var prepsString: String {
+            if (preps.isEmpty) {
+                return "(None)"
+            }
+            return preps.reduce("", { $0 + ", " + $1.prepName }).deletingPrefix(", ").chop(24)
+        }
         
         private(set) var showBay: Bool = false
         
@@ -111,19 +111,5 @@ extension ItemDetailsView {
             let selectedStoreId = (try? self.appDatabase.getSelectedStoreId()) ?? -1
             self.appDatabase.updateItemAisleBay(itemId: itemId, storeId: selectedStoreId, newBay: bay)
         }
-        
-        func addItem(itemName: String) {
-            self.appDatabase.addItemPrep(itemId: self.item?.id ?? -1, prepName: itemName)
-        }
-        
-        func deleteItem(itemId: Int) {
-            self.appDatabase.deleteItemPrep(itemPrepId: itemId)
-        }
-        
-        func renameItem(itemId: Int, newName: String) {
-            self.appDatabase.renameItemPrep(itemPrepId: itemId, newName: newName)
-        }
-        
-        var alert: AlertViewModel
     }
 }

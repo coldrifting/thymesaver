@@ -1,147 +1,82 @@
 [
     {
-        "itemPrepId": 1,
-        "itemId": 209,
-        "prepName": "Minced"
-    },
-    {
-        "itemPrepId": 2,
-        "itemId": 181,
-        "prepName": "Shredded"
-    },
-    {
-        "itemPrepId": 3,
-        "itemId": 179,
-        "prepName": "Crumbled"
-    },
-    {
-        "itemPrepId": 4,
-        "itemId": 219,
-        "prepName": "Diced"
-    },
-    {
-        "itemPrepId": 5,
-        "itemId": 211,
-        "prepName": "Sliced"
-    },
-    {
-        "itemPrepId": 6,
-        "itemId": 207,
-        "prepName": "Diced"
-    },
-    {
-        "itemPrepId": 62,
-        "itemId": 207,
-        "prepName": "Test"
-    },
-    {
-        "itemPrepId": 7,
-        "itemId": 217,
-        "prepName": "Sliced (Halves)"
-    },
-    {
-        "itemPrepId": 8,
-        "itemId": 218,
-        "prepName": "Diced"
-    },
-    {
-        "itemPrepId": 9,
         "itemId": 57,
-        "prepName": "Cooked"
+        "prepId": 7
     },
     {
-        "itemPrepId": 10,
+        "itemId": 179,
+        "prepId": 1
+    },
+    {
+        "itemId": 207,
+        "prepId": 5
+    },
+    {
+        "itemId": 218,
+        "prepId": 2
+    },
+    {
+        "itemId": 219,
+        "prepId": 2
+    },
+    {
+        "itemId": 209,
+        "prepId": 3
+    },
+    {
         "itemId": 180,
-        "prepName": "Sliced"
+        "prepId": 4
     },
     {
-        "itemPrepId": 11,
+        "itemId": 181,
+        "prepId": 4
+    },
+    {
+        "itemId": 183,
+        "prepId": 4
+    },
+    {
+        "itemId": 184,
+        "prepId": 4
+    },
+    {
+        "itemId": 185,
+        "prepId": 4
+    },
+    {
+        "itemId": 186,
+        "prepId": 4
+    },
+    {
         "itemId": 180,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 12,
         "itemId": 181,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 13,
-        "itemId": 181,
-        "prepName": "Sliced"
-    },
-    {
-        "itemPrepId": 14,
         "itemId": 183,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 15,
-        "itemId": 183,
-        "prepName": "Sliced"
-    },
-    {
-        "itemPrepId": 16,
         "itemId": 184,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 17,
-        "itemId": 184,
-        "prepName": "Sliced"
-    },
-    {
-        "itemPrepId": 18,
         "itemId": 185,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 19,
-        "itemId": 185,
-        "prepName": "Sliced"
-    },
-    {
-        "itemPrepId": 20,
         "itemId": 186,
-        "prepName": "Shredded"
+        "prepId": 5
     },
     {
-        "itemPrepId": 21,
-        "itemId": 186,
-        "prepName": "Sliced"
+        "itemId": 211,
+        "prepId": 6
     },
     {
-        "itemPrepId": 22,
-        "itemId": 44,
-        "prepName": "Prep 1"
+        "itemId": 217,
+        "prepId": 6
     },
-    {
-        "itemPrepId": 23,
-        "itemId": 44,
-        "prepName": "Prep 2"
-    },
-    {
-        "itemPrepId": 24,
-        "itemId": 44,
-        "prepName": "Prep 3"
-    },
-    {
-        "itemPrepId": 25,
-        "itemId": 44,
-        "prepName": "Prep 4"
-    },
-    {
-        "itemPrepId": 26,
-        "itemId": 44,
-        "prepName": "Prep 5"
-    },
-    {
-        "itemPrepId": 27,
-        "itemId": 44,
-        "prepName": "Prep 6"
-    },
-    {
-        "itemPrepId": 28,
-        "itemId": 44,
-        "prepName": "Prep 7"
-    }
 ]

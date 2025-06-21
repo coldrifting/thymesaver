@@ -64,7 +64,9 @@ struct RecipesView: View {
                         if (isInEditMode) {
                                 Button(
                                     action: {
-                                        viewModel.toggleRecipePin(recipeId: recipe.recipeId)
+                                        withAnimation {
+                                            viewModel.toggleRecipePin(recipeId: recipe.recipeId)
+                                        }
                                     },
                                     label: { Label("Pin", systemImage: recipe.isPinned ? "star.fill" : "star").labelStyle(.iconOnly) }
                                 )
@@ -85,14 +87,11 @@ struct RecipesView: View {
                         )
                         .tint(.blue)
                     }
-                    .swipeActions(edge: .trailing) {
-                        Button(
-                            action: {
-                                viewModel.alert.queueDelete(id: recipe.recipeId, itemsInUse: ["Test", "test2"])
-                            },
-                            label: { Text("Delete") }
-                        )
-                        .tint(.red)
+                    .deleteDisabled(recipe.isPinned)
+                }
+                .onDelete { offsets in
+                    offsets.forEach { index in
+                        viewModel.deleteRecipe(recipeId: self.recipes[index].recipeId)
                     }
                 }
             }

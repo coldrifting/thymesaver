@@ -7,12 +7,12 @@ struct RecipeIngredientsView: View {
     
     @State private var viewModel: ViewModel
     
-    @State private var recipeItems: RecipeTree = RecipeTree()
+    @State private var recipeSections: [RecipeSect] = []
     
     @State private var isInEditMode: Bool = false
     @State private var showBottomSheet: Bool = false
     
-    @State private var test: Bool = false
+    @State private var checked: [Int:Bool] = [:]
     
     init(_ appDatabase: AppDatabase, recipeId: Int, recipeName: String) {
         _viewModel = State(initialValue: ViewModel(appDatabase, recipeId: recipeId, recipeName: recipeName))
@@ -20,25 +20,38 @@ struct RecipeIngredientsView: View {
     
     var body: some View {
         List {
-            
             Section("Details") {
                 NavigationLink(
-                    destination: { RecipeStepsView(appDatabase, recipeId: viewModel.recipeId, recipeName: viewModel.recipeName) },
+                    destination: {
+                        RecipeStepsView(
+                            appDatabase,
+                            recipeId: viewModel.recipeId,
+                            recipeName: viewModel.recipeName)
+                    },
                     label: { Text("Steps") }
                 )
             }
             
-            ForEach(recipeItems.recipeSections) { section in
-                sectionContents(section)
+            ForEach(Array(self.recipeSections.enumerated()), id: \.offset) { index, section in
+                let showHeader: Bool = isInEditMode || !section.entries.isEmpty || index == 0
+                sectionContents(section, sectionIndex: index, showHeader: showHeader)
             }
         }
         .navigationTitle(viewModel.recipeName).navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                VStack {
-                    Text("Recipe Ingredients").font(.headline)
-                    Text(viewModel.recipeName).font(.subheadline)
-                }
+                Button(
+                    action: {
+                        viewModel.staticProperties.checked = [:]
+                    },
+                    label: {
+                        VStack {
+                            Text("Recipe Ingredients").font(.headline)
+                            Text(viewModel.recipeName).font(.subheadline)
+                        }
+                    }
+                )
+                .foregroundStyle(.primary)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack {
@@ -66,27 +79,45 @@ struct RecipeIngredientsView: View {
         .sheet(isPresented: $showBottomSheet, content: {
             NavigationStack {
                 List {
-                    let showItem: Bool = viewModel.recipeEntryAndItemId == nil
-                    let showSection: Bool = viewModel.recipeEntryAndItemId == nil && viewModel.recipeItems.recipeSections.count > 1
-                    let sectionHeader: String = showSection ? "Item and Section" : "Item"
-                    if (showItem || showSection) {
-                        Section(sectionHeader) {
-                            if (showSection) {
-                                Picker("Section", selection: viewModel.selectedSectionIdBinding) {
-                                    ForEach(recipeItems.recipeSections, id: \.recipeSectionId) { recipeSection in
-                                        Text(recipeSection.recipeSectionName).tag(recipeSection.recipeSectionName)
+                    let curValidPreps = viewModel.curValidPreps
+                    Section("Details") {
+                        if (viewModel.showSectionPicker) {
+                            Picker("Section", selection: viewModel.selectedSectionIdBinding) {
+                                ForEach(self.recipeSections) { recipeSection in
+                                    Text(recipeSection.recipeSectionName).tag(recipeSection.recipeSectionId)
+                                }
+                            }
+                        }
+                        
+                        if (viewModel.enableItemPicker) {
+                            FilterSelectionPicker(
+                                "Ingredient",
+                                selection: viewModel.selItemBinding,
+                                options: viewModel.curValidItems
+                            )
+                        }
+                        else {
+                            HStack {
+                                Text("Item")
+                                Spacer()
+                                Text(viewModel.selItem?.itemName ?? "(None)").foregroundStyle(.secondary)
+                            }
+                        }
+                        
+                        if (viewModel.showPrepPicker) {
+                            if (viewModel.enablePrepPicker) {
+                                Picker("Prep", selection: $viewModel.selPrep ) {
+                                    ForEach(curValidPreps) { prep in
+                                        Text(prep.prepName).tag(prep)
                                     }
                                 }
                             }
-                            
-                            if (showItem) {
-                                FilterSelectionPicker(
-                                    "Ingredient",
-                                    selection: viewModel.selectedItemBinding,
-                                    options: viewModel.currentValidItems,
-                                    getSubtitle: { $0.itemPrep?.prepName },
-                                    subTitleLabel: "Preperation"
-                                )
+                            else {
+                                HStack {
+                                    Text("Prep")
+                                    Spacer()
+                                    Text(viewModel.selPrep.prepName).foregroundStyle(.secondary)
+                                }
                             }
                         }
                     }
@@ -96,72 +127,60 @@ struct RecipeIngredientsView: View {
                         AmountPicker(amount: $viewModel.selectedAmount)
                     }
                     
-                    VStack {
-                        Button(
-                            action: {
-                                $showBottomSheet.wrappedValue = false
-                                if let recipeEntryId = viewModel.recipeEntryAndItemId?.recipeEntryId {
-                                    viewModel.updateRecipeEntry(recipeEntryId: recipeEntryId)
-                                } else {
-                                    viewModel.addRecipeEntry()
-                                }
-                            },
-                            label: { Text(viewModel.recipeEntryAndItemId != nil ? "Update Ingredient" : "Add Ingredient")
-                                    .fontWeight(.semibold)
-                                    .frame(maxWidth: .infinity, minHeight: 32)
-                            }
-                        )
-                        .buttonStyle(.borderedProminent)
-                        .tint(viewModel.recipeEntryAndItemId != nil ? .blue : .green.mix(with: .blue, by: 0.15).mix(with: .black, by: 0.15))
-                        .disabled(!viewModel.selectedOkay)
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(EmptyView())
-                    .listRowInsets(EdgeInsets())
+                    ListButton(
+                        action: {
+                            showBottomSheet = false
+                            viewModel.addOrUpdateRecipeEntry()
+                        },
+                        label: {
+                            Text(viewModel.isNewItemScreen ? "Add Ingredient" : "Update Ingredient")
+                        }
+                    )
+                    .tint(viewModel.isNewItemScreen ? .blue : .indigo)
+                    .disabled(!viewModel.selectedOkay)
                 }
-            }.presentationDetents([.height(500)])
-            
+                .navigationTitle("Item Details").toolbarTitleDisplayMode(.inline)
+            }
+            .presentationDetents([.height(500)])
         })
         .onAppear(perform: viewModel.observe )
-        .onReceive(Just(viewModel.recipeItems)) { recipeItems in
+        .onReceive(Just(viewModel.recipeSections)) { recipeSections in
             withAnimation {
-                self.recipeItems = recipeItems
+                self.recipeSections = recipeSections
+            }
+        }
+        .onReceive(Just(viewModel.staticProperties.checked)) { checked in
+            withAnimation {
+                self.checked = checked
             }
         }
         .alertCustom(viewModel.alert)
     }
     
-    func showUpdateSheet(section: RecipeSectionTree, item: ItemTree) {
-        viewModel.setupUpdateItemScreen(
-            recipeEntryId: item.entryId,
-            recipeSectionId: section.recipeSectionId,
-            type: item.amount.type,
-            fraction: item.amount.fraction,
-            itemId: item.itemId,
-            itemPrepId: item.itemPrep?.itemPrepId
-        )
-        $showBottomSheet.wrappedValue = true
-    }
-    
     @ViewBuilder
-    func sectionContents(_ section: RecipeSectionTree) -> some View {
-        let headerText: String = recipeItems.recipeSections.count < 2 ? "Ingredients" : section.recipeSectionName
+    func sectionContents(_ section: RecipeSect, sectionIndex: Int, showHeader: Bool = true) -> some View {
+        let headerText: String = self.recipeSections.count < 2 ? "Ingredients" : section.recipeSectionName
         Section(
             content: {
-                ForEach(section.items) { item in
+                if (section.entries.isEmpty && showHeader) {
+                    Text("(No Items Yet)").foregroundStyle(.secondary)
+                }
+                
+                ForEach(section.entries) { entry in
                     if (isInEditMode) {
                         Button(
                             action: {
-                                showUpdateSheet(section: section, item: item)
+                                viewModel.setupUpdateItemScreen(section: section, entry: entry)
+                                showBottomSheet = true
                             },
                             label: {
                                 HStack {
-                                    Text(item.itemName).foregroundStyle(.primary)
+                                    Text(entry.item.itemName).foregroundStyle(.primary)
                                     Spacer()
                                     VStack(alignment: .trailing) {
-                                        Text(item.amount.description)
-                                        if let itemPrep = item.itemPrep?.prepName {
-                                            Text(itemPrep).font(.caption)
+                                        Text(entry.amount.description)
+                                        if (entry.prep.prepId != 0) {
+                                            Text(entry.prep.prepName).font(.caption)
                                         }
                                     }
                                     .font(.callout)
@@ -174,34 +193,39 @@ struct RecipeIngredientsView: View {
                         .transition(.slide)
                     }
                     else {
+                        //let checked: Bool = ViewModel.entryChecked[entry.recipeEntryId] ?? false
+                        let checked: Bool = self.checked[entry.recipeEntryId] ?? false
                         CheckboxItem(
-                            isChecked: item.isChecked,
+                            isChecked: checked,
                             onToggle: {
-                                ViewModel.setValue(item.itemId.concat(item.itemPrep?.id ?? 1), value: !item.isChecked)
-                                viewModel.update()
+                                withAnimation {
+                                    viewModel.staticProperties.checked[entry.recipeEntryId] = !checked
+                                }
                             },
-                            text: item.itemName,
-                            subtitle: item.amount.description,
-                            subsubtitle: item.itemPrep?.prepName
+                            text: entry.item.itemName,
+                            subtitle: entry.amount.description,
+                            subsubtitle: entry.prep.prepId != 0 ? entry.prep.prepName : nil
                         )
                         .deleteDisabled(true)
                     }
                 }
                 .onDelete { offsets in
                     offsets.forEach { index in
-                        viewModel.deleteRecipeEntry(sectionIndex: section.recipeSectionId, index: index)
+                        viewModel.deleteRecipeEntry(self.recipeSections[sectionIndex].entries[index])
                     }
                 }
             },
             header: {
-                HStack {
-                    Text(headerText)
-                    Spacer()
-                    if (isInEditMode && viewModel.recipeItems.recipeSections.count > 1) {
-                        Button(
-                            action: { viewModel.alert.queueRename(id: section.recipeSectionId, name: section.recipeSectionName) },
-                            label: { Text("Rename Section").textCase(.none).font(.footnote) }
-                        )
+                if (showHeader) {
+                    HStack {
+                        Text(headerText)
+                        Spacer()
+                        if (isInEditMode && viewModel.recipeSections.count > 1) {
+                            Button(
+                                action: { viewModel.alert.queueRename(id: section.recipeSectionId, name: section.recipeSectionName) },
+                                label: { Text("Rename Section").textCase(.none).font(.footnote) }
+                            )
+                        }
                     }
                 }
             },
@@ -223,6 +247,6 @@ struct RecipeIngredientsView: View {
 
 #Preview {
     NavigationStack {
-        RecipeIngredientsView(.shared, recipeId: 2, recipeName: "Green Chili Mac & Cheese")
+        RecipeIngredientsView(.shared, recipeId: 1, recipeName: "Pasta Alfredo")
     }
 }

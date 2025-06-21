@@ -56,7 +56,7 @@ extension CartView {
         }
         
         func reset() {
-            self._selectedItemAmount = nil
+            self._selectedItemAmount = Amount()
             self._selectedRecipeQuantity = 1
             self._selectedItemToAdd = nil
             self._selectedRecipeToAdd = nil
@@ -116,7 +116,7 @@ extension CartView {
             return Amount()
         }
         
-        var _selectedItemAmount: Amount? = nil
+        var _selectedItemAmount: Amount? = Amount()
         var selectedItemAmount: Binding<Amount?>  {
             Binding(
                 get: { self._selectedItemAmount },

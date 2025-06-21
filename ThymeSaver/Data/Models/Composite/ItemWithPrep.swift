@@ -1,90 +1,97 @@
 import GRDB
 
 struct ItemWithPrep: Identifiable, CustomStringConvertible, Hashable {
-    var itemId: Int
-    var itemName: String
-    var defaultUnits: UnitType
+    var item: Item
+    var prep: Prep
     
-    var itemPrep: Prep? = nil
-    
-    var id: Int { itemId.concat(itemPrep?.prepId ?? -1) }
-    var description: String { itemName }
+    var id: Int { item.itemId.concat(prep.prepId) }
+    var description: String { item.itemName }
     
     var nameWithPrep: String {
-        if let prep = itemPrep {
-            return "\(itemName) - \(prep.prepName)"
-        }
-        return itemName
-    }
-    
-    struct Prep: Identifiable, Hashable {
-        var prepId: Int
-        var prepName: String
-        
-        var id: Int { prepId }
+        return "\(item.itemName) - \(prep.prepName)"
     }
     
     fileprivate init(_ item: ItemWithPrepFetch) {
-        self.itemId = item.itemId
-        self.itemName = item.itemName
-        self.defaultUnits = item.defaultUnits
+        self.item = Item(
+            itemId: item.itemId,
+            itemName: item.itemName,
+            itemTemp: item.itemTemp,
+            defaultUnits: item.defaultUnits
+        )
         
-        if let prepId = item.itemPrepId, let prepName = item.prepName {
-            self.itemPrep = Prep(prepId: prepId, prepName: prepName)
-        }
+        self.prep = Prep(
+            prepId: item.prepId,
+            prepName: item.prepName
+        )
     }
     
-    static func getAll(_ db: Database) -> [ItemWithPrep] {
-        let entries: [ItemWithPrepFetch] = (try? ItemWithPrepFetch.get().fetchAll(db)) ?? []
+    static func getDefaultPreps(_ db: Database) -> [Item:Set<Prep>] {
+        let entries: [ItemWithPrepFetch] = (try? ItemWithPrepFetch.getDefaults().fetchAll(db)) ?? []
         
-        return entries.map { entry in ItemWithPrep(entry) }
+        return ItemWithPrep.toMap(entries.map{ ItemWithPrep($0) } )
     }
     
-    static func getAllNotInRecipeSections(_ db: Database, recipeId: Int) -> [Int:Set<ItemWithPrep>] {
-        var map: [Int:Set<ItemWithPrep>] = [:]
+    static func getValidPerRecipeSection(_ db: Database, recipeId: Int) -> [Int:[Item:Set<Prep>]] {
+        var result: [Int:[Item:Set<Prep>]] = [:]
         
-        let recipeSectionIds: [Int] = (try? Int.fetchAll(db, sql: "SELECT recipeSectionId FROM RecipeSections WHERE recipeId = \(recipeId)")) ?? []
+        let recipeSectionIds: [Int] = RecipeSection.getAllSectionIds(db, recipeId: recipeId)
         
         for recipeSectionId in recipeSectionIds {
             let entries: [ItemWithPrepFetch] = (try? ItemWithPrepFetch.getNotInRecipeSection(recipeSectionId: recipeSectionId).fetchAll(db)) ?? []
-            map[recipeSectionId] = Set(entries.map{ ItemWithPrep($0) })
+            result[recipeSectionId] = ItemWithPrep.toMap(entries.map{ ItemWithPrep($0) })
         }
         
-        return map
+        return result
+    }
+    
+    static func toMap(_ itemWithPreps: [ItemWithPrep]) -> [Item:Set<Prep>] {
+        var result: [Item:Set<Prep>] = [:]
+        
+        for (itemWithPrep) in itemWithPreps {
+            var preps: Set<Prep> = result[itemWithPrep.item] ?? []
+            preps.insert(itemWithPrep.prep)
+            result[itemWithPrep.item] = preps
+        }
+        
+        return result
     }
 }
 
 private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
     var itemId: Int
     var itemName: String
+    var itemTemp: ItemTemp
     var defaultUnits: UnitType
-    var itemPrepId: Int?
-    var prepName: String?
     
-    var id: Int { itemId.concat(itemPrepId ?? -1) }
+    var prepId: Int
+    var prepName: String
+    
+    var id: Int { itemId.concat(prepId) }
     
     init(row: GRDB.Row) throws {
         itemId = row["itemId"]
         itemName = row["itemName"]
+        itemTemp = row["itemTemp"]
         defaultUnits = row["defaultUnits"]
-        itemPrepId = row["itemPrepId"]
+        prepId = row["prepId"]
         prepName = row["prepName"]
     }
     
-    static func get() -> SQLRequest<ItemWithPrepFetch> {
+    static func getDefaults() -> SQLRequest<ItemWithPrepFetch> {
         """
         SELECT 
-            Items.itemId,
-            Items.itemName,
+            Items.itemId, 
+            Items.itemname, 
+            Items.itemTemp,
             Items.defaultUnits,
-            ItemPreps.itemPrepId,
-            ItemPreps.prepName
-        FROM Items 
-        LEFT JOIN ItemPreps 
-            ON Items.itemId = ItemPreps.itemId
+            Preps.prepId, 
+            Preps.prepName 
+        FROM ( SELECT itemId, COALESCE(prepId, 0) as prepId FROM Items LEFT JOIN ItemPreps USING(itemId) UNION SELECT itemId, 0 FROM Items ) 
+        NATURAL JOIN Items
+        NATURAL JOIN Preps
         ORDER BY
             Items.itemName,
-            ItemPreps.prepName;
+            Preps.prepName;
         """
     }
     
@@ -93,20 +100,19 @@ private struct ItemWithPrepFetch: FetchableRecord, Identifiable {
         SELECT 
             Items.itemId, 
             Items.itemname, 
+            Items.itemTemp,
             Items.defaultUnits,
-            ItemPreps.itemPrepId, 
-            ItemPreps.prepName 
+            Preps.prepId, 
+            Preps.prepName 
         FROM (
-            SELECT * FROM ( SELECT itemId,itemPrepId FROM Items LEFT JOIN ItemPreps USING(itemId) ) 
-            EXCEPT SELECT * FROM ( SELECT itemId, itemPrepId FROM RecipeEntries WHERE RecipeSectionId = \(recipeSectionId) )
+            SELECT * FROM ( SELECT itemId, COALESCE(prepId, 0) as prepId FROM Items LEFT JOIN ItemPreps USING(itemId) UNION SELECT itemId, 0 FROM Items ) 
+            EXCEPT SELECT * FROM ( SELECT itemId, prepId FROM RecipeEntries WHERE RecipeSectionId = \(recipeSectionId) )
         )
-        LEFT JOIN Items 
-            USING (itemId)
-        LEFT JOIN ItemPreps 
-            USING (itemPrepId)
+        NATURAL JOIN Items
+        NATURAL JOIN Preps
         ORDER BY
             Items.itemName,
-            ItemPreps.prepName;
+            Preps.prepName;
         """
     }
 }

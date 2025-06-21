@@ -65,20 +65,6 @@ struct StoreView: View {
         }
     }
     
-    func storeItem(name: String, selected: Bool) -> some View {
-        HStack {
-            Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                .renderingMode(.original)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 24)
-                .foregroundColor(.gray)
-                .accessibilityLabel(selected ? "Selected" : "Unselected")
-                .padding([.trailing], 4)
-            Text(name)
-        }
-    }
-    
     func allStores() -> some View {
         Section("All Stores") {
             ForEach(self.stores) { store in
@@ -88,7 +74,7 @@ struct StoreView: View {
                 
                 Button(
                     action: { viewModel.selectStore(storeId: store.storeId) },
-                    label: { storeItem(name: store.storeName, selected: selected) }
+                    label: { Selected(name: store.storeName, selected: selected) }
                 )
                 .foregroundStyle(.primary)
                 .swipeActions(edge: .leading) {

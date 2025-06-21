@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 
-struct RecipeSection: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
+struct RecipeSection: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable, CreateTable {
     var recipeSectionId: Int
     var recipeSectionName: String
     var recipeId: Int
@@ -15,6 +15,22 @@ struct RecipeSection: Codable, Identifiable, FetchableRecord, PersistableRecord,
     }
     
     static var databaseTableName: String = "RecipeSections"
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: RecipeSection.databaseTableName) { t in
+            t.autoIncrementedPrimaryKey("recipeSectionId")
+            t.column("recipeSectionName", .text).notNull()
+            t.column("recipeId", .integer).notNull()
+                .references(Recipe.databaseTableName, onDelete: .cascade)
+        }
+    }
+    
+    static func getAllSectionIds(_ db: Database, recipeId: Int) -> [Int] {
+        return (try? RecipeSection
+            .filter{ $0.recipeId == recipeId }
+            .select({ $0.recipeSectionId }, as: Int.self)
+            .fetchAll(db)) ?? []
+    }
 }
 
 struct RecipeSectionInsert: Codable, FetchableRecord, PersistableRecord {

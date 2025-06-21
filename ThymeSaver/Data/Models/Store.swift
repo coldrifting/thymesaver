@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 
-struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
+struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable, CreateTable {
     var storeId: Int
     var storeName: String
     
@@ -13,6 +13,13 @@ struct Store: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashabl
     }
     
     static var databaseTableName: String = "Stores"
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: Store.databaseTableName) { t in
+            t.autoIncrementedPrimaryKey("storeId")
+            t.column("storeName", .text).notNull()
+        }
+    }
 }
 
 struct StoreInsert: Codable, FetchableRecord, PersistableRecord {

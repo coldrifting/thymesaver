@@ -1,6 +1,6 @@
 import GRDB
 
-struct ItemAisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
+struct ItemAisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CreateTable {
     var itemId: Int
     var aisleId: Int
     var storeId: Int
@@ -17,6 +17,20 @@ struct ItemAisle: Codable, Identifiable, FetchableRecord, PersistableRecord {
     }
     
     static var databaseTableName: String = "ItemAisles"
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: ItemAisle.databaseTableName) { t in
+            t.column("itemId", .integer).notNull()
+                .references(Item.databaseTableName, onDelete: .cascade)
+            t.column("storeId", .integer).notNull()
+                .references(Store.databaseTableName, onDelete: .cascade)
+            t.column("aisleId", .integer).notNull()
+                .references(Aisle.databaseTableName, onDelete: .cascade)
+            t.column("bay", .text).notNull()
+            
+            t.primaryKey(["itemId", "storeId"])
+        }
+    }
     
     static func getItemAisles(_ db: Database, itemId: Int) throws -> [ItemAisle] {
         let storeId = try Config.find(db).selectedStore

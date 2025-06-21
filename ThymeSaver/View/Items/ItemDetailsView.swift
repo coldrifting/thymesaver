@@ -3,6 +3,8 @@ import Observation
 import Combine
 
 struct ItemDetailsView: View {
+    @Environment(\.appDatabase) var appDatabase
+    
     @State private var viewModel: ViewModel
     
     @State private var itemPreps: [ItemPrepExpanded] = []
@@ -25,8 +27,25 @@ struct ItemDetailsView: View {
                         Text(String(describing: option).capitalized).tag(option)
                     }
                 }
-            }
                 
+                NavigationLink(
+                    destination: {
+                        ItemPrepView(
+                            appDatabase,
+                            itemId: viewModel.itemId,
+                            itemName: viewModel.itemName
+                        )
+                    },
+                    label: {
+                        HStack {
+                            Text("Preps")
+                            Spacer()
+                            Text(viewModel.prepsString).foregroundStyle(.secondary)
+                        }
+                    }
+                )
+            }
+            
             Section("Location") {
                 Picker("Store", selection: viewModel.currentStoreId) {
                     ForEach(viewModel.stores.map { x in x.id }, id: \.self) { storeIndex in
@@ -44,61 +63,11 @@ struct ItemDetailsView: View {
                     }
                 }
             }
-            
-            Section("Preperations") {
-                if (itemPreps.isEmpty) {
-                    Text("Default").foregroundStyle(.secondary)
-                }
-                else {
-                    ForEach(itemPreps, id: \.id) { itemPrep in
-                        Text(itemPrep.prepName)
-                        .swipeActions(edge: .leading) {
-                            Button(
-                                action: { viewModel.alert.queueRename(id: itemPrep.itemPrepId, name: itemPrep.prepName) },
-                                label: { Text("Rename") }
-                            )
-                            .tint(.blue)
-                        }
-                        .if(itemPrep.usedIn.count > 0) { v in
-                            v
-                            .swipeActions(edge: .trailing) {
-                                Button(
-                                    action: {
-                                        viewModel.alert.queueDelete(id: itemPrep.itemPrepId, itemsInUse: itemPrep.usedIn)
-                                    },
-                                    label: { Text("Delete") }
-                                )
-                                .tint(.red)
-                            }
-                        }
-                        .deleteDisabled(itemPrep.usedIn.count > 0)
-                    }
-                    .onDelete { offsets in
-                        offsets.forEach { index in
-                            viewModel.deleteItem(itemId: itemPreps[index].itemPrepId)
-                        }
-                    }
-                }
-            }
         }
-        .navigationTitle(Text(viewModel.itemName)).navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem {
-                Button (
-                    action: { viewModel.alert.queueAdd() },
-                    label: { Label("Add Item Preperation", systemImage: "plus") }
-                )
-            }
-        }
+        .navigationTitle(viewModel.itemName).navigationBarTitleDisplayMode(.inline)
         .onAppear() {
             viewModel.observe()
         }
-        .onReceive(Just(viewModel.itemPreps)) { itemPreps in
-            withAnimation {
-                self.itemPreps = viewModel.itemPreps
-            }
-        }
-        .alertCustom(viewModel.alert)
     }
 }
 

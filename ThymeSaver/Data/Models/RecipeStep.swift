@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 
-struct RecipeStep: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable {
+struct RecipeStep: Codable, Identifiable, FetchableRecord, PersistableRecord, Hashable, CreateTable {
     var recipeStepId: Int
     var recipeStepContent: String
     var recipeStepOrder: Int
@@ -19,6 +19,17 @@ struct RecipeStep: Codable, Identifiable, FetchableRecord, PersistableRecord, Ha
     }
     
     static var databaseTableName: String = "RecipeSteps"
+    
+    static func createTable(_ db: Database) throws {
+        try db.create(table: RecipeStep.databaseTableName) { t in
+            t.autoIncrementedPrimaryKey("recipeStepId")
+            t.column("recipeStepContent", .text).notNull()
+            t.column("recipeStepOrder", .integer).notNull()
+            t.column("isImage", .boolean).notNull()
+            t.column("recipeId", .integer).notNull()
+                .references(Recipe.databaseTableName, onDelete: .cascade)
+        }
+    }
 }
 
 struct RecipeStepInsert: Codable, FetchableRecord, PersistableRecord {
