@@ -103,5 +103,239 @@
         "recipeStepContent": "And that’s it! Now you’re ready to get your pasta on.",
         "recipeStepOrder": 15,
         "isImage": false
+    },
+    
+    {
+        "recipeId": 2,
+        "recipeStepId": 20,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/1-Drained-Macaroni.jpg",
+        "recipeStepOrder": 1,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 21,
+        "recipeStepContent": "Bring a large pot of water to a boil for the macaroni. Once boiling, add 1/2 lb. macaroni and continue to boil until the macaroni is tender (7-10 minutes). Drain the macaroni in a colander.",
+        "recipeStepOrder": 2,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 22,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/2-Butter-and-Flour.jpg",
+        "recipeStepOrder": 3,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 23,
+        "recipeStepContent": "While the macaroni is cooking, begin the cheese sauce. Add 2 Tbsp butter and 2 Tbsp all-purpose flour to a sauce pot. Cook over medium while stirring for about 2 minutes.",
+        "recipeStepOrder": 4,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 24,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/3-Whisk-in-Milk.jpg",
+        "recipeStepOrder": 5,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 25,
+        "recipeStepContent": "Whisk 2 cups whole milk into the saucepot with the butter and flour. Continue to cook and whisk over medium heat until the milk comes up to a simmer, at which point it will thicken. It should thicken to the consistency of cream.",
+        "recipeStepOrder": 6,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 26,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/4-Whisk-in-Cheese.jpg",
+        "recipeStepOrder": 6,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 27,
+        "recipeStepContent": "Turn off the heat and begin stirring in the 8oz. shredded Monterey Jack cheese, one handful at a time, until it is all melted into the sauce.",
+        "recipeStepOrder": 8,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 28,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/5-Chiles-and-seasoning.jpg",
+        "recipeStepOrder": 9,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 29,
+        "recipeStepContent": "Drain two 4oz. cans of diced green chiles, then add them to the cheese sauce along with ½ tsp cumin, ⅛ tsp crushed red pepper, and ¼ tsp salt. Stir to combine, then taste the sauce and adjust the seasonings to your liking if needed. The sauce should taste heavily seasoned as the flavor will dilute a bit when mixed with the pasta.",
+        "recipeStepOrder": 10,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 30,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/6-Pasta-and-Sauce.jpg",
+        "recipeStepOrder": 11,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 31,
+        "recipeStepContent": "Finally, combine the cooked and drained pasta with the green chile cheese sauce.",
+        "recipeStepOrder": 12,
+        "isImage": false
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 32,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2021/06/7-Finished-Green-Chile-Mac.jpg",
+        "recipeStepOrder": 13,
+        "isImage": true
+    },
+    {
+        "recipeId": 2,
+        "recipeStepId": 33,
+        "recipeStepContent": "Serve and enjoy while it’s hot and creamy!",
+        "recipeStepOrder": 14,
+        "isImage": false
+    },
+    
+    {
+        "recipeId": 3,
+        "recipeStepId": 40,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/1-Ingredients.jpg",
+        "recipeStepOrder": 1,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 41,
+        "recipeStepContent": "For this recipe, you’ll need four pitas and a cup of hummus. You’ll also need to small dice half of a cucumber and a quarter of a red onion, slice a cup of grape tomatoes into halves, chop a tablespoon of fresh parsley, crumbled two ounces of feta cheese, and slice about eight kalamata olives.",
+        "recipeStepOrder": 2,
+        "isImage": false
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 42,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/2-Hummus-Layer-1.jpg",
+        "recipeStepOrder": 3,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 43,
+        "recipeStepContent": "Spread about a quarter cup of hummus on each pita.",
+        "recipeStepOrder": 4,
+        "isImage": false
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 44,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/3-Cucumber-Tomato-Onion-1.jpg",
+        "recipeStepOrder": 5,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 45,
+        "recipeStepContent": "Add the chopped cucumber, onion, and tomatoes to each pita, then add a pinch of salt and pepper.",
+        "recipeStepOrder": 6,
+        "isImage": false
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 46,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/4-Feta-Olive-Parsley-1.jpg",
+        "recipeStepOrder": 6,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 47,
+        "recipeStepContent": "Top each pita with a half-ounce of feta cheese and two kalamata olives.",
+        "recipeStepOrder": 8,
+        "isImage": false
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 48,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/5-Olive-Oil-Drizzle-1.jpg",
+        "recipeStepOrder": 9,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 49,
+        "recipeStepContent": "Finish with a drizzle of olive oil and enjoy!",
+        "recipeStepOrder": 10,
+        "isImage": false
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 50,
+        "recipeStepContent": "https://www.budgetbytes.com/wp-content/uploads/2022/06/Loaded-Hummus-Pita-close.jpg",
+        "recipeStepOrder": 11,
+        "isImage": true
+    },
+    {
+        "recipeId": 3,
+        "recipeStepId": 51,
+        "recipeStepContent": "Cold, crunchy, delicious, and filling! 🙌",
+        "recipeStepOrder": 12,
+        "isImage": false
+    },
+    
+    {
+        "recipeId": 4,
+        "recipeStepId": 60,
+        "recipeStepContent": "https://cdn.loveandlemons.com/wp-content/uploads/2016/07/poblano-peppers-1080x1080.jpg",
+        "recipeStepOrder": 1,
+        "isImage": true
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 61,
+        "recipeStepContent": "Preheat the oven to 400°F and line a baking sheet with parchment pepper.",
+        "recipeStepOrder": 2,
+        "isImage": false
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 62,
+        "recipeStepContent": "Slice the peppers in half and remove the seeds and ribbing. Place on the baking sheet, drizzle with olive oil and pinches of salt and pepper, and roast cut side up for 15 minutes.",
+        "recipeStepOrder": 3,
+        "isImage": false
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 63,
+        "recipeStepContent": "In a large skillet, heat 1 tablespoon olive oil over medium heat. Add the onion, cauliflower, red pepper, cumin, coriander, oregano, garlic, 1/2 teaspoon salt, and several grinds of black pepper. Cook until the onion is soft and the cauliflower is lightly browned, about 5 to 8 minutes.",
+        "recipeStepOrder": 4,
+        "isImage": false
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 64,
+        "recipeStepContent": "Remove from the heat and stir in the black beans, rice, spinach, lime juice and tomatillo salsa. Taste and adjust seasonings.",
+        "recipeStepOrder": 5,
+        "isImage": false
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 65,
+        "recipeStepContent": "Scoop the filling into the peppers and bake for 15 minutes.",
+        "recipeStepOrder": 6,
+        "isImage": false
+    },
+    {
+        "recipeId": 4,
+        "recipeStepId": 66,
+        "recipeStepContent": "Serve with avocado slices, tomatillo salsa, green chile cashew cream and lime slices on the side.",
+        "recipeStepOrder": 7,
+        "isImage": false
     }
 ]

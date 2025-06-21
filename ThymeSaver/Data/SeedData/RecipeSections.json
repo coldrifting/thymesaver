@@ -22,11 +22,5 @@
         "recipeId": 4,
         "recipeSectionOrder": 1,
         "recipeSectionName": "Main"
-    },
-    {
-        "recipeSectionId": 5,
-        "recipeId": 2,
-        "recipeSectionOrder": 2,
-        "recipeSectionName": "Empty Section"
     }
 ]

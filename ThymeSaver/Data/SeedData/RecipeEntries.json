@@ -187,20 +187,9 @@
     }
   },
   {
-    "recipeEntryId": 222,
-    "recipeId": 2,
-    "recipeSectionId": 2,
-    "itemId": 1,
-    "prepId": 0,
-    "amount": {
-      "fraction": "1/4",
-      "type": "VolumeTeaspoons"
-    }
-  },
-  {
     "recipeEntryId": 18,
     "recipeId": 2,
-    "recipeSectionId": 5,
+    "recipeSectionId": 2,
     "itemId": 89,
     "prepId": 0,
     "amount": {
