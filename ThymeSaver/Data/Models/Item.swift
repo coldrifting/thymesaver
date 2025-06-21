@@ -1,6 +1,6 @@
 import GRDB
 
-struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable, Hashable {
+struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable, Hashable, Comparable {
     var itemId: Int
     var itemName: String
     var itemTemp: ItemTemp = ItemTemp.ambient
@@ -23,6 +23,14 @@ struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomSt
     init() {
         self.itemId = -1
         self.itemName = "(None)"
+    }
+    
+    init(item: Item, newAmount: Amount) {
+        self.itemId = item.itemId
+        self.itemName = item.itemName
+        self.itemTemp = item.itemTemp
+        self.defaultUnits = item.defaultUnits
+        self.cartAmount = newAmount
     }
     
     init(
@@ -60,6 +68,26 @@ struct Item: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomSt
             .filter(Item.Columns.itemName.like("%\(filterString)%"))
             .order(Item.Columns.itemName.asc)
             .fetchAll(db)
+    }
+    
+    static func < (lhs: Item, rhs: Item) -> Bool {
+        if (lhs.itemName != rhs.itemName) {
+            return lhs.itemName < rhs.itemName
+        }
+        
+        if (lhs.itemTemp != rhs.itemTemp) {
+            return lhs.itemTemp < rhs.itemTemp
+        }
+        
+        if (lhs.itemId != rhs.itemId) {
+            return lhs.itemId < rhs.itemId
+        }
+        
+        if let lhsType = lhs.cartAmount?.type, let rhsType = rhs.cartAmount?.type {
+            return lhsType.description < rhsType.description
+        }
+        
+        return lhs.cartAmount?.type != nil
     }
 }
 

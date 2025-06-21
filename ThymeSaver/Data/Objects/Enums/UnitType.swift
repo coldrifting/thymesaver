@@ -15,6 +15,31 @@ enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConverti
     
     var id: Self { self }
     
+    var intId: Int {
+        switch self {
+        case .count:
+            1
+        case .volumeTeaspoons:
+            2
+        case .volumeTablespoons:
+            3
+        case .volumeOunces:
+            4
+        case .volumeCups:
+            5
+        case .volumeQuarts:
+            6
+        case .volumePints:
+            7
+        case .volumeGallons:
+            8
+        case .weightOunces:
+            9
+        case .weightPounds:
+            10
+        }
+    }
+    
     var description: String {
         return self.rawValue
             .replacingOccurrences(of: "WeightOunces", with: "Ounces (#)")
@@ -69,6 +94,48 @@ enum UnitType: String, Codable, CaseIterable, Identifiable, CustomStringConverti
             1
         case .weightPounds:
             16
+        }
+    }
+    
+    enum Category: Identifiable {
+        case count
+        case volume
+        case weight
+        
+        var id: Int {
+            switch self {
+            case .count:
+                1
+            case .volume:
+                2
+            case .weight:
+                3
+            }
+        }
+    }
+    
+    var category: Category {
+        return switch self {
+        case .count:
+                .count
+        case .volumeTeaspoons:
+                .volume
+        case .volumeTablespoons:
+                .volume
+        case .volumeOunces:
+                .volume
+        case .volumeCups:
+                .volume
+        case .volumePints:
+                .volume
+        case .volumeQuarts:
+                .volume
+        case .volumeGallons:
+                .volume
+        case .weightOunces:
+                .weight
+        case .weightPounds:
+                .weight
         }
     }
 }

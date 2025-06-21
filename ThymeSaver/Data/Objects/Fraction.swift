@@ -186,7 +186,7 @@ struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
     }
     
     private func simplify() -> Fraction {
-        for div in dem...2 {
+        for div in stride(from: dem, through: 2, by: -1) {
             if (num % div == 0 && dem % div == 0) {
                 return Fraction(num / div, dem: dem / div)
             }

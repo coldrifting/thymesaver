@@ -4,7 +4,9 @@ struct Amount: Codable, Identifiable, Hashable, DatabaseValueConvertible, Custom
     var fraction: Fraction
     var type: UnitType
     
-    var id: Int { fraction.id.concat(type.hashValue) }
+    var id: Int {
+        fraction.id.concat(type.intId)
+    }
     
     var description: String { "\(fraction) \(type.getAbbreviation(fraction.isPlural()))" }
     
@@ -40,14 +42,8 @@ struct Amount: Codable, Identifiable, Hashable, DatabaseValueConvertible, Custom
             return Amount(left.fraction + right.fraction, type: left.type).simplify()
         }
         
-        let leftStr = left.type.description
-        let rightStr = right.type.description
-        
-        let index = leftStr.startIndex
-        let index2 = leftStr.index(index, offsetBy: 3)
-        
-        if (String(leftStr[index..<index2]) != String(rightStr[index..<index2])) {
-            return Amount(0, type: .count) // Error
+        if (left.type.category != right.type.category) {
+            fatalError("Cant Combine these amounts!")
         }
         
         let divisor: Int
@@ -63,5 +59,9 @@ struct Amount: Codable, Identifiable, Hashable, DatabaseValueConvertible, Custom
             
         let newFraction = ((left.fraction * left.type.getUnits()) + (right.fraction * right.type.getUnits())) / divisor
         return Amount(newFraction, type: selectedType)
+    }
+    
+    static func * (left: Amount, right: Int) -> Amount {
+        return Amount(left.fraction * right, type: left.type)
     }
 }

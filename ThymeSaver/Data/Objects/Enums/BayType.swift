@@ -1,6 +1,6 @@
-import Foundation
+import GRDB
 
-enum BayType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
+enum BayType: String, Codable, CaseIterable, Identifiable, CustomStringConvertible, DatabaseValueConvertible {
     case start = "Start"
     case middle = "Middle"
     case end = "End"
