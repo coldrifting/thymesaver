@@ -22,16 +22,19 @@ struct RecipesView: View {
             }
             .toolbar {
                 ToolbarItem() {
-                    Button(
-                        action: { $isInEditMode.wrappedValue = !isInEditMode },
-                        label: { Text(isInEditMode ? "Done" : "Edit") }
-                    )
-                }
-                ToolbarItem {
-                    Button(
-                        action: { viewModel.alert.queueAdd() },
-                        label: { Label("Add Item", systemImage: "plus") }
-                    )
+                    HStack {
+                        Button(
+                            action: { $isInEditMode.wrappedValue = !isInEditMode },
+                            label: {
+                                Label($isInEditMode.wrappedValue ? "Done" : "Edit" , systemImage: $isInEditMode.wrappedValue ? "xmark" : "pencil")
+                            }
+                        )
+                        .tint($isInEditMode.wrappedValue ? .red : .accentColor)
+                        Button(
+                            action: { viewModel.alert.queueAdd() },
+                            label: { Label("Add Item", systemImage: "plus") }
+                        )
+                    }
                 }
             }
             .onAppear(perform: viewModel.observe)

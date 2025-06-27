@@ -18,7 +18,7 @@ struct AppContentView: View {
         _selectedTab.wrappedValue = defaultTab
     }
     
-    @State private var selectedTab: Int = 2
+    @State private var selectedTab: Int = 0
     
     var body: some View {
         TabView(selection: $selectedTab) {

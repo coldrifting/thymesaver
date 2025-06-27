@@ -163,7 +163,7 @@ extension CartSelectView {
         }
         
         func queueAddRecipeOrItem() {
-            self.addUpdateButtonText = "Add Recipe"
+            self.addUpdateButtonText = self.isSelectionInRecipeMode.wrappedValue ? "Add Recipe" : "Add Item"
             self.inUpdateMode = false
             self.showBottomSheet.wrappedValue = true
         }

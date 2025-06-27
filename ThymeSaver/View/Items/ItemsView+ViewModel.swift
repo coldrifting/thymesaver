@@ -31,7 +31,13 @@ extension ItemsView {
             
             cancellable = observation.start(in: appDatabase.reader) { _ in
             } onChange: { items in
-                self.itemsWithAisleInfo = self.splitItemsBySection(items: items)
+                var test = self.splitItemsBySection(items: items)
+                
+                for (index, (section, items)) in test.enumerated() {
+                    test[index] = (section, items.sorted())
+                }
+                
+                self.itemsWithAisleInfo = test
             }
         }
         
@@ -48,7 +54,11 @@ extension ItemsView {
                     .map{ ("\($0.key)", $0.value) }
             case .aisle:
                 return Dictionary(grouping: items, by: { $0.aisleId} )
-                    .sorted(by: { $0.value.first?.aisleOrder ?? Int.max < $1.value.first?.aisleOrder ?? Int.max })
+                    .sorted(by: {
+                        let a = $0.value.first?.aisleOrder ?? Int.max
+                        let b = $1.value.first?.aisleOrder ?? Int.max
+                        return a < b
+                    })
                     .map{ ("\($0.value.first?.aisleName ?? "No Aisle Assigned")", $0.value) }
             }
         }

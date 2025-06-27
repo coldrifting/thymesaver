@@ -36,6 +36,16 @@
 		079A72922DFA59070098A2EB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		078B56162E0F5E100047B532 /* Exceptions for "ThymeSaverTests" folder in "ThymeSaverTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ThymeSaver.xctestplan,
+			);
+			target = 079A72702DFA1BEE0098A2EB /* ThymeSaverTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		079A72642DFA1BED0098A2EB /* ThymeSaver */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -44,6 +54,9 @@
 		};
 		079A72742DFA1BEF0098A2EB /* ThymeSaverTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				078B56162E0F5E100047B532 /* Exceptions for "ThymeSaverTests" folder in "ThymeSaverTests" target */,
+			);
 			path = ThymeSaverTests;
 			sourceTree = "<group>";
 		};
@@ -487,7 +500,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M4327C8M2N;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.3.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.coldrifting.thymesaverTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -506,7 +519,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M4327C8M2N;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.3.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.coldrifting.thymesaverTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

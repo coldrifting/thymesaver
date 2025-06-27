@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "7985A4A8-438B-4A8E-AB58-D79FF43850B9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ThymeSaver.xcodeproj",
+      "identifier" : "079A72612DFA1BED0098A2EB",
+      "name" : "ThymeSaver"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ThymeSaver.xcodeproj",
+        "identifier" : "079A72702DFA1BEE0098A2EB",
+        "name" : "ThymeSaverTests"
+      }
+    }
+  ],
+  "version" : 1
+}

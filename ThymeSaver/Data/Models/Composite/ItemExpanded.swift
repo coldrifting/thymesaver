@@ -1,6 +1,13 @@
 import GRDB
 
-struct ItemExpanded: Identifiable {
+struct ItemExpanded: Identifiable, Comparable {
+    static func < (lhs: ItemExpanded, rhs: ItemExpanded) -> Bool {
+        if (lhs.itemTemp == rhs.itemTemp) {
+            return lhs.itemName < rhs.itemName
+        }
+        return lhs.itemTemp < rhs.itemTemp
+    }
+    
     var itemId: Int
     var itemName: String
     var itemTemp: ItemTemp
@@ -22,6 +29,9 @@ struct ItemExpanded: Identifiable {
                 itemName: $0.itemName,
                 itemTemp: $0.itemTemp,
                 defaultUnits: $0.defaultUnits,
+                aisleId: $0.aisleId,
+                aisleName: $0.aisleName,
+                aisleOrder: $0.aisleOrder,
                 usedIn: $0.usedIn.split(separator: ",", omittingEmptySubsequences: true).map{String($0)}
             )
         }
