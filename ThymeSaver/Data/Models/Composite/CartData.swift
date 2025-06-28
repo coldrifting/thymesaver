@@ -57,28 +57,57 @@ struct CartAisle: Identifiable, Comparable {
     
     static func combine(items: [Item]) -> [Item] {
         
-        var results : [Item] = items
+        var results : [Item] = []
         
-        //return results
+        var itemDict: [Int:Item] = [:]
         
-        for x in stride(from: 0, to: items.count, by: 1) {
-            for y in stride(from: 0, to: items.count, by: 1) {
-                if (x == y) {
-                    continue
+        var eaches: [Int:Amount] = [:]
+        var volume: [Int:Amount] = [:]
+        var weight: [Int:Amount] = [:]
+        
+        for item in items {
+            itemDict[item.itemId] = item
+            
+            if let cartAmount = item.cartAmount {
+                
+                if (cartAmount.type.category == .count) {
+                    var curEaches = eaches[item.itemId] ?? Amount(0, type: .count)
+                    curEaches = curEaches + cartAmount
+                    eaches[item.itemId] = curEaches
                 }
                 
-                if (results[x].itemId == results[y].itemId &&
-                    results[x].cartAmount?.type.category == results[y].cartAmount?.type.category) {
-                    
-                    if let a = items[x].cartAmount, let b = items[y].cartAmount {
-                        results[x].cartAmount = Amount(0, type: UnitType.count)
-                        results[y].cartAmount = a + b
-                    }
+                if (cartAmount.type.category == .volume) {
+                    var curVolume = volume[item.itemId] ?? Amount(0, type: cartAmount.type)
+                    curVolume = curVolume + cartAmount
+                    volume[item.itemId] = curVolume
+                }
+                
+                if (cartAmount.type.category == .weight) {
+                    var curWeight = weight[item.itemId] ?? Amount(0, type: cartAmount.type)
+                    curWeight = curWeight + cartAmount
+                    weight[item.itemId] = curWeight
                 }
             }
         }
         
-        return results.filter{ $0.cartAmount?.fraction.toDouble() ?? 0 > 0}
+        for (itemId, item) in itemDict {
+            if let eachesAmount = eaches[itemId] {
+                let newItem = Item(item: item, newAmount: eachesAmount)
+                results.append(newItem)
+            }
+            
+            if let volumeAmount = volume[itemId] {
+                let newItem = Item(item: item, newAmount: volumeAmount)
+                results.append(newItem)
+            }
+            
+            if let weightAmount = weight[itemId] {
+                let newItem = Item(item: item, newAmount: weightAmount)
+                results.append(newItem)
+            }
+        }
+        
+        return results
     }
     
 }

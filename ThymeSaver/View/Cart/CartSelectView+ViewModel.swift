@@ -63,18 +63,7 @@ extension CartSelectView {
             self.addUpdateButtonEnabled = false
         }
         
-        var addUpdateButtonText: String = "Add Recipe"
-        
-        var _isSelectionInRecipeMode: Bool = true
-        var isSelectionInRecipeMode: Binding<Bool> {
-            Binding (
-                get: { self._isSelectionInRecipeMode },
-                set: { value in
-                    self._isSelectionInRecipeMode = value
-                    self.addUpdateButtonText = value ? "Add Recipe" : "Add Item"
-                }
-            )
-        }
+        var isSelectionInRecipeMode: Bool = true
         
         var _selectedRecipeQuantity: Int = 1
         var selectedRecipeQuantity: Binding<Int> {
@@ -142,7 +131,7 @@ extension CartSelectView {
         
         func addOrUpdateRecipeOrItem() {
             
-            if (self.isSelectionInRecipeMode.wrappedValue) {
+            if (self.isSelectionInRecipeMode) {
                 if let recipeId = self._selectedRecipeToAdd?.recipeId {
                     self.appDatabase.updateRecipeCartAmount(
                         recipeId: recipeId,
@@ -162,26 +151,37 @@ extension CartSelectView {
             self.showBottomSheet.wrappedValue = false
         }
         
+        var addUpdateButtonText: String {
+            if self.isSelectionInRecipeMode && !self.inUpdateMode {
+                return "Add Recipe"
+            }
+            if self.isSelectionInRecipeMode && self.inUpdateMode {
+                return "Update Recipe Quantity"
+            }
+            if !self.isSelectionInRecipeMode && !self.inUpdateMode {
+                return "Add Item"
+            }
+            
+            return "Update Item Quantity"
+        }
+        
         func queueAddRecipeOrItem() {
-            self.addUpdateButtonText = self.isSelectionInRecipeMode.wrappedValue ? "Add Recipe" : "Add Item"
             self.inUpdateMode = false
             self.showBottomSheet.wrappedValue = true
         }
         
         func queueUpdateRecipe(recipe: Recipe) {
             self.selectedRecipeQuantity.wrappedValue = recipe.cartAmount
-            self.addUpdateButtonText = "Update Quantity"
             self.inUpdateMode = true
-            self.isSelectionInRecipeMode.wrappedValue = true
+            self.isSelectionInRecipeMode = true
             self.selectedRecipeToAdd.wrappedValue = recipe
             self.showBottomSheet.wrappedValue = true
         }
         
         func queueUpdateItem(item: Item) {
             self.selectedItemAmount.wrappedValue = item.cartAmount
-            self.addUpdateButtonText = "Update Quantity"
             self.inUpdateMode = true
-            self.isSelectionInRecipeMode.wrappedValue = false
+            self.isSelectionInRecipeMode = false
             self.selectedItemToAdd.wrappedValue = item
             self.showBottomSheet.wrappedValue = true
         }

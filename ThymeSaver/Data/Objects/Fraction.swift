@@ -163,7 +163,7 @@ struct Fraction: Codable, Identifiable, Hashable, CustomStringConvertible {
     
     static func + (left: Fraction, right: Fraction) -> Fraction {
         if (left.dem == right.dem) {
-            return Fraction(left.num + right.num, dem: left.dem)
+            return Fraction(left.num + right.num, dem: left.dem).simplify()
         }
         
         let lcd = left.dem * right.dem

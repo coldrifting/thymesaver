@@ -120,7 +120,7 @@ struct CartSelectView: View {
                     Section("Type") {
                         Section {
                             Picker(
-                                selection: viewModel.isSelectionInRecipeMode,
+                                selection: $viewModel.isSelectionInRecipeMode,
                                 content: {
                                     Text("Recipe").tag(true)
                                     Text("Item").tag(false)
@@ -133,12 +133,12 @@ struct CartSelectView: View {
                     }
                 }
                 
-                let header: String = viewModel.isSelectionInRecipeMode.wrappedValue == true
+                let header: String = viewModel.isSelectionInRecipeMode == true
                 ? "Recipe Details"
                 : "Item Details"
                 Section(header) {
                     if (!viewModel.inUpdateMode) {
-                        if (viewModel.isSelectionInRecipeMode.wrappedValue) {
+                        if (viewModel.isSelectionInRecipeMode) {
                             FilterSelectionPicker(
                                 "Recipe",
                                 selection: viewModel.selectedRecipeToAdd,
@@ -154,7 +154,7 @@ struct CartSelectView: View {
                         }
                     }
                     else {
-                        if (viewModel.isSelectionInRecipeMode.wrappedValue) {
+                        if (viewModel.isSelectionInRecipeMode) {
                             HStack {
                                 Text("Recipe")
                                 Spacer()
@@ -170,7 +170,7 @@ struct CartSelectView: View {
                         }
                     }
                     
-                    if (viewModel.isSelectionInRecipeMode.wrappedValue) {
+                    if (viewModel.isSelectionInRecipeMode) {
                         Stepper(
                             label: {
                                 HStack {
