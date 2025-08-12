@@ -32,7 +32,7 @@ struct CartSelectView: View {
                         }
                     }
                 )
-                .tint(.indigo.opacity(0.25))
+                .tint(.accentColor)
                 
                 if (self.selectedRecipes.count > 0) {
                     Section("Recipes") {

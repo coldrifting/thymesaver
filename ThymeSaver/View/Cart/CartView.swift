@@ -16,10 +16,9 @@ struct CartView: View {
             ForEach(self.cartAisles) { cartAisle in
                 Section(cartAisle.aisleName) {
                     ForEach(cartAisle.entries) { entry in
-                        //let isChecked: Bool = self.checked[item.id] ?? false
                         CheckboxItem(
-                            isChecked: entry.checked, //isChecked,
-                            onToggle: { viewModel.toggleCartEntryChecked(entryId: entry.cartEntryId) }, //viewModel.staticProperties.checked[item.id] = !isChecked },
+                            isChecked: entry.checked,
+                            onToggle: { viewModel.toggleCartEntryChecked(entryId: entry.cartEntryId) },
                             text: entry.itemName,
                             subtitle: entry.itemAmount.description
                         )
