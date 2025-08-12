@@ -73,7 +73,7 @@ final class AppDatabase: Sendable {
         Recipe.self,
         RecipeSection.self,
         RecipeEntry.self,
-        RecipeStep.self,
+        RecipeStep.self
     ]
     
     static func makeConfiguration() -> Configuration {
@@ -96,6 +96,9 @@ final class AppDatabase: Sendable {
         for type in databaseTypes {
             try type.createTable(db)
         }
+        
+        try CartEntry.createTable(db)
+        
         try Config.createTable(db)
     }
     

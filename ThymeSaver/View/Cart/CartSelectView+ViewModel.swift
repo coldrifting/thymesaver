@@ -193,5 +193,9 @@ extension CartSelectView {
         func removeFromCart(itemId: Int) {
             self.appDatabase.updateItemCartAmount(itemId: itemId)
         }
+        
+        func generate() {
+            self.appDatabase.generateCart()
+        }
     }
 }

@@ -1,58 +1,46 @@
 import GRDB
 
-struct CartAisle: Identifiable, Comparable {
-    var aisleId: Int
-    var aisleOrder: Int
-    var aisleName: String
-    var bay: BayType
+// Used to import data into the cart
+struct CartData: FetchableRecord, Decodable {
+    var itemId: Int
+    var itemName: String
+    var itemTemp: ItemTemp
+    var defaultUnits: UnitType
     
-    var items: [Item] = []
+    var aisleId: Int?
+    var aisleOrder: Int?
+    var aisleName: String?
+    var bay: BayType?
     
-    var id: Int { aisleId }
+    var amount: Amount = Amount()
+    var cartAmount: Int = 1
     
-    static func < (lhs: CartAisle, rhs: CartAisle) -> Bool {
-        if (lhs.aisleOrder != rhs.aisleId) {
-            return lhs.aisleOrder < rhs.aisleOrder
+    // Combines entries of the same item that have the same amount type (Count, Volume, or Weight)
+    static func combine(cartData: [CartData]) -> [CartData] {
+        var map: [Int:CartData] = [:]
+        
+        let items = cartData.map { data in
+            map[data.itemId] = data
+            return Item(itemId: data.itemId, itemName: data.itemName, itemTemp: data.itemTemp, defaultUnits: data.defaultUnits, cartAmount: data.amount)
         }
         
-        return lhs.aisleName < rhs.aisleName
-    }
-    
-    static func fetchAll(_ db: Database) -> [CartAisle] {
-        let allData: [CartData] = (try? CartData.all(db).fetchAll(db)) ?? []
+        let combinedItems = combine(items: items)
         
-        let map: [Int:CartAisle] = [:]
-        let transformed = allData
-            .reduce(into: map) { aisles, entry in
-                let aisleId: Int = entry.aisleId ?? -1
-                let aisleOrder = entry.aisleOrder ?? -1
-                let aisleName = entry.aisleName ?? "No Aisle Set"
-                let bay = entry.bay ?? BayType.middle
-                
-                var aisle: CartAisle = aisles[aisleId] ?? CartAisle(aisleId: aisleId, aisleOrder: aisleOrder, aisleName: aisleName, bay: bay)
-                
-                let item = Item(
-                    itemId: entry.itemId,
-                    itemName: entry.itemName,
-                    itemTemp: entry.itemTemp,
-                    defaultUnits: entry.defaultUnits,
-                    cartAmount: entry.amount * entry.cartAmount
-                )
-                
-                var items = aisle.items
-                items.append(item)
-                aisle.items = items
-                
-                aisles[aisleId] = aisle
-            }
-            .values.sorted()
-            .map { a in
-                var aisle = a
-                aisle.items = combine(items: aisle.items)
-                return aisle
-            }
+        let finalData = combinedItems.map { item in
+            CartData(
+                itemId: item.itemId,
+                itemName: item.itemName,
+                itemTemp: item.itemTemp,
+                defaultUnits: item.defaultUnits,
+                aisleId: map[item.itemId]?.aisleId ?? -1,
+                aisleOrder: map[item.itemId]?.aisleOrder ?? -1,
+                aisleName: map[item.itemId]?.aisleName ?? "Not Found",
+                bay: map[item.itemId]?.bay ?? BayType.middle,
+                amount: item.cartAmount ?? Amount()
+            )
+        }
         
-        return transformed
+        return finalData
     }
     
     static func combine(items: [Item]) -> [Item] {
@@ -110,22 +98,6 @@ struct CartAisle: Identifiable, Comparable {
         return results
     }
     
-}
-
-struct CartData: FetchableRecord, Decodable {
-    var itemId: Int
-    var itemName: String
-    var itemTemp: ItemTemp
-    var defaultUnits: UnitType
-    
-    var aisleId: Int?
-    var aisleOrder: Int?
-    var aisleName: String?
-    var bay: BayType?
-    
-    var amount: Amount = Amount()
-    var cartAmount: Int = 1
-    
     static func all(_ db: Database) -> SQLRequest<CartData> {
         """
         SELECT itemId,
@@ -138,7 +110,17 @@ struct CartData: FetchableRecord, Decodable {
                bay,
                amount,
                cartAmount
-        FROM   (SELECT *
+        FROM (SELECT 
+            itemId, 
+            itemName, 
+            itemTemp, 
+            defaultUnits, 
+            amount, 
+            cartAmount, 
+            storeId, 
+            aisleId, 
+            bay 
+        FROM (SELECT *
                 FROM   (SELECT itemId,
                                itemName,
                                itemTemp,
@@ -159,14 +141,45 @@ struct CartData: FetchableRecord, Decodable {
                                cartAmount AS amount,
                                1          AS cartAmount
                         FROM   items
-                        WHERE  amount > 0))
-               LEFT JOIN itemAisles using (itemId)
-               LEFT JOIN aisles using (aisleId)
-        WHERE  itemAisles.storeId = (SELECT selectedStore FROM Config)
-                OR itemAisles.storeId IS NULL
-        ORDER  BY itemAisles.storeId DESC,
-                  aisleOrder,
-                  itemName
+                        WHERE  amount > 0)) 
+        LEFT JOIN ItemAisles 
+            USING (itemId) 
+        UNION ALL 
+        SELECT     itemId, 
+            itemName, 
+            itemTemp, 
+            defaultUnits, 
+            amount, 
+            cartAmount,
+            NULL,
+            NULL,
+            NULL
+        FROM (SELECT *
+                FROM   (SELECT itemId,
+                               itemName,
+                               itemTemp,
+                               defaultUnits,
+                               amount,
+                               recipes.cartAmount
+                        FROM   recipes
+                               natural JOIN recipeSections
+                               natural JOIN recipeEntries
+                               JOIN items using (itemId)
+                        WHERE  recipes.cartAmount > 0)
+                UNION ALL
+                SELECT *
+                FROM   (SELECT itemId,
+                               itemName,
+                               itemTemp,
+                               defaultUnits,
+                               cartAmount AS amount,
+                               1          AS cartAmount
+                        FROM   items
+                        WHERE  amount > 0)))
+        LEFT JOIN Aisles USING (aisleId)
+        WHERE Aisles.storeId = (SELECT selectedStore FROM Config) OR Aisles.storeId IS NULL
+        GROUP BY itemId, amount
+        ORDER BY aisleOrder, itemName
         """
     }
 }

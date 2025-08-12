@@ -1,6 +1,6 @@
 import GRDB
 
-struct Aisle: Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable {
+struct Aisle: Hashable, Codable, Identifiable, FetchableRecord, PersistableRecord, CustomStringConvertible, CreateTable {
     var aisleId: Int
     var storeId: Int
     var aisleName: String

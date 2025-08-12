@@ -6,7 +6,6 @@ struct CartView: View {
     @State private var viewModel: ViewModel
     
     @State private var cartAisles: [CartAisle] = []
-    @State private var checked: [Int:Bool] = [:]
     
     init(_ appDatabase: AppDatabase) {
         _viewModel = State(initialValue: ViewModel(appDatabase))
@@ -16,18 +15,14 @@ struct CartView: View {
         List {
             ForEach(self.cartAisles) { cartAisle in
                 Section(cartAisle.aisleName) {
-                    let items: [(id: Int, item: Item)] = cartAisle.items.map {
-                        let id = $0.itemId.concat($0.cartAmount?.id ?? -1)
-                        return (id: id, item: $0)
-                    }
-                    
-                    ForEach(items, id: \.id) { item in
-                        let isChecked: Bool = self.checked[item.id] ?? false
+                    ForEach(cartAisle.entries) { entry in
+                        //let isChecked: Bool = self.checked[item.id] ?? false
                         CheckboxItem(
-                            isChecked: isChecked,
-                            onToggle: { viewModel.staticProperties.checked[item.id] = !isChecked },
-                            text: item.item.itemName,
-                            subtitle: item.item.cartAmount?.description)
+                            isChecked: entry.checked, //isChecked,
+                            onToggle: { viewModel.toggleCartEntryChecked(entryId: entry.cartEntryId) }, //viewModel.staticProperties.checked[item.id] = !isChecked },
+                            text: entry.itemName,
+                            subtitle: entry.itemAmount.description
+                        )
                     }
                 }
             }
@@ -37,11 +32,6 @@ struct CartView: View {
         .onReceive(Just(viewModel.cartAisles)) { cartAisles in
             withAnimation {
                 self.cartAisles = cartAisles
-            }
-        }
-        .onReceive(Just(viewModel.staticProperties.checked)) { checked in
-            withAnimation {
-                self.checked = checked
             }
         }
     }

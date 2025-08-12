@@ -21,6 +21,7 @@ struct CartSelectView: View {
             List {
                 ListButton(
                     action: {
+                        viewModel.generate()
                         $path.wrappedValue.append("Generate")
                     },
                     label: {
